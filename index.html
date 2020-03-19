@@ -444,19 +444,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_the_mm_adt_console">The mm-ADT Console</a></li>
-<li><a href="#_core_concepts">Core Concepts</a>
-<ul class="sectlevel2">
 <li><a href="#_language_storage_and_processor">Language, Storage, and Processor</a></li>
 <li><a href="#_language_structures">Language Structures</a>
+<ul class="sectlevel2">
+<li><a href="#_types">Types</a>
 <ul class="sectlevel3">
-<li><a href="#_values_and_types">Values and Types</a>
-<ul class="sectlevel4">
+<li><a href="#_type_quantifiers">Type Quantifiers</a></li>
+<li><a href="#_type_composition">Type Composition</a></li>
+<li><a href="#_type_gradient">Type Gradient</a></li>
+</ul>
+</li>
 <li><a href="#_values">Values</a></li>
-<li><a href="#_types">Types</a></li>
-</ul>
-</li>
-</ul>
-</li>
 <li><a href="#_model_categories_and_their_functors">Model Categories and their Functors</a></li>
 <li><a href="#_storage_structures">Storage Structures</a></li>
 <li><a href="#_processor_structures">Processor Structures</a></li>
@@ -520,10 +518,8 @@ mmlang&gt; 1[plus,2]
 </div>
 </div>
 <div class="sect1">
-<h2 id="_core_concepts">Core Concepts</h2>
+<h2 id="_language_storage_and_processor">Language, Storage, and Processor</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_language_storage_and_processor">Language, Storage, and Processor</h3>
 <div class="paragraph">
 <p>The mm-ADT VM has three primary integration points.</p>
 </div>
@@ -546,36 +542,18 @@ Processors are responsible for driving the the mm-ADT VM&#8217;s distributed tra
 <p>The mm-ADT VM enables the intermingling of any language, any storage system, and any processor that can faithfully implement the core language semantics (types and values), processor semantics (monadic traversers), and/or storage semantics (streams of atomic and composite data structures).</p>
 </div>
 </div>
+</div>
+<div class="sect1">
+<h2 id="_language_structures">Language Structures</h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="_language_structures">Language Structures</h3>
-<div class="paragraph">
-<p>A <em>type</em> denotes a set of <code>objs</code>. For example, <code>int</code> refers to a the set of integers. A set is a non-repeating collection of <code>objs.</code>
-A <em>stream</em> generalizes a set. A stream is an unordered collection of <code>objs</code> of varying cardinality (a multi-set, or bag).
-In mm-ADT, <code>int</code> is shorthand for <code>int{1}</code>--a single integer. In practice, when <code>int</code> is used to define a value, it is referring
-to a single integer from the set of all integers--<code>int</code>. <code>bool{42}</code> refers to <code>42</code> boolean values. <code>{ }</code>-expressions
-operate on the mm-ADT VM&#8217;s <em>quantifier ring</em> (w/ unity). Any <code>obj</code> that supports <code>+</code>/<code>*</code>/<code>0</code>/<code>1</code> and various rules governing their composition
-is supported by mm-ADT. In mm-ADT types can be specified to an as accurate degree or fuzzy degree as computationally
-and conceptually possible.</p>
-</div>
-<div class="paragraph">
-<p>Typically, the quantifier of choice for most applications is the <code>int</code> or <code>int</code> range rings. Common programming concepts
-that are usually captured by classes or functors (lifting) are expressed in mm-ADT via quantification.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">int                          // a single int (some)
-int{?}&lt;=int[is,[gt,0]]       // 0 or 1 int   (maybe/option)
-int{0}&lt;=int[is,false]        // 0 ints       (none)
-int{4}&lt;=int{2}[[id]+[id]]    // 4 ints
-int{*}&lt;=[=db][get,'costs']   // 0 or more ints</code></pre>
-</div>
-</div>
+<h3 id="_types">Types</h3>
 <div class="paragraph">
 <p>mm-ADT types are constructed using a small collection of modifiers. These are written below within the ascii-structure.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>range{quantifier}&lt;=domain{quantifier}[op,value|type]{quantifier}[ bran-&gt;ch | ing-&gt;inst ][inst][inst,[with[nesting]]]</code></pre>
+<pre class="highlight"><code class="language-mmadt" data-lang="mmadt">range{quantifier}&lt;=domain{quantifier}[inst]{quantifier}[ bran-&gt;ch | ing-&gt;inst ][op,value|type][inst,[with[nesting]]]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -646,17 +624,54 @@ int{*}&lt;=[=db][get,'costs']   // 0 or more ints</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_values_and_types">Values and Types</h4>
-<div class="sect4">
-<h5 id="_values">Values</h5>
+<h4 id="_type_quantifiers">Type Quantifiers</h4>
 <div class="paragraph">
-<p>There are only two kinds of structures in mm-ADT: <em>values</em> and <em>types</em>.
-Values are the elements of standard data type sets such as:</p>
+<p>A <em>type</em> denotes a set of <code>objs</code>. For example, <code>int</code> refers to a the set of integers. A set is a non-repeating collection of <code>objs.</code>
+A <em>stream</em> generalizes a set. A stream is an unordered collection of <code>objs</code> of varying cardinality (a multi-set, or bag).
+In mm-ADT, <code>int</code> is shorthand for <code>int{1}</code>--a single integer. In practice, when <code>int</code> is used to define a value, it is referring
+to a single integer from the set of all integers&#8212;&#8203;e.g., <code>val answer:int = 42</code>. <code>bool{42}</code> refers to <code>42</code> boolean values. All
+<code>mmlang</code> expressions within <code>{ }</code> operate on the mm-ADT VM&#8217;s <strong><em>quantifier ring</em></strong> (w/ unity). Any <code>obj</code> that supports
+<code>+</code>/<code>*</code>/<code>0</code>/<code>1</code> and various rules governing their composition is supported by mm-ADT. In mm-ADT, types can be specified to
+an as accurate or fuzzy degree as computationally and conceptually possible.</p>
+</div>
+<div class="paragraph">
+<p>Typically, the quantifier of choice for most applications is the <code>int</code> ring (or <code>int</code> range ring&#8201;&#8212;&#8201;<code>{2,13}</code>). Common programming concepts
+that are usually captured by classes or functors (lifting) are expressed in mm-ADT via quantification.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">int                          // a single int (some)
+int{?}&lt;=int[is,[gt,0]]       // 0 or 1 int   (maybe/option)
+int{0}&lt;=int[is,false]        // 0 ints       (none)
+int{4}&lt;=int{2}[[id]+[id]]    // 4 ints
+int{*}&lt;=[=db][get,'costs']   // 0 or more ints</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>{?}</code> is shorthand for <code>{0,1}</code>, <code>{+}</code> for <code>{1,+infty}</code>, <code>{*}</code> for <code>{0,+infty}</code>, and ` ` (nothing) for <code>{1}</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In functional programming, the algebraic laws governing the composition of wrapper objects via <code>map</code>, <code>flatmap</code>, <code>filter</code>, etc.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_type_composition">Type Composition</h4>
+<div class="paragraph">
+<p>The fundamental base types of mm-ADT are:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>bool</code>: two element boolean set containing <code>true</code> and <code>false</code>.</p>
+<p><code>bool</code>: two value boolean set containing <code>true</code> and <code>false</code>.</p>
 </li>
 <li>
 <p><code>int</code>: an integer set including positive and negative values (overflow prevention via dynamic bit expansion).</p>
@@ -678,27 +693,39 @@ Values are the elements of standard data type sets such as:</p>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>The referent denoting that union of all these types is <code>obj</code>. Thus, <code>true</code>, <code>42</code>, and <code>['a':1]</code> are in <code>obj</code>. There are
+many types that denote a stream of these three <code>objs</code>.</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">mmlang&gt; 45[plus,5][plus,[mult,2]]
-==&gt;150
-mmlang&gt; 'a','b','c'[fold,'seed','',[plus,str&lt;seed&gt;]]
-==&gt;'abc'
-mmlang&gt; 1,2,3[plus,2]&lt;x&gt;[plus,3]&lt;y&gt;[as,rec['a':int&lt;x&gt;,'b':int&lt;y&gt;]]
-==&gt;['a':3,'b':6]
-==&gt;['a':4,'b':7]
-==&gt;['a':5,'b':8]
-mmlang&gt; ['a':['b':['c':['d':0]]]]
-==&gt;['a':['b':['c':['d':0]]]]
-mmlang&gt; ['a':['b':['c':['d':0]]]].a.b.c.d
-==&gt;0
-mmlang&gt; .a
-==&gt;[get,'a']</code></pre>
+<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">obj{3}&lt;=obj{3}                                            // a stream of 3 objs (equivalent to obj{3})
+obj{3}&lt;=obj{3}[true|42|['a':1]]                           // a stream of the 3 objs (not necessarily all of them)
+obj{3}&lt;=obj{3}[true|42|['a':1]][is,[dedup][count][eq,3]]  // a stream of the 3 objs (each being unique)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A type is built from a <em>canonical type</em> (called the domain) by composing instructions in <code>inst</code>. Like the quantifier ring,
+the <strong><em>instruction ring</em></strong> is an algebraic ring with unity. The type system of mm-ADT is characterized by a particular formulation
+of the direct product of rings over the <em>quantifier</em> and <em>instruction</em> rings. The direct product of these two rings is
+a ring itself. Thus, mm-ADT&#8217;s types are completely understood using ring theory (a sub-ring of the mm-ADT type system
+is a <em>near-ring</em> and special considerations are required when composing instructions from that set).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">mmlang&gt; int
+==&gt;int                                                   // equivalent to int{1}&lt;=int{1}
+mmlang&gt; int[plus,2]
+==&gt;int[plus,2]                                           // equivalent to int&lt;=int[plus,2]
+mmlang&gt; int[plus,2][is,[gt,3]]
+==&gt;int{?}&lt;=int[plus,2][is,bool&lt;=int[gt,3]]               // the [is]-filter introduces quantifier uncertainty
+mmlang&gt; int[plus,2][is,[gt,3]][lte,100]
+==&gt;bool{?}&lt;=int[plus,2][is,bool&lt;=int[gt,3]][lte,100]     // moving from int to bool</code></pre>
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_types">Types</h5>
+<div class="sect3">
+<h4 id="_type_gradient">Type Gradient</h4>
 <div class="paragraph">
 <p>mm-ADT types differ from convention in that they serve to denote:</p>
 </div>
@@ -726,6 +753,30 @@ mmlang&gt; .a
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_values">Values</h3>
+<div class="paragraph">
+<p>There are only two kinds of structures in mm-ADT: <em>values</em> and <em>types</em>.
+Values are the elements of standard data type sets such as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">mmlang&gt; 45[plus,5][plus,[mult,2]]
+==&gt;150
+mmlang&gt; 'a','b','c'[fold,'seed','',[plus,str&lt;seed&gt;]]
+==&gt;'abc'
+mmlang&gt; 1,2,3[plus,2]&lt;x&gt;[plus,3]&lt;y&gt;[as,rec['a':int&lt;x&gt;,'b':int&lt;y&gt;]]
+==&gt;['a':3,'b':6]
+==&gt;['a':4,'b':7]
+==&gt;['a':5,'b':8]
+mmlang&gt; ['a':['b':['c':['d':0]]]]
+==&gt;['a':['b':['c':['d':0]]]]
+mmlang&gt; ['a':['b':['c':['d':0]]]].a.b.c.d
+==&gt;0
+mmlang&gt; .a
+==&gt;[get,'a']</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_model_categories_and_their_functors">Model Categories and their Functors</h3>
@@ -749,7 +800,7 @@ All mm-ADT types respective associative composition and every type&#8217;s ident
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-19 16:07:50 -0600
+Last updated 2020-03-19 16:54:21 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
