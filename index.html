@@ -699,9 +699,9 @@ many types that denote a stream of these three <code>objs</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">obj{3}&lt;=obj{3}                                            // a stream of 3 objs (equivalent to obj{3})
-obj{3}&lt;=obj{3}[true|42|['a':1]]                           // a stream of the 3 objs (not necessarily all of them)
-obj{3}&lt;=obj{3}[true|42|['a':1]][is,[dedup][count][eq,3]]  // a stream of the 3 objs (each being unique)</code></pre>
+<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">obj{3}&lt;=obj{3}                                            // a stream of 3 objs
+obj{3}&lt;=obj{3}[true|42|['a':1]]                           // a stream of the 3 objs (repeatable)
+obj{3}&lt;=obj{3}[true|42|['a':1]][is,[dedup][count][eq,3]]  // a stream of the 3 objs (all unique)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -800,7 +800,7 @@ All mm-ADT types respective associative composition and every type&#8217;s ident
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-19 16:55:56 -0600
+Last updated 2020-03-19 17:04:33 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
