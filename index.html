@@ -714,13 +714,13 @@ is a <em>near-ring</em> and special considerations are required when composing i
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-mmlang" data-lang="mmlang">mmlang&gt; int
-==&gt;int                                                   // equivalent to int{1}&lt;=int{1}
+==&gt;int                                               // equivalent to int{1}&lt;=int{1}
 mmlang&gt; int[plus,2]
-==&gt;int[plus,2]                                           // equivalent to int&lt;=int[plus,2]
+==&gt;int[plus,2]                                       // equivalent to int&lt;=int[plus,2]
 mmlang&gt; int[plus,2][is,[gt,3]]
-==&gt;int{?}&lt;=int[plus,2][is,bool&lt;=int[gt,3]]               // the [is]-filter introduces quantifier uncertainty
+==&gt;int{?}&lt;=int[plus,2][is,bool&lt;=int[gt,3]]           // the [is]-filter and uncertainty
 mmlang&gt; int[plus,2][is,[gt,3]][lte,100]
-==&gt;bool{?}&lt;=int[plus,2][is,bool&lt;=int[gt,3]][lte,100]     // moving from int to bool</code></pre>
+==&gt;bool{?}&lt;=int[plus,2][is,bool&lt;=int[gt,3]][lte,100] // moving from int to bool</code></pre>
 </div>
 </div>
 </div>
@@ -800,7 +800,7 @@ All mm-ADT types respective associative composition and every type&#8217;s ident
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-19 16:54:21 -0600
+Last updated 2020-03-19 16:55:56 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
