@@ -566,8 +566,9 @@ table.CodeRay td.code>pre{padding:0}
 <p><a href="http://mm-adt.org">mm-ADT</a> is a dual licensed <a href="https://www.gnu.org/licenses/agpl-3.0.txt">AGPL3</a>/commercial open source
 project intended to provide computer scientists, mathematicians, engineers, and others involved in the process of
 creating software a royalty-based OSS model. By virtue of the integrative-nature of the Turing Complete mm-ADT virtual
-machine (VM), a large number of modern data technologies can be integrated. Each integration point offers a development team access
-to a revenue stream from commercial organizations leveraging the technology.</p>
+machine (VM), data processing technologies can be composed to create novel <em>synthetic data systems</em> tailored to the
+space/time constraints of the problem at hand. Furthermore, each integration point offers a development team access
+to a revenue stream from the commercial organizations leveraging the technologies in the mm-ADT ecosystem.</p>
 </div>
 </div>
 </div>
@@ -663,9 +664,9 @@ Processors are responsible for driving the the mm-ADT VM&#8217;s distributed tra
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. mmlang Language Structures</caption>
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 27.1739%;">
+<col style="width: 0.3623%;">
+<col style="width: 72.4638%;">
 </colgroup>
 <thead>
 <tr>
@@ -736,68 +737,59 @@ Processors are responsible for driving the the mm-ADT VM&#8217;s distributed tra
 <p>The referent denoting that union of all these types is <code>obj</code>. Thus, <code>true</code> (<code>bool</code>), <code>42</code> (<code>int</code>), and <code>['a':1]</code> (<code>rec</code>) are in <code>obj</code>.</p>
 </div>
 <div class="paragraph">
-<p>A type is built from a <em>canonical type</em> (called the <em>domain</em>) by composing instructions drawn from the set <code>inst</code>, where <code>inst</code>
-is the carrier set of the <strong><em>instruction ring</em></strong> (an <a href="https://en.wikipedia.org/wiki/Ring_%28mathematics%29:">algebraic ring with unity</a>). Serial composition is multiplication (<code>*</code>)
-and parallel composition is addition (<code>+</code>) such that, if <code>&lt;A,+,*&gt;</code> is the ring with <code>A</code> the carrier set, with a <code>0</code> element
-(additive identity), a <code>1</code> element (multiplicative identity), and <code>a,b,c,&#8230;&#8203;,0,1</code> in the examples below in <code>A</code>,
-then the following ring axioms much hold.</p>
+<p>A type is built from a <em>canonical type</em> (called the <em>domain</em>) by composing instructions drawn from the set <code>inst</code>. <code>inst</code>
+is the carrier set of the mm-ADT <strong><em>instruction ring</em></strong> (an <a href="https://en.wikipedia.org/wiki/Ring_%28mathematics%29:">algebraic ring with unity</a>).
+Serial composition is multiplication (<code>*</code>) and parallel composition is addition (<code>+</code>). If <code>&lt;A,+,*&gt;</code> is a ring with <code>A</code> the carrier set, <code>0</code> the
+additive identity, <code>1</code> the multiplicative identity, and <code>a,b,c,&#8230;&#8203;,0,1</code> in <code>A</code>,
+then the ring must obey the itemized axioms and benefit from the deductions that yield the common implications and equalities.</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><code>(a + b) + c = a + (b + c)</code></p>
-</li>
-<li>
-<p><code>0 + a = a + 0 = a</code></p>
-</li>
-<li>
-<p><code>a - a = a + (-a) = 0</code></p>
-</li>
-<li>
-<p><code>a + b = b + a</code></p>
-</li>
-<li>
-<p><code>(a * b) * c = a * (b * c)</code></p>
-</li>
-<li>
-<p><code>1 * a = a * 1 = a</code></p>
-</li>
-<li>
-<p><code>(a + b) * c = (a * c) + (b * c)</code></p>
-</li>
-<li>
-<p><code>a * (b + c) = (a * b) + (a * c)</code></p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>From these axioms, the following common implications are equalities can be deduced.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><code>a + b = a + c &#8658; b = c</code></p>
-</li>
-<li>
-<p><code>a + b = 0 &#8658; a = -b &amp; b = -a</code></p>
-</li>
-<li>
-<p><code>-(a+b) = (-a) + (-b)</code></p>
-</li>
-<li>
-<p><code>-(-a) = a</code></p>
-</li>
-<li>
-<p><code>a*0 = 0 = 0*a</code></p>
-</li>
-<li>
-<p><code>a * (-b) = -a * b = -(a * b)</code></p>
-</li>
-<li>
-<p><code>(-a) * (-b) = a * b</code></p>
-</li>
-</ol>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. The Ring Axioms and Useful Deductions</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Ring Axioms</th>
+<th class="tableblock halign-left valign-top">Popular Entailments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(a + b) + c = a + (b + c)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a + b = a + c &#8658; b = c</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0 + a = a + 0 = a</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a + b = 0 &#8658; a = -b &amp; b = -a</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a - a = a + (-a) = 0</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-(a+b) = (-a) + (-b)</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a + b = b + a</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-(-a) = a</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(a * b) * c = a * (b * c)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a*0 = 0 = 0*a</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1 * a = a * 1 = a</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a * (-b) = -a * b = -(a * b)</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(a + b) * c = (a * c) + (b * c)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(-a) * (-b) = a * b</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>a * (b + c) = (a * b) + (a * c)</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph">
 <p>In mm-ADT, the carrier set is the set of all instructions <code>inst</code> where:</p>
 </div>
@@ -821,8 +813,9 @@ int&lt;=int[plus,<span class="integer">10</span>] + bool&lt;=int[gt,<span class=
 </div>
 </div>
 <div class="paragraph">
-<p>All serial and parallel composition are associative (except for those that use instructions from the <code>inst</code> sub-ring: <em>the reduce near-ring</em>).
-Finally, the distributivity of multiplications over addition is made apparent via:</p>
+<p>All serial and parallel compositions are <a href="https://en.wikipedia.org/wiki/Associative_property">associative</a> except for those that
+use instructions from the <code>inst</code> sub-ring: <em>the reduce near-ring</em> (discussed later). Finally, the
+<a href="https://en.wikipedia.org/wiki/Distributive_property">distributivity</a> of multiplications over addition is made apparent via:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -833,14 +826,14 @@ Finally, the distributivity of multiplications over addition is made apparent vi
 <div class="paragraph">
 <p>The above expressions have a diagrammatic representation where the lines are streams of <code>objs</code> that are being operated
 on by the <code>insts</code> they meet along the way. Whenever the diagram branches, the <code>obj</code> at the branch is cloned, taking
-both branches (always).</p>
+<strong>both</strong> branches.</p>
 </div>
-<div class="imageblock">
+<div class="imageblock text-center">
 <div class="content">
 <img src="inst-left-distributivity.png" alt="inst left distributivity" width="690" height="112">
 </div>
 </div>
-<div class="imageblock">
+<div class="imageblock text-center">
 <div class="content">
 <img src="inst-right-distributivity.png" alt="inst right distributivity" width="690" height="98">
 </div>
@@ -849,21 +842,22 @@ both branches (always).</p>
 <div class="sect3">
 <h4 id="_type_quantification_and_the_quantifier_ring">Type Quantification and the Quantifier Ring</h4>
 <div class="paragraph">
-<p>A <em>type</em> denotes a set of <code>objs</code>. For example, <code>int</code> refers to a the set of integers. A set is a non-repeating collection of <code>objs.</code>
+<p>Typically, a type denotes a set of elements. A set is a non-repeating collection of said elements.
 A <em>stream</em> generalizes a set. A stream is an unordered collection of <code>objs</code> of varying cardinality (a multi-set, or bag).
-In mm-ADT, <code>int</code> is shorthand for <code>int{1}</code>--a single integer. In practice, when <code>int</code> is used to define a value, it is referring
-to a single integer from the set of all integers&#8212;&#8203;e.g., <code>val answer:int = 42</code>. <code>bool{42}</code> refers to <code>42</code> boolean values. All
+In mm-ADT, <code>int</code> is shorthand for <code>int{1}</code>--a single integer. This is analogous to other languages, where when <code>int</code> is used
+to define a value, it is referring to a single integer from the set of all integers&#8212;&#8203;e.g., <code>val answer:int = 42</code>.
+Where mm-ADT differs from other languages is that <code>bool{42}</code> is a type denoting <code>42</code> boolean values. All
 <code>mmlang</code> expressions within <code>{ }</code> operate on the mm-ADT VM&#8217;s <strong><em>quantifier ring</em></strong> (w/ unity). Any <code>obj</code> that supports
-<code>+</code>/<code>*</code>/<code>0</code>/<code>1</code> and various rules governing their composition is supported by mm-ADT. In mm-ADT, types can be specified to
+<code>+</code>/<code>*</code>/<code>0</code>/<code>1</code> and the axioms governing their composition is supported by mm-ADT. In mm-ADT, types can be specified to
 an as accurate or fuzzy degree as computationally and conceptually possible.</p>
 </div>
 <div class="paragraph">
 <p>Typically, the quantifier of choice for most applications is the <code>int</code> ring (or <code>int</code> range ring&#8201;&#8212;&#8201;<code>{2,13}</code>). Common programming concepts
-that are usually captured by classes or functors (lifting) are expressed in mm-ADT via quantification.</p>
+that are usually captured by typeclasses or functors (via lifting) are expressed in mm-ADT via quantification.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">int                          <span class="comment">// a single int (some)</span>
+<pre class="CodeRay highlight"><code data-lang="Delphi">int                          <span class="comment">// a single int (just/some)</span>
 int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,[gt,<span class="integer">0</span>]]       <span class="comment">// 0 or 1 int   (maybe/option)</span>
 int<span class="comment">{0}</span>&lt;=int[<span class="keyword">is</span>,false]        <span class="comment">// 0 ints       (none)</span>
 int<span class="comment">{4}</span>&lt;=int<span class="comment">{2}</span>[[id]+[id]]    <span class="comment">// 4 ints</span>
@@ -883,10 +877,9 @@ int<span class="comment">{*}</span>&lt;=[=db][get,<span class="string"><span cla
 </table>
 </div>
 <div class="paragraph">
-<p>The type system of mm-ADT is characterized by a particular formulation of the direct product of rings over
-the <em>quantifier</em> and <em>instruction</em> rings. The direct product of these two rings is  a ring itself. Thus, mm-ADT&#8217;s
-types are completely understood using ring theory (a sub-ring of the mm-ADT type system
-is a <em>near-ring</em> and special considerations are required when composing instructions from that set).</p>
+<p>The type system of mm-ADT is characterized by a particular formulation of the <a href="https://en.wikipedia.org/wiki/Product_ring">direct product of rings</a>
+over the <em>quantifier</em> and <em>instruction</em> rings. The direct product of these two rings is a ring itself. Thus, mm-ADT&#8217;s
+types are founded on ring theory.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -958,10 +951,14 @@ mmlang&gt; .a
 <div class="sect2">
 <h3 id="_model_categories_and_their_functors">Model Categories and their Functors</h3>
 <div class="paragraph">
-<p>A <em>model</em> is a set of related types (a type of types).
-Mathematically, a every mm-ADT model forms a category where the category <em>objects</em> are the canonical types and the <em>morphisms</em> are types that span the canonical types.
-All mm-ADT types respective associative composition and every type&#8217;s identity morphism is the <code>[id]</code> instruction as in
-<code>int&#8656;int[id]</code>.</p>
+<p>A <em>model</em> is a set of related types (a type of types). Every mm-ADT model forms a category where the category&#8217;s <em>objects</em>
+are the canonical types and the <em>morphisms</em> are types that span the canonicals. All mm-ADT types respect associative composition
+and every type&#8217;s identity morphism is the <code>[id]</code> instruction as in <code>int&#8656;int[id]</code>.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="type-commutativity.png" alt="type commutativity" width="360" height="182">
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -977,7 +974,7 @@ All mm-ADT types respective associative composition and every type&#8217;s ident
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-19 23:08:42 -0600
+Last updated 2020-03-20 01:32:58 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
