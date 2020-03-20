@@ -472,7 +472,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>mm-ADT integrates a variety of data processing technologies via the distributed mm-ADT virtual machine (mm-ADT VM).</p>
+<p><a href="http://mm-adt.org">mm-ADT</a> is a dual licensed <a href="https://www.gnu.org/licenses/agpl-3.0.txt">AGPL3</a>/commercial open source
+project intended to provide computer scientists, mathematicians, engineers, and others involved in the process of
+creating software a royalty-based OSS model. By virtue of the integrative-nature of the Turing Complete mm-ADT virtual
+machine (VM), a large number of modern data technologies can be integrated. Each integration point offers a development team access
+to a revenue stream from commercial organizations leveraging the technology.</p>
 </div>
 </div>
 </div>
@@ -480,12 +484,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_the_mm_adt_console">The mm-ADT Console</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The mm-ADT VM is packaged with a REPL console that supports any mm-ADT language.
+<p>The mm-ADT VM is packaged with a <a href="https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop:">REPL</a> console that supports any mm-ADT language.
 The default language is <code>mmlang</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">~/software/mm-adt/vm/jvm bin/mmadt.sh
+<pre class="highlight"><code>~/software/mm-adt/vm/jvm bin/mmadt.sh
                                 _____ _______
                            /\  |  __ |__   __|
  _ __ ___  _ __ ___ _____ /  \ | |  | | | |
@@ -504,7 +508,7 @@ used in the mm-ADT console. Furthermore, mm-ADT <em>models</em> can be shared be
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">mmlang&gt; 1
+<pre class="highlight"><code class="language-Delphi" data-lang="Delphi">mmlang&gt; 1
 ==&gt;1
 mmlang&gt; +2
 ==&gt;[plus,2]
@@ -552,7 +556,7 @@ Processors are responsible for driving the the mm-ADT VM&#8217;s distributed tra
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-mmadt" data-lang="mmadt">range{quantifier}&lt;=domain{quantifier}[inst]{quantifier}[ bran-&gt;ch | ing-&gt;inst ][op,value|type][inst,[with[nesting]]]</code></pre>
+<pre class="highlight"><code class="language-Delphi" data-lang="Delphi">range{q}&lt;=domain{q}[inst]{q}[bran-&gt;ch|ing-&gt;inst][with[nesting]]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -560,7 +564,7 @@ Processors are responsible for driving the the mm-ADT VM&#8217;s distributed tra
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-mmadt" data-lang="mmadt">int&lt;=int{2}&lt;x&gt;[plus,10]&lt;y&gt;[is.&lt;10 -&gt; &lt;x&gt;
+<pre class="highlight"><code class="language-Delphi" data-lang="Delphi">int&lt;=int{2}&lt;x&gt;[plus,10]&lt;y&gt;[is.&lt;10 -&gt; &lt;x&gt;
                           |is.&lt;20 -&gt; &lt;y&gt;
                           |int    -&gt; &lt;x&gt;+&lt;y&gt;][count]</code></pre>
 </div>
@@ -642,7 +646,7 @@ Processors are responsible for driving the the mm-ADT VM&#8217;s distributed tra
 </div>
 <div class="paragraph">
 <p>A type is built from a <em>canonical type</em> (called the <em>domain</em>) by composing instructions drawn from the set <code>inst</code>, where <code>inst</code>
-is the carrier set of the <strong><em>instruction ring</em></strong> (an algebraic ring with unity). Serial composition is multiplication (<code>*</code>)
+is the carrier set of the <strong><em>instruction ring</em></strong> (an <a href="https://en.wikipedia.org/wiki/Ring_%28mathematics%29:">algebraic ring with unity</a>). Serial composition is multiplication (<code>*</code>)
 and parallel composition is addition (<code>+</code>) such that, if <code>&lt;A,+,*&gt;</code> is the ring with <code>A</code> the carrier set, with a <code>0</code> element
 (additive identity), a <code>1</code> element (multiplicative identity), and <code>a,b,c,&#8230;&#8203;,0,1</code> in the examples below in <code>A</code>,
 then the following ring axioms much hold.</p>
@@ -721,7 +725,7 @@ then the following ring axioms much hold.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">int&lt;=int[plus,10] * bool&lt;=int[gt,5]   ==   bool&lt;=int[plus,10][gt,5]
+<pre class="highlight"><code class="language-Delphi" data-lang="Delphi">int&lt;=int[plus,10] * bool&lt;=int[gt,5]   ==   bool&lt;=int[plus,10][gt,5]
 int&lt;=int[plus,10] + bool&lt;=int[gt,5]   ==    obj&lt;=int[branch,[plus,10],[gt,5]]</code></pre>
 </div>
 </div>
@@ -731,7 +735,7 @@ Finally, the distributivity of multiplications over addition is made apparent vi
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">[plus,10] * ([gt,5] + [lt,2])     ==   [plus,10][gt,5] + [plus,10][lt,2]
+<pre class="highlight"><code class="language-Delphi" data-lang="Delphi">[plus,10] * ([gt,5] + [lt,2])     ==   [plus,10][gt,5] + [plus,10][lt,2]
 ([plus,10] + [mult,5]) * [gt,7]   ==   [plus,10][gt,7] + [mult,5][gt,7]</code></pre>
 </div>
 </div>
@@ -742,7 +746,12 @@ both branches (always).</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="diag-2747d53c19cf0aa9a8358bbaf3d71f0e.png" alt="diag 2747d53c19cf0aa9a8358bbaf3d71f0e" width="680" height="182">
+<img src="inst-left-distributivity.png" alt="inst left distributivity" width="690" height="112">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="inst-right-distributivity.png" alt="inst right distributivity" width="690" height="98">
 </div>
 </div>
 </div>
@@ -763,7 +772,7 @@ that are usually captured by classes or functors (lifting) are expressed in mm-A
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">int                          // a single int (some)
+<pre class="highlight"><code class="language-Delphi" data-lang="Delphi">int                          // a single int (some)
 int{?}&lt;=int[is,[gt,0]]       // 0 or 1 int   (maybe/option)
 int{0}&lt;=int[is,false]        // 0 ints       (none)
 int{4}&lt;=int{2}[[id]+[id]]    // 4 ints
@@ -790,7 +799,7 @@ is a <em>near-ring</em> and special considerations are required when composing i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">mmlang&gt; int
+<pre class="highlight"><code class="language-Delphi" data-lang="Delphi">mmlang&gt; int
 ==&gt;int                                               // equivalent to int{1}&lt;=int{1}
 mmlang&gt; int[plus,2]
 ==&gt;int[plus,2]                                       // equivalent to int&lt;=int[plus,2]
@@ -838,7 +847,7 @@ Values are the elements of standard data type sets such as:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">mmlang&gt; 45[plus,5][plus,[mult,2]]
+<pre class="highlight"><code class="language-Delphi" data-lang="Delphi">mmlang&gt; 45[plus,5][plus,[mult,2]]
 ==&gt;150
 mmlang&gt; 'a','b','c'[fold,'seed','',[plus,str&lt;seed&gt;]]
 ==&gt;'abc'
@@ -877,7 +886,7 @@ All mm-ADT types respective associative composition and every type&#8217;s ident
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-19 22:38:44 -0600
+Last updated 2020-03-19 23:06:39 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
