@@ -449,8 +449,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_types">Types</a>
 <ul class="sectlevel3">
-<li><a href="#_type_quantifiers">Type Quantifiers</a></li>
-<li><a href="#_type_composition">Type Composition</a></li>
+<li><a href="#_type_composition_and_the_instruction_ring">Type Composition and the Instruction Ring</a></li>
+<li><a href="#_type_quantification_and_the_quantifier_ring">Type Quantification and the Quantifier Ring</a></li>
 <li><a href="#_type_gradient">Type Gradient</a></li>
 </ul>
 </li>
@@ -498,10 +498,9 @@ mmlang&gt;</code></pre>
 </div>
 <div class="paragraph">
 <p><code>mmlang</code> is in 1-to-1 correspondence with the storage and processing architecture of the mm-ADT VM. As such, <code>mmlang</code>
-has an assembly language look-and-feel.
-Fortunately, the mm-ADT VM was designed to easily support other programming and query languages via the it&#8217;s <code>LanguageProvider</code> interface.
-Any language that implements <code>LanguageProvider</code> can be used in the mm-ADT console.
-Furthermore, models can be shared between languages.</p>
+has an assembly language look-and-feel. Fortunately, the mm-ADT VM was designed to easily support other programming and
+query languages via the it&#8217;s <code>LanguageProvider</code> interface. Any language that implements <code>LanguageProvider</code> can be
+used in the mm-ADT console. Furthermore, mm-ADT <em>models</em> can be shared between languages.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -608,23 +607,147 @@ Processors are responsible for driving the the mm-ADT VM&#8217;s distributed tra
 </tr>
 </tbody>
 </table>
+<div class="sect3">
+<h4 id="_type_composition_and_the_instruction_ring">Type Composition and the Instruction Ring</h4>
+<div class="paragraph">
+<p>The fundamental base types of mm-ADT are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>bool</code>: two value boolean set containing <code>true</code> and <code>false</code>.</p>
+</li>
+<li>
+<p><code>int</code>: an integer set including positive and negative values (overflow prevention via dynamic bit expansion).</p>
+</li>
+<li>
+<p><code>real</code>: a decimal set including positive and negative values (overflow prevention via dynamic bit expansion).</p>
+</li>
+<li>
+<p><code>str</code>: the set of all Unicode strings.</p>
+</li>
+<li>
+<p><code>rec</code>: a key/value structure supporting arbitrary key and value types.</p>
+</li>
+<li>
+<p><code>lst</code>: an ordered list of values support tuple and inductive applications.</p>
+</li>
+<li>
+<p><code>inst</code>: an instruction is a <code>str</code> opcode and an ordered list of arguments</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The referent denoting that union of all these types is <code>obj</code>. Thus, <code>true</code> (<code>bool</code>), <code>42</code> (<code>int</code>), and <code>['a':1]</code> (<code>rec</code>) are in <code>obj</code>.</p>
+</div>
+<div class="paragraph">
+<p>A type is built from a <em>canonical type</em> (called the <em>domain</em>) by composing instructions drawn from the set <code>inst</code>, where <code>inst</code>
+is the carrier set of the <strong><em>instruction ring</em></strong> (an algebraic ring with unity). Serial composition is multiplication (<code>*</code>)
+and parallel composition is addition (<code>+</code>) such that, if <code>&lt;A,+,*&gt;</code> is the ring with <code>A</code> the carrier set, with a <code>0</code> element
+(additive identity), a <code>1</code> element (multiplicative identity), and <code>a,b,c,&#8230;&#8203;,0,1</code> in the examples below in <code>A</code>,
+then the following ring axioms much hold.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>(a + b) + c = a + (b + c)</code></p>
+</li>
+<li>
+<p><code>0 + a = a + 0 = a</code></p>
+</li>
+<li>
+<p><code>a - a = a + (-a) = 0</code></p>
+</li>
+<li>
+<p><code>a + b = b + a</code></p>
+</li>
+<li>
+<p><code>(a * b) * c = a * (b * c)</code></p>
+</li>
+<li>
+<p><code>1 * a = a * 1 = a</code></p>
+</li>
+<li>
+<p><code>(a + b) * c = (a * c) + (b * c)</code></p>
+</li>
+<li>
+<p><code>a * (b + c) = (a * b) + (a * c)</code></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>From these axioms, the following common implications are equalities can be deduced.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>a + b = a + c &#8658; b = c</code></p>
+</li>
+<li>
+<p><code>a + b = 0 &#8658; a = -b &amp; b = -a</code></p>
+</li>
+<li>
+<p><code>-(a+b) = (-a) + (-b)</code></p>
+</li>
+<li>
+<p><code>-(-a) = a</code></p>
+</li>
+<li>
+<p><code>a*0 = 0 = 0*a</code></p>
+</li>
+<li>
+<p><code>a * (-b) = -a * b = -(a * b)</code></p>
+</li>
+<li>
+<p><code>(-a) * (-b) = a * b</code></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>In mm-ADT, the carrier set is the set of all instructions <code>inst</code> where:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the <code>0</code>-element of <code>inst</code> is <code>obj{0}&#8656;obj[none]</code> and</p>
+</li>
+<li>
+<p>the <code>1</code>-element of <code>inst</code> is <code>obj&#8656;obj[id]</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>As an example, the instructions <code>[plus,10]</code> and <code>[gt,5]</code> can be combined via serial and/or parallel composition.</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-mmadt" data-lang="mmadt">instruction                                    domain         range      state
--------------------------------------------------------------------------------
-[plus,10]                                      int{2}    =&gt;   int{2}      int{2}&lt;x&gt;
-[choose,[int{0,2}&lt;=int{2}[is,bool{2}&lt;=in...    int{2}    =&gt;   int{2}      int{2}&lt;x&gt; int{2}&lt;y&gt;
- [is,bool{2}&lt;=int{2}[lt,10]]                    int{2}   =&gt;    int{0,2}   int{2}&lt;x&gt; int{2}&lt;y&gt;
-  [lt,10]                                        int{2}  =&gt;     bool{2}   int{2}&lt;x&gt; int{2}&lt;y&gt;
- [is,bool{2}&lt;=int{2}[lt,20]]                    int{2}   =&gt;    int{0,2}   int{2}&lt;x&gt; int{2}&lt;y&gt;
-  [lt,20]                                        int{2}  =&gt;     bool{2}   int{2}&lt;x&gt; int{2}&lt;y&gt;
- [plus,int{2}&lt;y&gt;]                               int{2}   =&gt;    int{2}     int{2}&lt;x&gt; int{2}&lt;y&gt;
-[count]                                        int{2}    =&gt;   int         int{2}&lt;x&gt; int{2}&lt;y&gt;
-']</code></pre>
+<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">int&lt;=int[plus,10] * bool&lt;=int[gt,5]   ==   bool&lt;=int[plus,10][gt,5]
+int&lt;=int[plus,10] + bool&lt;=int[gt,5]   ==    obj&lt;=int[branch,[plus,10],[gt,5]]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All serial and parallel composition are associative (except for those that use instructions from the <code>inst</code> sub-ring: <em>the reduce near-ring</em>).
+Finally, the distributivity of multiplications over addition is made apparent via:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">[plus,10] * ([gt,5] + [lt,2])     ==   [plus,10][gt,5] + [plus,10][lt,2]
+([plus,10] + [mult,5]) * [gt,7]   ==   [plus,10][gt,7] + [mult,5][gt,7]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The above expressions have a diagrammatic representation where the lines are streams of <code>objs</code> that are being operated
+on by the <code>insts</code> they meet along the way. Whenever the diagram branches, the <code>obj</code> at the branch is cloned, taking
+both branches (always).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="diag-2747d53c19cf0aa9a8358bbaf3d71f0e.png" alt="diag 2747d53c19cf0aa9a8358bbaf3d71f0e" width="680" height="182">
+</div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_type_quantifiers">Type Quantifiers</h4>
+<h4 id="_type_quantification_and_the_quantifier_ring">Type Quantification and the Quantifier Ring</h4>
 <div class="paragraph">
 <p>A <em>type</em> denotes a set of <code>objs</code>. For example, <code>int</code> refers to a the set of integers. A set is a non-repeating collection of <code>objs.</code>
 A <em>stream</em> generalizes a set. A stream is an unordered collection of <code>objs</code> of varying cardinality (a multi-set, or bag).
@@ -660,55 +783,9 @@ int{*}&lt;=[=db][get,'costs']   // 0 or more ints</code></pre>
 </table>
 </div>
 <div class="paragraph">
-<p>In functional programming, the algebraic laws governing the composition of wrapper objects via <code>map</code>, <code>flatmap</code>, <code>filter</code>, etc.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_type_composition">Type Composition</h4>
-<div class="paragraph">
-<p>The fundamental base types of mm-ADT are:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>bool</code>: two value boolean set containing <code>true</code> and <code>false</code>.</p>
-</li>
-<li>
-<p><code>int</code>: an integer set including positive and negative values (overflow prevention via dynamic bit expansion).</p>
-</li>
-<li>
-<p><code>real</code>: a decimal set including positive and negative values (overflow prevention via dynamic bit expansion).</p>
-</li>
-<li>
-<p><code>str</code>: the set of all Unicode strings.</p>
-</li>
-<li>
-<p><code>rec</code>: a key/value structure supporting arbitrary key and value types.</p>
-</li>
-<li>
-<p><code>lst</code>: an ordered list of values support tuple and inductive applications.</p>
-</li>
-<li>
-<p><code>inst</code>: an instruction is a <code>str</code> opcode and an ordered list of arguments</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The referent denoting that union of all these types is <code>obj</code>. Thus, <code>true</code>, <code>42</code>, and <code>['a':1]</code> are in <code>obj</code>. There are
-many types that denote a stream of these three <code>objs</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-mmlang" data-lang="mmlang">obj{3}&lt;=obj{3}                                            // a stream of 3 objs
-obj{3}&lt;=obj{3}[true|42|['a':1]]                           // a stream of the 3 objs (repeatable)
-obj{3}&lt;=obj{3}[true|42|['a':1]][is,[dedup][count][eq,3]]  // a stream of the 3 objs (all unique)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>A type is built from a <em>canonical type</em> (called the domain) by composing instructions in <code>inst</code>. Like the quantifier ring,
-the <strong><em>instruction ring</em></strong> is an algebraic ring with unity. The type system of mm-ADT is characterized by a particular formulation
-of the direct product of rings over the <em>quantifier</em> and <em>instruction</em> rings. The direct product of these two rings is
-a ring itself. Thus, mm-ADT&#8217;s types are completely understood using ring theory (a sub-ring of the mm-ADT type system
+<p>The type system of mm-ADT is characterized by a particular formulation of the direct product of rings over
+the <em>quantifier</em> and <em>instruction</em> rings. The direct product of these two rings is  a ring itself. Thus, mm-ADT&#8217;s
+types are completely understood using ring theory (a sub-ring of the mm-ADT type system
 is a <em>near-ring</em> and special considerations are required when composing instructions from that set).</p>
 </div>
 <div class="listingblock">
@@ -800,7 +877,7 @@ All mm-ADT types respective associative composition and every type&#8217;s ident
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-19 17:04:33 -0600
+Last updated 2020-03-19 22:38:44 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
