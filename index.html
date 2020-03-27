@@ -669,7 +669,6 @@ definition in pseudo-<code>mmlang</code> notation below.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="Delphi">range<span class="comment">{q}</span>&lt;=domain<span class="comment">{q}</span>[inst]<span class="comment">{q}</span>[bran-&gt;ch|ing-&gt;inst][allowing,[nesting,[types]]
-
 |_________________||______________________________________________________|
   <span class="keyword">type</span> signature                     <span class="keyword">type</span> definition</code></pre>
 </div>
@@ -696,19 +695,19 @@ drawn from this type are always generally within the range <code>ctype</code> as
 </ol>
 </div>
 <div class="paragraph">
-<p>A few type signature examples are presented, detailing the nuanced definition of an mm-ADT.</p>
+<p>A few type signature examples are presented which highlight the nuances of an mm-ADT type.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int<span class="comment">{1}</span>             <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int<span class="comment">{1}</span>                <i class="conum" data-value="1"></i><b>(1)</b>
 ==&gt;int
-mmlang&gt; int&lt;=int           <i class="conum" data-value="2"></i><b>(2)</b>
+mmlang&gt; int&lt;=int              <i class="conum" data-value="2"></i><b>(2)</b>
 ==&gt;int
-mmlang&gt; int<span class="comment">{5}</span>             <i class="conum" data-value="3"></i><b>(3)</b>
+mmlang&gt; int<span class="comment">{5}</span>                <i class="conum" data-value="3"></i><b>(3)</b>
 ==&gt;int<span class="comment">{5}</span>
-mmlang&gt; int<span class="comment">{0,5}</span>           <i class="conum" data-value="4"></i><b>(4)</b>
+mmlang&gt; int<span class="comment">{0,5}</span>              <i class="conum" data-value="4"></i><b>(4)</b>
 ==&gt;int<span class="comment">{0,5}</span>
-mmlang&gt; int<span class="comment">{0,5}</span>&lt;=int<span class="comment">{0,5}</span> <i class="conum" data-value="5"></i><b>(5)</b>
+mmlang&gt; int<span class="comment">{0,5}</span>&lt;=int<span class="comment">{0,5}</span>    <i class="conum" data-value="5"></i><b>(5)</b>
 ==&gt;int<span class="comment">{0,5}</span></code></pre>
 </div>
 </div>
@@ -716,10 +715,11 @@ mmlang&gt; int<span class="comment">{0,5}</span>&lt;=int<span class="comment">{0
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>In most programming languages, a value can be typed <code>int</code> as in <code>val x:int</code>. Such declarations state that
-the value referred to by <code>x</code> is a <em>single</em> element within the set of integers. This concept is captured in mm-ADT
-via quantification, where when the quantifier is the <a href="https://en.wikipedia.org/wiki/Unit_(ring_theory)">unit</a> of
-the underlying quantifier ring, then it is simply not displayed in <code>mmlang</code>.</td>
+<td>In most programming languages, a value can be typed <code>int</code> as in <code>val x:int</code>. Such
+<a href="https://en.wikipedia.org/wiki/Declaration_(computer_programming)">declarations</a> state that the value referred to by <code>x</code>
+is a <em>single</em> element within the set of integers. This concept is captured in mm-ADT via quantification, where when the
+quantifier is the <a href="https://en.wikipedia.org/wiki/Unit_(ring_theory)">unit</a> of the underlying quantifier ring, then it is
+simply not displayed in <code>mmlang</code>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -729,15 +729,16 @@ integer, the integer is returned. However, in <code>mmlang</code>, when the doma
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>A type can refer to an unordered bag (or multi-set) of elements known as a <em>stream</em>. <code>int{5}</code> is a type
-referring to 5 integer values (with repeats possible).</td>
+<td>A type always refers to an unordered <a href="https://en.wikipedia.org/wiki/Multiset">multi-set</a> (or bag) of elements
+known as a <em>stream</em>. <code>int{5}</code> is a type referring to 5 integer values (with repeats possible). As a point of comparison,
+<code>int</code> denotes a stream containing a single integer. This explains why <code>mmlang</code> displays <code>int{1}</code> as <code>int</code>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
 <td>The quantifier ring can be any ring with unity. In the previous examples, the chosen ring&#8217;s
 <a href="https://en.wikipedia.org/wiki/Algebraic_structure">carrier set</a> was the set of integers. In this example, the
-carrier set is two integers and is used to capture uncertainty as
-to the number of elements being referred. <code>int{0,5}</code> is a type referring to either 0, 1, 2, 3, 4, or 5 integers.</td>
+carrier set is two integers and that are used to capture uncertainty as
+to the number of elements being referred to. <code>int{0,5}</code> is a type referring to either 0, 1, 2, 3, 4, or 5 integers.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
@@ -1465,7 +1466,7 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-27 11:59:35 -0600
+Last updated 2020-03-27 12:19:11 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
