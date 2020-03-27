@@ -53,7 +53,7 @@ textarea{overflow:auto;vertical-align:top}
 table{border-collapse:collapse;border-spacing:0}
 *,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
 html,body{font-size:95%}
-body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
 a:hover{cursor:pointer}
 img,object,embed{max-width:100%;height:auto}
 object,embed{height:100%}
@@ -79,7 +79,7 @@ a:hover,a:focus{color:#1d4b8f}
 a img{border:none}
 p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
 p aside{font-size:.875em;line-height:1.35;font-style:italic}
-h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
 h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
 h1{font-size:2.125em}
 h2{font-size:1.6875em}
@@ -90,7 +90,7 @@ hr{border:solid #ddddd8;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em
 em,i{font-style:italic;line-height:inherit}
 strong,b{font-weight:bold;line-height:inherit}
 small{font-size:60%;line-height:inherit}
-code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+code{font-size:1.2em;font-weight:400;color:rgba(0,0,0,.9)}
 ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
 ul,ol,ul.no-bullet,ol.no-bullet{margin-left:1.5em}
 ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
@@ -125,10 +125,10 @@ h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-s
 h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
 .clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
 .clearfix:after,.float-group:after{clear:both}
-*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
-pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
+*:not(pre)>code{font-size:.9em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-weight:400;text-rendering:optimizeSpeed}
 .keyseq{color:rgba(51,51,51,.8)}
-kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+kbd{display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
 .keyseq kbd:first-child{margin-left:0}
 .keyseq kbd:last-child{margin-right:0}
 .menuseq,.menu{color:rgba(0,0,0,.8)}
@@ -242,7 +242,7 @@ table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
 .quoteblock .quoteblock blockquote{padding:0 0 0 .75em}
 .quoteblock .quoteblock blockquote:before{display:none}
 .verseblock{margin:0 1em 1.25em 1em}
-.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre{font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
 .verseblock pre strong{font-weight:400}
 .verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
 .quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
@@ -658,25 +658,99 @@ for migration around a compute cluster.</p>
 <div class="sect2">
 <h3 id="_types">Types</h3>
 <div class="paragraph">
-<p>mm-ADT types are constructed using a small collection of modifiers. These are written below in an information,
-non-compiling manner.</p>
+<p>mm-ADT types are constructed by composing a set of <em>fundamental types</em> using <strong>instructions</strong> and <strong>quantifiers</strong>.
+Instructions and quantifiers are elements of two independent <a href="https://en.wikipedia.org/wiki/Ring_(mathematics)">rings</a>,
+whose direct product is the subject of study in <a href="https://zenodo.org/record/2565243">stream ring theory</a>.<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p>
+</div>
+<div class="paragraph">
+<p>Instructions, quantifiers, and their unification into types are captured in the informative, yet non-compiling type
+definition in pseudo-<code>mmlang</code> notation below.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">range<span class="comment">{q}</span>&lt;=domain<span class="comment">{q}</span>[inst]<span class="comment">{q}</span>[bran-&gt;ch|ing-&gt;inst][<span class="keyword">with</span>[nesting]]</code></pre>
+<pre class="CodeRay highlight"><code data-lang="Delphi">range<span class="comment">{q}</span>&lt;=domain<span class="comment">{q}</span>[inst]<span class="comment">{q}</span>[bran-&gt;ch|ing-&gt;inst][allowing,[nesting,[types]]
+
+|_________________||______________________________________________________|
+  <span class="keyword">type</span> signature                     <span class="keyword">type</span> definition</code></pre>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_type_signatures">Type Signatures</h4>
+<div class="paragraph">
+<p>Every mm-ADT type can be generally understood as a function that maps elements from one type to elements of another
+type. The type signature specifies the source and target types.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Domain</strong>: Every mm-ADT type has a domain type known as a <code>ctype</code> (canonical type). A <code>ctype</code> always has a
-<em>quantifier</em> specified in <code>{ }</code> (in <code>mmlang</code>) denoting the quantify of the values denoted by the type. When the quantifier
-is unity, then <code>mmlang</code> does not display it.</p>
+<p><strong>Domain</strong>: The domain of an mm-ADT type is a <code>ctype</code> (or <em>canonical type</em>). A <code>ctype</code> is one component of
+a product whose other component is a quantifier specified, in <code>mmmlang</code>, via <code>{}</code>. The semantics of quantification
+vary depending on the chosen quantifier ring, but in general, the intuition is that the quantifier denotes the "number"
+of elements being referred to by the constructed type.</p>
 </li>
 <li>
-<p><strong>Range</strong>: Every mm-ADT type has a range <code>ctype</code> with quantifier. The <code>range&#8656;domain</code> is written backwards to emphasize
-the signature of the type over the instructions that determine the type definition.</p>
+<p><strong>Range</strong>: The range of an mm-ADT type is also a quantified <code>ctype</code>. The <em>signature</em> of a type is the domain/range
+specification: <code>range{q}&#8656;domain{q}</code>. The reasoning behind presenting the range before the domain is that the elements
+drawn from this type are always generally within the range <code>ctype</code> as the domain and range of a type can vary.</p>
 </li>
+</ol>
+</div>
+<div class="paragraph">
+<p>A few type signature examples are presented, detailing the nuanced definition of an mm-ADT.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int<span class="comment">{1}</span>             <i class="conum" data-value="1"></i><b>(1)</b>
+==&gt;int
+mmlang&gt; int&lt;=int           <i class="conum" data-value="2"></i><b>(2)</b>
+==&gt;int
+mmlang&gt; int<span class="comment">{5}</span>             <i class="conum" data-value="3"></i><b>(3)</b>
+==&gt;int<span class="comment">{5}</span>
+mmlang&gt; int<span class="comment">{0,5}</span>           <i class="conum" data-value="4"></i><b>(4)</b>
+==&gt;int<span class="comment">{0,5}</span>
+mmlang&gt; int<span class="comment">{0,5}</span>&lt;=int<span class="comment">{0,5}</span> <i class="conum" data-value="5"></i><b>(5)</b>
+==&gt;int<span class="comment">{0,5}</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>In most programming languages, a value can be typed <code>int</code> as in <code>val x:int</code>. Such declarations state that
+the value referred to by <code>x</code> is a <em>single</em> element within the set of integers. This concept is captured in mm-ADT
+via quantification, where when the quantifier is the <a href="https://en.wikipedia.org/wiki/Unit_(ring_theory)">unit</a> of
+the underlying quantifier ring, then it is simply not displayed in <code>mmlang</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>An mm-ADT <code>int</code> is a <a href="https://en.wikipedia.org/wiki/NOP_(code)">no-op</a> function from <code>int</code> to <code>int</code>. Given some
+integer, the integer is returned. However, in <code>mmlang</code>, when the domain and range are the same, the <code>&#8656;</code> and repeated
+<code>ctype</code> and quantifier are not displayed.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>A type can refer to an unordered bag (or multi-set) of elements known as a <em>stream</em>. <code>int{5}</code> is a type
+referring to 5 integer values (with repeats possible).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The quantifier ring can be any ring with unity. In the previous examples, the chosen ring&#8217;s
+<a href="https://en.wikipedia.org/wiki/Algebraic_structure">carrier set</a> was the set of integers. In this example, the
+carrier set is two integers and is used to capture uncertainty as
+to the number of elements being referred. <code>int{0,5}</code> is a type referring to either 0, 1, 2, 3, 4, or 5 integers.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>This example emphasizes the point that every mm-ADT type is ultimately a function with a quantified domain and a
+quantified range.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_type_definition">Type Definition</h4>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
 <p><strong>Instruction</strong>: The domain type is modified via a single instruction. Types are connected to one another via
 instructions. Instructions are denoted in <code>[ ]</code> (in <code>mmlang</code>) and form the primary body of knowledge required
@@ -787,6 +861,7 @@ check if they are greater than <code>5</code>. This yields 2 <code>bools</code><
 </tr>
 </tbody>
 </table>
+</div>
 <div class="sect3">
 <h4 id="_type_composition_and_the_instruction_ring">Type Composition and the Instruction Ring</h4>
 <div class="paragraph">
@@ -1382,9 +1457,15 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 </div>
 </div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. In stream ring theory, instructions are called <em>functions</em> and quantifiers are called <em>coefficients</em>, where their product as mm-ADT types are called <em>streams</em>.
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-27 04:27:33 -0600
+Last updated 2020-03-27 11:59:35 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
