@@ -658,13 +658,80 @@ for migration around a compute cluster.</p>
 <div class="sect2">
 <h3 id="_types">Types</h3>
 <div class="paragraph">
-<p>mm-ADT types are constructed using a small collection of modifiers.
-These are written below within the ascii-structure.</p>
+<p>mm-ADT types are constructed using a small collection of modifiers. These are written below in an information,
+non-compiling manner.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="Delphi">range<span class="comment">{q}</span>&lt;=domain<span class="comment">{q}</span>[inst]<span class="comment">{q}</span>[bran-&gt;ch|ing-&gt;inst][<span class="keyword">with</span>[nesting]]</code></pre>
 </div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Domain</strong>: Every mm-ADT type has a domain type known as a <code>ctype</code> (canonical type). A <code>ctype</code> always has a
+<em>quantifier</em> specified in <code>{ }</code> (in <code>mmlang</code>) denoting the quantify of the values denoted by the type.</p>
+</li>
+<li>
+<p><strong>Range</strong>: Every mm-ADT type has a range <code>ctype</code> with quantifier. The <code>range&#8656;domain</code> is written backwards to emphasize
+the signature of the type over the instructions that determine the type definition.</p>
+</li>
+<li>
+<p><strong>Instruction</strong>: The domain type is modified via a single instruction. Types are connected to one another via
+instructions. Instructions are denoted in <code>[ ]</code> (in <code>mmlang</code>) and form the primary body of knowledge required
+to program the mm-ADT VM.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>If <code>domain</code> and <code>range</code> are <code>ctypes</code>, then the mm-ADT VM type data structure is the bi-sorted list of <code>ctypes</code> and
+instructions.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="types-and-instructions.png" alt="types and instructions" width="730" height="70">
+</div>
+</div>
+<div class="paragraph">
+<p>The above list is rendered in <code>mmlang</code> as below where the intermediate <code>ctypes</code> are not displayed (though they exist).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">range<span class="comment">{q}</span>&lt;=domain<span class="comment">{q}</span>[inst][inst][inst]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int                        <i class="conum" data-value="1"></i><b>(1)</b>
+==&gt;int
+mmlang&gt; int<span class="comment">{2}</span>                     <i class="conum" data-value="2"></i><b>(2)</b>
+==&gt;int<span class="comment">{2}</span>
+mmlang&gt; int<span class="comment">{2}</span>[plus,<span class="integer">2</span>]             <i class="conum" data-value="3"></i><b>(3)</b>
+==&gt;int<span class="comment">{2}</span>[plus,<span class="integer">2</span>]
+mmlang&gt; int<span class="comment">{2}</span>[plus,<span class="integer">2</span>][gt,<span class="integer">5</span>]       <i class="conum" data-value="4"></i><b>(4)</b>
+==&gt;bool<span class="comment">{2}</span>&lt;=int<span class="comment">{2}</span>[plus,<span class="integer">2</span>][gt,<span class="integer">5</span>]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>When the domain and range are the same, no <code>&#8656;</code> is displayed.<code>int</code> is equivalent to <code>int&#8656;int</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Quantifiers can be from any algebraic ring. Typically, the integers are used to denote the size of the type. <code>int{2}</code> is 2 <code>ints</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>An instruction builds off the domain to yield a new type. Given 2 <code>ints</code>, the <code>ints</code> will be incremented by 2.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The <code>[gt]</code> instruction yields a <code>bool</code> domain. This type will take 2 <code>ints</code>, increment them by 2, and
+check if they are greater than <code>5</code>. This yields 2 <code>bools</code></td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>A complex type definition is provided below that captures a large number of the mm-ADT type constructs.</p>
@@ -1315,7 +1382,7 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-27 03:37:58 -0600
+Last updated 2020-03-27 04:01:39 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
