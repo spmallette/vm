@@ -7,7 +7,7 @@
 <meta name="generator" content="Asciidoctor 1.5.8">
 <meta name="author" content="Marko A. Rodriguez">
 <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
-<title>mm-ADT: A Multi-Model Abstract Data Type</title>
+<title>mm-ADT: The Virtual Machine (A Multi-Model Abstract DataType)</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
 /* Remove comment around @import statement below when using as a custom stylesheet */
@@ -513,7 +513,7 @@ table.CodeRay td.code>pre{padding:0}
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>mm-ADT: A Multi-Model Abstract Data Type</h1>
+<h1>mm-ADT: The Virtual Machine (A Multi-Model Abstract DataType)</h1>
 <div class="details">
 <span id="author" class="author">Marko A. Rodriguez</span><br>
 <span id="email" class="email"><a href="mailto:marko@rredux.com">marko@rredux.com</a></span><br>
@@ -670,7 +670,8 @@ non-compiling manner.</p>
 <ol class="arabic">
 <li>
 <p><strong>Domain</strong>: Every mm-ADT type has a domain type known as a <code>ctype</code> (canonical type). A <code>ctype</code> always has a
-<em>quantifier</em> specified in <code>{ }</code> (in <code>mmlang</code>) denoting the quantify of the values denoted by the type.</p>
+<em>quantifier</em> specified in <code>{ }</code> (in <code>mmlang</code>) denoting the quantify of the values denoted by the type. When the quantifier
+is unity, then <code>mmlang</code> does not display it.</p>
 </li>
 <li>
 <p><strong>Range</strong>: Every mm-ADT type has a range <code>ctype</code> with quantifier. The <code>range&#8656;domain</code> is written backwards to emphasize
@@ -684,7 +685,7 @@ to program the mm-ADT VM.</p>
 </ol>
 </div>
 <div class="paragraph">
-<p>If <code>domain</code> and <code>range</code> are <code>ctypes</code>, then the mm-ADT VM type data structure is the bi-sorted list of <code>ctypes</code> and
+<p>Let <code>domain</code> and <code>range</code> be <code>ctypes</code>, the mm-ADT VM type data structure is the bi-sorted list of <code>ctypes</code> and
 instructions.</p>
 </div>
 <div class="imageblock text-center">
@@ -716,7 +717,8 @@ mmlang&gt; int<span class="comment">{2}</span>[plus,<span class="integer">2</spa
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>When the domain and range are the same, no <code>&#8656;</code> is displayed.<code>int</code> is equivalent to <code>int&#8656;int</code></td>
+<td>When the domain and range are the same, no <code>&#8656;</code> is displayed. <code>int</code> is equivalent to <code>int&#8656;int</code>. More specifically,
+<code>int</code> is actually <code>int{1}&#8656;int{1}</code>. Every <code>int</code> is contained in the type <code>int</code>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -1382,7 +1384,7 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-27 04:01:39 -0600
+Last updated 2020-03-27 04:27:33 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
