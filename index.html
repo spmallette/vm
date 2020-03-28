@@ -596,8 +596,12 @@ semantics (streams of atomic and composite data structures).</p>
 <div class="sect2">
 <h3 id="_the_mm_adt_console">The mm-ADT Console</h3>
 <div class="paragraph">
-<p>The mm-ADT VM is packaged with a <a href="https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop:">REPL</a> console that supports any mm-ADT language.
-The default language is <code>mmlang</code>.</p>
+<p>The mm-ADT VM is packaged with a <a href="https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop:">REPL</a> console that
+enables users to evaluate mm-ADT programs written in any language with a respective <code>LanguageProvider</code> implementation.
+The reference language distributed with the mm-ADT VM is called <code>mmlang</code>. <code>mmlang</code> is a low-level, functional language that
+is in near 1-to-1  correspondence with the underlying mm-ADT VM architecture&#8201;&#8212;&#8201;offering it&#8217;s users
+<a href="https://en.wikipedia.org/wiki/Turing_completeness">Turing-Complete</a> expressively as well as a direct means of understanding
+the VMs internal structures and processes.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -613,18 +617,8 @@ mmlang&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><code>mmlang</code> is in near 1-to-1 correspondence with the underlying mm-ADT VM architecture. For users that find <code>mmlang</code> too
-terse or overly expressive, other mm-ADT compliant languages can be used to control the mm-ADT VM and thus, indirectly,
-the integrated storage systems and processors.</p>
-</div>
-<div class="paragraph">
-<p>All mm-ADT compliant languages must implement the <code>LanguageProvider</code> interface. By doing so, the language can be used
-in the mm-ADT console. Furthermore, mm-ADT <em>models</em> (the primary application unit of mm-ADT) can be shared between languages.
-Languages with simple <code>get</code>/<code>put</code> semantics can be used for interacting with key/value stores while graph-oriented
-languages can be used for processing strongly connected data structures.</p>
-</div>
-<div class="paragraph">
-<p>A simple console session is presented below demonstrating values and the instructions that operate on them.</p>
+<p>A simple console session is presented below, where the parser expects programs written in the language specified left
+of the <code>&gt;</code> prompt. All the examples in this documentation are written in <code>mmlang</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -646,30 +640,45 @@ mmlang&gt; <span class="integer">1</span>[plus,<span class="integer">2</span>]
 <div class="sectionbody">
 <div class="imageblock left text-left">
 <div class="content">
-<img src="types-and-values.png" alt="types and values" width="220" height="210">
+<img src="types-and-values.png" alt="types and values" width="160" height="112">
 </div>
 </div>
 <div class="paragraph">
-<p>The mm-ADT VM has two kinds of datum: <strong>types</strong> and <strong>values</strong>. It is important to understand the breadth of uses that
-types play. It is via types and their composition that program are specified, sets constructed, functions defined,
-and mappings between different abstract data types are realized. Values, on the other hand, are simple datum optimized
-for migration around a compute cluster.</p>
+<p>The mm-ADT VM operates on <em>objects</em> denoted <code>obj</code>. Every mm-ADT <code>obj</code> is either a <strong>type</strong> or a <strong>value</strong>.</p>
+</div>
+<div class="paragraph">
+<p>\[ \texttt{obj} = \texttt{type} + \texttt{value} \]</p>
+</div>
+<div class="paragraph">
+<p>It is via types and their composition that program
+are specified, sets constructed, functions defined, and mappings between different abstract data types are realized.
+Values, on the other hand, are simple datum optimized for migration around a compute cluster.</p>
 </div>
 <div class="sect2">
 <h3 id="_types">Types</h3>
-<div class="paragraph">
-<p>mm-ADT types are constructed by composing a set of <em>fundamental types</em> using <strong>instructions</strong> and <strong>quantifiers</strong>.
-Instructions and quantifiers are elements of two independent <a href="https://en.wikipedia.org/wiki/Ring_(mathematics)">rings</a>,
-whose direct product is the subject of study in <a href="https://zenodo.org/record/2565243">stream ring theory</a>.<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p>
+<div class="imageblock right">
+<div class="content">
+<img src="types-instructions-quantifiers.png" alt="types instructions quantifiers" width="130" height="126">
+</div>
 </div>
 <div class="paragraph">
-<p>Instructions, quantifiers, and their unification into types are captured in the informative, yet non-compiling type
-definition in pseudo-<code>mmlang</code> notation below.</p>
+<p>The set of all mm-ADT types can be constructed inductively from the finite set of <em>initial data types</em> being composed
+with <strong>instructions</strong> (<code>inst</code>) and <strong>quantifiers</strong> (<code>q</code>).
+Instructions and quantifiers form the carrier sets of two independent <a href="https://en.wikipedia.org/wiki/Ring_(mathematics)">rings</a>
+with unity whose direct product forms the mm-ADT <strong>type ring</strong> and is the subject of study in
+<a href="https://zenodo.org/record/2565243">stream ring theory</a> (SRT).<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p>
+</div>
+<div class="paragraph">
+<p>\[ \texttt{type} = \texttt{inst} * \texttt{q} \]</p>
+</div>
+<div class="paragraph">
+<p>An informative, yet non-compiling type is presented below in pseudo-<code>mmlang</code> notation. The expression highlights the
+two primary components of an mm-ADT type: <em>signature</em> and <em>definition</em>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">range<span class="comment">{q}</span>&lt;=domain<span class="comment">{q}</span>[inst]<span class="comment">{q}</span>[bran-&gt;ch|ing-&gt;inst][allowing,[nesting,[types]]
-|_________________||______________________________________________________|
+<pre class="CodeRay highlight"><code data-lang="Delphi">range<span class="comment">{q}</span>&lt;=domain<span class="comment">{q}</span>[inst]<span class="comment">{q}</span>[bran-&gt;ch|ing-&gt;inst][allows,[nesting,[types]]
+|_________________||____________________________________________________|
   <span class="keyword">type</span> signature                     <span class="keyword">type</span> definition</code></pre>
 </div>
 </div>
@@ -750,14 +759,40 @@ quantified range.</td>
 </div>
 <div class="sect3">
 <h4 id="_type_definition">Type Definition</h4>
+<div class="paragraph">
+<p>mm-ADT type signatures describe the structure and quantity of the referred to elements via the broadest
+generalization possible: <code>ctypes</code>. Further specification of the nature of the elements in a type is accomplished
+via type definitions. As an example, the following mm-ADT type is a
+<a href="https://en.wikipedia.org/wiki/Refinement_type">refinement type</a>&#8201;&#8212;&#8201;it provides further
+constraint/refinement to <code>int</code>. In particular, it is the mm-ADT definition of a natural number in \$\mathbb{N}\$.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">int[<span class="keyword">is</span>,[gte,<span class="integer">0</span>]]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The structure <code>[is,[gte,0]]</code> is an <strong>instruction</strong> with a single argument: a type.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int[<span class="keyword">is</span>,[gte,<span class="integer">0</span>]]
+==&gt;int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,bool&lt;=int[gte,<span class="integer">0</span>]]</code></pre>
+</div>
+</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Instruction</strong>: The domain type is modified via a single instruction. Types are connected to one another via
-instructions. Instructions are denoted in <code>[ ]</code> (in <code>mmlang</code>) and form the primary body of knowledge required
-to program the mm-ADT VM.</p>
+<p><strong>Instruction</strong>: An mm-ADT instruction denotes an operation explicitly implemented by the mm-ADT virtual machine. The
+set of all mm-ADT instructions forms the machine&#8217;s <a href="https://en.wikipedia.org/wiki/Instruction_set_architecture">instruction set architecture</a>.
+A type is transformed into another type via an instruction.</p>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>The mm-ADT <strong>type graph</strong> is composed of <code>ctype</code> vertices and
+instruction edges. Every path through the graph denotes an mm-ADT type, where an mm-ADT <em>program</em> is simply
+a (longer) path through the type graph. Thus, every mm-ADT type is a program and every mm-ADT program is a type.</p>
 </div>
 <div class="paragraph">
 <p>Let <code>domain</code> and <code>range</code> be <code>ctypes</code>, the mm-ADT VM type data structure is the bi-sorted list of <code>ctypes</code> and
@@ -1461,12 +1496,12 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 <div id="footnotes">
 <hr>
 <div class="footnote" id="_footnotedef_1">
-<a href="#_footnoteref_1">1</a>. In stream ring theory, instructions are called <em>functions</em> and quantifiers are called <em>coefficients</em>, where their product as mm-ADT types are called <em>streams</em>.
+<a href="#_footnoteref_1">1</a>. In stream ring theory, instructions are called <em>functions</em> and quantifiers are called <em>coefficients</em>, where their product are called <em>streams</em>. This equivalence highlights the fact that mm-ADT types are referents to streams of objects (i.e. <a href="https://en.wikipedia.org/wiki/Multiset">multi-sets</a> or bags).
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-27 12:19:11 -0600
+Last updated 2020-03-27 23:13:59 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
