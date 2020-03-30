@@ -659,7 +659,7 @@ mmlang&gt; <span class="integer">1</span>[plus,<span class="integer">2</span>]
 </div>
 </div>
 <div class="paragraph">
-<p>The mm-ADT VM operates on <strong>quantified</strong> objects known as <code>objs</code>. Every object is either a <strong>type</strong> or a <strong>value</strong>.</p>
+<p>The mm-ADT VM operates on quantified objects known as <code>objs</code>. Every object is either a <strong>type</strong> or a <strong>value</strong>.</p>
 </div>
 <div class="paragraph">
 <p>\[
@@ -670,10 +670,10 @@ mmlang&gt; <span class="integer">1</span>[plus,<span class="integer">2</span>]
 \]</p>
 </div>
 <div class="paragraph">
-<p>A type denotes a <em>stream</em> (i.e. <a href="https://en.wikipedia.org/wiki/Multiset">multi-set</a> or bag) of <code>obj</code> values. Values refer to datum existing outside the mm-ADT VM within the the larger execution context. For instance, if an mm-ADT VM is implemented on the <a href="https://en.wikipedia.org/wiki/Java_virtual_machine">JVM</a>, then the <code>str</code> value <code>'mmadt'</code> refers to the <code>java.lang.String</code> <code>"mmadt"</code>. Both <code>obj</code> types and values have associated quantifiers, where the semantics of quantification varies as, for each mm-ADT program, a different quantifier can be used (e.g. integers, reals, unitary matrices, etc.). However, in general, the intuition is that the quantifier denotes the <em>amount</em> of objects being referred to.</p>
+<p>A type denotes a <em>stream</em> (i.e. <a href="https://en.wikipedia.org/wiki/Multiset">multi-set</a> or bag) of <code>obj</code> values. Values denote atomic or composite datum existing outside the mm-ADT VM within it&#8217;s execution environment. For instance, if an mm-ADT VM is implemented on the <a href="https://en.wikipedia.org/wiki/Java_virtual_machine">JVM</a>, then the <code>str</code> value <code>'mmadt'</code> refers to the <code>java.lang.String</code> instance <code>"mmadt"</code>. Both <code>obj</code> types and values have associated <strong>quantifiers</strong> (<code>q</code>), where the semantics of quantification depends on the quantifier used across an mm-ADT program (e.g. integers, reals, unitary matrices, etc.). However, in general, the intuition is that the quantifier denotes the <em>amount</em> of objects being referred to.</p>
 </div>
 <div class="paragraph">
-<p>It is via types and their composition that program are specified, streams constructed, functions defined, and functorial mappings between different abstract data types realized. Fundamentally, a type refers to a stream of values and when a type us <em>dereferenced</em> (evaluated), values are returned. Those values are the results of the mm-ADT program (a type).</p>
+<p>It is via types and their composition that programs are written, streams are constructed, functions are defined, and functorial mappings between different abstract data types are specified. mm-ADT types serve numerous roles which are realized by many different sorts of objects in traditional abstract computing machines. The reason being is that the fundamental idea of an mm-ADT type is that it refers to a stream of values that when <em>dereferenced</em> (evaluated), those values are returned. Thus, at the level of an mm-ADT program (which is simply a "complex" type), the referent values are the program&#8217;s results.</p>
 </div>
 <div class="sect2">
 <h3 id="_types">Types</h3>
@@ -683,18 +683,35 @@ mmlang&gt; <span class="integer">1</span>[plus,<span class="integer">2</span>]
 </div>
 </div>
 <div class="paragraph">
-<p>mm-ADT <strong>types</strong> are the product of a type and an instruction (<code>inst</code>), where the type component is the <em>domain</em>, the instruction component the <em>function</em>, and the type product as a whole, relative to it&#8217;s components, the <em>range</em>.
-\[
+<p>An mm-ADT <strong>type</strong> is the product of a type and an instruction (<code>inst</code>), where the type component serves as the <em>domain</em>, the instruction component the <em>function</em>, and the type product as a whole, relative to it&#8217;s components, the <em>range</em>.</p>
+</div>
+<div class="paragraph">
+<p>\[
 \begin{split}
 \tt{type} &amp;=\;&amp; \tt{type} &amp;*\;&amp; \tt{inst}   \\
-``\text{range} &amp;=\;&amp; \text{domain} &amp;*\;&amp; \text{function}{"}
+\text{“range} &amp;=\;&amp; \text{domain} &amp;*\;&amp; \text{function"}
 \end{split}
-\]
-This recursive definition is grounded at the 6 <strong>canonical types</strong>`: <code>bool</code>, <code>int</code>, <code>real</code>, <code>str</code>, <code>lst</code>, and <code>rec</code>. The type of every canonical type is itself and the instruction of every canonical type is the identity instruction <code>[id]</code>.</p>
+\]</p>
+</div>
+<div class="paragraph">
+<p>This recursive definition is grounded at the 6 <strong>canonical types</strong> (called <em>ctypes</em>): <code>bool</code>, <code>int</code>, <code>real</code>, <code>str</code>, <code>lst</code>, and <code>rec</code>. The type of every canonical type is itself and the instruction of every canonical type is the identity instruction <code>[id]</code>.</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="images/ctypes.png" alt="ctypes" width="225">
+</div>
+</div>
+<div class="paragraph">
+<p>From the canonical types, the set of all <strong>derived type</strong> (called <em>dtypes</em>) can be constructed.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/dtype.png" alt="dtype" width="425">
+</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/types.png" alt="types" width="300">
 </div>
 </div>
 <div class="paragraph">
@@ -712,19 +729,6 @@ In stream ring theory, instructions are called <em>functions</em> and quantifier
 </td>
 </tr>
 </table>
-</div>
-<div class="paragraph">
-<p>From the canonical types, the set of all <strong>derived type</strong> can be constructed.</p>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="images/dtype.png" alt="dtype" width="425">
-</div>
-</div>
-<div class="imageblock right">
-<div class="content">
-<img src="images/types.png" alt="types" width="300">
-</div>
 </div>
 <div class="paragraph">
 <p>An informative, yet non-compiling type is presented below in pseudo-<code>mmlang</code> notation. The expression highlights the
@@ -1404,7 +1408,7 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-30 14:31:32 -0600
+Last updated 2020-03-30 15:27:02 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
