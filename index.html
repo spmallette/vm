@@ -721,15 +721,20 @@ In stream ring theory, instructions are called <em>functions</em> and quantifier
 <img src="images/dtype.png" alt="dtype" width="425">
 </div>
 </div>
+<div class="imageblock right">
+<div class="content">
+<img src="images/types.png" alt="types" width="300">
+</div>
+</div>
 <div class="paragraph">
 <p>An informative, yet non-compiling type is presented below in pseudo-<code>mmlang</code> notation. The expression highlights the
 two primary components of an mm-ADT type: <em>signature</em> and <em>definition</em>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">range<span class="comment">{q}</span>&lt;=domain<span class="comment">{q}</span>[inst]<span class="comment">{q}</span>[bran-&gt;ch|ing-&gt;inst][allows,[nesting,[types]]
-|_________________||____________________________________________________|
-  <span class="keyword">type</span> signature                     <span class="keyword">type</span> definition</code></pre>
+<pre class="CodeRay highlight"><code data-lang="Delphi">range<span class="comment">{q}</span>&lt;=domain<span class="comment">{q}</span>([inst]<span class="comment">{q}</span>)*
+|_________________||__________|
+     signature      definition</code></pre>
 </div>
 </div>
 <div class="sect3">
@@ -1399,7 +1404,7 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-30 14:16:54 -0600
+Last updated 2020-03-30 14:31:32 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
