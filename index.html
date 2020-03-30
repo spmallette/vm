@@ -545,15 +545,12 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel3">
 <li><a href="#_type_signatures">Type Signatures</a></li>
 <li><a href="#_type_definition">Type Definition</a></li>
-</ul>
-</li>
-<li><a href="#_the_type_graph_and_commutative_diagram">The Type Graph and Commutative Diagram</a>
-<ul class="sectlevel3">
-<li><a href="#_common_type_classifications_in_mm_adts_type_theory">Common Type Classifications in mm-ADT&#8217;s Type Theory</a></li>
+<li><a href="#_ring_theoretic_type_composition">Ring Theoretic Type Composition</a></li>
+<li><a href="#_type_graphs_and_their_commutative_diagrams">Type Graphs and their Commutative Diagrams</a></li>
 </ul>
 </li>
 <li><a href="#_values">Values</a></li>
-<li><a href="#_model_categories_and_their_functors">Model Categories and their Functors</a></li>
+<li><a href="#_mmlang_syntax_and_semantics">mmlang Syntax and Semantics</a></li>
 </ul>
 </li>
 <li><a href="#_storage_structures">Storage Structures</a></li>
@@ -662,18 +659,21 @@ mmlang&gt; <span class="integer">1</span>[plus,<span class="integer">2</span>]
 </div>
 </div>
 <div class="paragraph">
-<p>The mm-ADT VM operates on quantified objects known as <code>objs</code>. Every mm-ADT object is either a <strong>type</strong> or a <strong>value</strong>.</p>
+<p>The mm-ADT VM operates on <strong>quantified</strong> objects known as <code>objs</code>. Every object is either a <strong>type</strong> or a <strong>value</strong>.</p>
 </div>
 <div class="paragraph">
-<p>\[ \texttt{obj} = (\texttt{type} + \texttt{value}) * \tt{quantifier}\]</p>
+<p>\[
+\begin{split}
+\tt{obj} &amp;=\;&amp; \tt{object} * \tt{q} \\
+\tt{object} &amp;=\;&amp; \tt{type} + \tt{value}
+\end{split}
+\]</p>
 </div>
 <div class="paragraph">
-<p>The semantics of quantification varies depending on the user&#8217;s chosen quantifier (e.g. integers, reals, unitary matrices, etc.), but in general, the intuition is that the quantifier denotes the amount of <code>objs</code>.</p>
+<p>A type denotes a <em>stream</em> (i.e. <a href="https://en.wikipedia.org/wiki/Multiset">multi-set</a> or bag) of <code>obj</code> values. Values refer to datum existing outside the mm-ADT VM within the the larger execution context. For instance, if an mm-ADT VM is implemented on the <a href="https://en.wikipedia.org/wiki/Java_virtual_machine">JVM</a>, then the <code>str</code> value <code>'mmadt'</code> refers to the <code>java.lang.String</code> <code>"mmadt"</code>. Both <code>obj</code> types and values have associated quantifiers, where the semantics of quantification varies as, for each mm-ADT program, a different quantifier can be used (e.g. integers, reals, unitary matrices, etc.). However, in general, the intuition is that the quantifier denotes the <em>amount</em> of objects being referred to.</p>
 </div>
 <div class="paragraph">
-<p>It is via types and their composition that program
-are specified, sets constructed, functions defined, and mappings between different abstract data types realized.
-Values, on the other hand, are simple datum optimized for migration around a compute cluster.</p>
+<p>It is via types and their composition that program are specified, streams constructed, functions defined, and functorial mappings between different abstract data types realized. Fundamentally, a type refers to a stream of values and when a type us <em>dereferenced</em> (evaluated), values are returned. Those values are the results of the mm-ADT program (a type).</p>
 </div>
 <div class="sect2">
 <h3 id="_types">Types</h3>
@@ -683,25 +683,19 @@ Values, on the other hand, are simple datum optimized for migration around a com
 </div>
 </div>
 <div class="paragraph">
-<p>mm-ADT <strong>types</strong> are the product of a type and an instruction (<code>inst</code>).
-\[ \tt{type} = \tt{type} * \tt{inst}  \]
-This recursive definition is grounded at the 6 <strong>canonical types</strong>: <code>bool</code>, <code>int</code>, <code>real</code>, <code>str</code>, <code>lst</code>, and <code>rec</code>. The type of every canonical type is itself and the instruction of every canonical type is the identity instruction <code>[id]</code>.</p>
+<p>mm-ADT <strong>types</strong> are the product of a type and an instruction (<code>inst</code>), where the type component is the <em>domain</em>, the instruction component the <em>function</em>, and the type product as a whole, relative to it&#8217;s components, the <em>range</em>.
+\[
+\begin{split}
+\tt{type} &amp;=\;&amp; \tt{type} &amp;*\;&amp; \tt{inst}   \\
+``\text{range} &amp;=\;&amp; \text{domain} &amp;*\;&amp; \text{function}{"}
+\end{split}
+\]
+This recursive definition is grounded at the 6 <strong>canonical types</strong>`: <code>bool</code>, <code>int</code>, <code>real</code>, <code>str</code>, <code>lst</code>, and <code>rec</code>. The type of every canonical type is itself and the instruction of every canonical type is the identity instruction <code>[id]</code>.</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="images/ctypes.png" alt="ctypes" width="225">
 </div>
-</div>
-<div class="paragraph">
-<p>From the canonical types, the set of all <strong>derived type</strong> can be constructed.</p>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="images/dtype.png" alt="dtype" width="425">
-</div>
-</div>
-<div class="paragraph">
-<p>Instructions are <a href="https://en.wikipedia.org/wiki/Partial_function#Total_function">total functions</a> that map mm-ADT <code>objs</code> of type <code>X</code> to mm-ADT <code>objs</code> of type <code>Y</code>.</p>
 </div>
 <div class="paragraph">
 <p>Instructions and quantifiers are the carrier sets of two independent <a href="https://en.wikipedia.org/wiki/Ring_(mathematics)">rings</a> with unity whose <a href="https://en.wikipedia.org/wiki/Direct_product">direct product</a> forms the
@@ -714,12 +708,18 @@ mm-ADT <strong>type ring</strong> and is the subject of study in <a href="https:
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-In stream ring theory, instructions are called <em>functions</em> and quantifiers are called <em>coefficients</em>.
-A function-coefficient pair is called a <em>stream</em>. The equivalence highlights the fact that mm-ADT types refer
-to streams of objects (i.e. <a href="https://en.wikipedia.org/wiki/Multiset">multi-sets</a> or bags).
+In stream ring theory, instructions are called <em>functions</em> and quantifiers are called <em>coefficients</em>. A function-coefficient pair is called a <em>stream</em>. The equivalence highlights the fact that mm-ADT types refer to streams of objects (i.e. <a href="https://en.wikipedia.org/wiki/Multiset">multi-sets</a> or bags).
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>From the canonical types, the set of all <strong>derived type</strong> can be constructed.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/dtype.png" alt="dtype" width="425">
+</div>
 </div>
 <div class="paragraph">
 <p>An informative, yet non-compiling type is presented below in pseudo-<code>mmlang</code> notation. The expression highlights the
@@ -730,59 +730,6 @@ two primary components of an mm-ADT type: <em>signature</em> and <em>definition<
 <pre class="CodeRay highlight"><code data-lang="Delphi">range<span class="comment">{q}</span>&lt;=domain<span class="comment">{q}</span>[inst]<span class="comment">{q}</span>[bran-&gt;ch|ing-&gt;inst][allows,[nesting,[types]]
 |_________________||____________________________________________________|
   <span class="keyword">type</span> signature                     <span class="keyword">type</span> definition</code></pre>
-</div>
-</div>
-<div class="sidebarblock">
-<div class="content">
-<div class="title">Expressions of mmlang</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">obj   := (<span class="keyword">type</span> | value)<span class="comment">{q}</span>
-<span class="keyword">type</span>  := ctype | dtype
-ctype := bool | int | real | str | rec | inst
-q     := int,int
-dtype := ctype&lt;=ctype([inst]+)
-rec   := [:] | [obj:obj(,obj:obj)*]
-inst  := [op(,obj*)]
-op    := a, <span class="keyword">as</span>, branch, choose, plus, mult, <span class="keyword">is</span>, ...</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The following equations have variables <code>x</code>, <code>y</code>, and <code>z</code> in <code>ctype</code> and <code>[a]</code> and <code>[b]</code> in <code>inst</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">id(x)                      := x&lt;=x[id]
-domain(y&lt;=x[a])            := x
-range(y&lt;=x[a])             := y
-domain(x)                  := x
-range(x)                   := x
-scompose(y&lt;=x[a],z&lt;=y[b])  := z&lt;=x[a][b]
-pcompose(y&lt;=x[a],y&lt;=x[b])  := y&lt;=x[branch,y&lt;=x[a],y&lt;=x[b]]
-pcompose(y&lt;=x[a],z&lt;=x[b])  := obj&lt;=x[branch,y&lt;=x[a],z&lt;=x[b]]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The quantifiers of an <code>mmlang</code> program are elements of a ring with unity (the quantifier ring). In the following equations, <code>*</code> and <code>+</code> refer to the respective monoid and group operations of the program&#8217;s associated quantifier ring.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">scompose(y<span class="comment">{q1}</span>&lt;=x[a],z<span class="comment">{q2}</span>&lt;=y[b]) := z<span class="comment">{q1*q2}</span>&lt;=x[a][b]
-pcompose(y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[a]) := y<span class="comment">{q1+q2}</span>&lt;=x[a]
-pcompose(y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[b]) := y<span class="comment">{q1+q2}</span>&lt;=x[branch,y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[b]]
-pcompose(y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[b]) := obj<span class="comment">{q1+q2}</span>&lt;=x[branch,y<span class="comment">{q1}</span>&lt;=x[a],z<span class="comment">{q2}</span>&lt;=x[b]]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The following inference rules reuse the same variables as the equations above.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">xxx   yyy      xxx   yyy
-_________      _________
-    zz            zz</code></pre>
-</div>
-</div>
 </div>
 </div>
 <div class="sect3">
@@ -850,6 +797,11 @@ mmlang&gt; int<span class="comment">{0,5}</span>&lt;=int<span class="comment">{0
 <p>mm-ADT type signatures specify the base type and quantity of the type&#8217;s domain and range. Further specification of the nature of the elements of the type is accomplished via a <strong>type definition</strong>. The following mm-ADT type is a <a href="https://en.wikipedia.org/wiki/Refinement_type">refinement type</a>&#8201;&#8212;&#8201;it provides further
 constraint/refinement to <code>int</code>. In particular, it is the mm-ADT definition of a natural number in \$\mathbb{N}\$.</p>
 </div>
+<div class="paragraph">
+<p>\[
+\tt{int[is,[gte,0]]} := \mathbb{N}
+\]</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="Delphi">int[<span class="keyword">is</span>,[gte,<span class="integer">0</span>]]
@@ -902,6 +854,9 @@ of the quantifier ring&#8201;&#8212;&#8201;<code>{1}</code>.</td>
 and can be safely garbage collected by the mm-ADT VM at anytime throughout a non-reducing computation without altering
 the semantics of the computation.</p>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_ring_theoretic_type_composition">Ring Theoretic Type Composition</h4>
 <div class="sect4">
 <h5 id="_the_instruction_ring">The Instruction Ring</h5>
 <div class="paragraph">
@@ -1053,9 +1008,8 @@ also form a category.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_the_type_graph_and_commutative_diagram">The Type Graph and Commutative Diagram</h3>
+<div class="sect3">
+<h4 id="_type_graphs_and_their_commutative_diagrams">Type Graphs and their Commutative Diagrams</h4>
 <div class="paragraph">
 <p>The mm-ADT <strong>type graph</strong> is composed of <em>type vertices</em> connected by <em>instruction edges</em> referring to a single instruction
 that distinguishes them while ensuring that the <a href="https://en.wikipedia.org/wiki/Diagram_(category_theory)">categorical diagram</a>
@@ -1080,33 +1034,6 @@ monoid or <a href="https://en.wikipedia.org/wiki/Homomorphism">homomorphisms</a>
 <div class="content">
 <img src="canonical-type-graph.png" alt="canonical type graph" width="380" height="210">
 </div>
-</div>
-<div class="sect3">
-<h4 id="_common_type_classifications_in_mm_adts_type_theory">Common Type Classifications in mm-ADT&#8217;s Type Theory</h4>
-<div class="paragraph">
-<p>mm-ADT types differ from convention in that they serve to denote:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>canonical types</strong>: sets of elements denoted as <code>int</code> or <code>str</code>, etc.</p>
-</li>
-<li>
-<p><strong>refined types</strong>: constraints on the canonical set types such as <code>nat&#8656;int[is,[gt,0]]</code></p>
-</li>
-<li>
-<p><strong>quantified types</strong>: specifying the cardinality of a set via quantification <code>int{0,5}</code> (a type of 0 to 5 <code>int</code> values).</p>
-</li>
-<li>
-<p><strong>dependent types</strong>:</p>
-</li>
-<li>
-<p><strong>translating types</strong>: specify a mapping from a domain set of elements to a range set of elements as in <code>int[plus,2]</code>.</p>
-</li>
-<li>
-<p><strong>recursive types</strong>:</p>
-</li>
-</ul>
 </div>
 </div>
 </div>
@@ -1136,8 +1063,58 @@ mmlang&gt; .a
 </div>
 </div>
 <div class="sect2">
-<h3 id="_model_categories_and_their_functors">Model Categories and their Functors</h3>
-
+<h3 id="_mmlang_syntax_and_semantics">mmlang Syntax and Semantics</h3>
+<div class="paragraph">
+<p>The <a href="https://en.wikipedia.org/wiki/Context-free_grammar">context-free grammar</a> for <code>mmlang</code> is presented below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">obj   := (<span class="keyword">type</span> | value)<span class="comment">{q}</span>
+<span class="keyword">type</span>  := ctype | dtype
+ctype := bool | int | real | str | rec | inst
+q     := int,int
+dtype := ctype&lt;=ctype([inst]+)
+rec   := [:] | [obj:obj(,obj:obj)*]
+inst  := [op(,obj*)]
+op    := a, <span class="keyword">as</span>, branch, choose, plus, mult, <span class="keyword">is</span>, ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following <a href="https://en.wikipedia.org/wiki/Axiomatic_semantics">language axioms</a> have variables <code>x</code>, <code>y</code>, and <code>z</code> in <code>ctype</code> and <code>[a]</code> and <code>[b]</code> in <code>inst</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">id(x)                      := x&lt;=x[id]
+domain(y&lt;=x[a])            := x
+range(y&lt;=x[a])             := y
+domain(x)                  := x
+range(x)                   := x
+scompose(y&lt;=x[a],z&lt;=y[b])  := z&lt;=x[a][b]
+pcompose(y&lt;=x[a],y&lt;=x[b])  := y&lt;=x[branch,y&lt;=x[a],y&lt;=x[b]]
+pcompose(y&lt;=x[a],z&lt;=x[b])  := obj&lt;=x[branch,y&lt;=x[a],z&lt;=x[b]]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The quantifiers of an <code>mmlang</code> program are elements of a ring with unity (the quantifier ring). In the following equations, <code>*</code> and <code>+</code> refer to the respective monoid and group operations of the program&#8217;s associated quantifier ring.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">scompose(y<span class="comment">{q1}</span>&lt;=x[a],z<span class="comment">{q2}</span>&lt;=y[b]) := z<span class="comment">{q1*q2}</span>&lt;=x[a][b]
+pcompose(y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[a]) := y<span class="comment">{q1+q2}</span>&lt;=x[a]
+pcompose(y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[b]) := y<span class="comment">{q1+q2}</span>&lt;=x[branch,y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[b]]
+pcompose(y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[b]) := obj<span class="comment">{q1+q2}</span>&lt;=x[branch,y<span class="comment">{q1}</span>&lt;=x[a],z<span class="comment">{q2}</span>&lt;=x[b]]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following inference rules reuse the same variables as the equations above.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">xxx   yyy      xxx   yyy
+_________      _________
+    zz            zz</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1422,7 +1399,7 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-30 13:11:36 -0600
+Last updated 2020-03-30 14:16:54 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
