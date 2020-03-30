@@ -658,14 +658,17 @@ mmlang&gt; <span class="integer">1</span>[plus,<span class="integer">2</span>]
 <div class="sectionbody">
 <div class="imageblock left">
 <div class="content">
-<img src="images/obj-type-value.png" alt="obj type value" width="150">
+<img src="images/obj-type-value-q.png" alt="obj type value q" width="300">
 </div>
 </div>
 <div class="paragraph">
-<p>The mm-ADT VM operates on <em>objects</em> denoted <code>obj</code>. Every mm-ADT <code>obj</code> is either a <strong>type</strong> or a <strong>value</strong>.</p>
+<p>The mm-ADT VM operates on quantified objects known as <code>objs</code>. Every mm-ADT object is either a <strong>type</strong> or a <strong>value</strong>.</p>
 </div>
 <div class="paragraph">
-<p>\[ \texttt{obj} = \texttt{type} + \texttt{value} \]</p>
+<p>\[ \texttt{obj} = (\texttt{type} + \texttt{value}) * \tt{quantifier}\]</p>
+</div>
+<div class="paragraph">
+<p>The semantics of quantification varies depending on the user&#8217;s chosen quantifier (e.g. integers, reals, unitary matrices, etc.), but in general, the intuition is that the quantifier denotes the amount of <code>objs</code>.</p>
 </div>
 <div class="paragraph">
 <p>It is via types and their composition that program
@@ -674,19 +677,35 @@ Values, on the other hand, are simple datum optimized for migration around a com
 </div>
 <div class="sect2">
 <h3 id="_types">Types</h3>
-<div class="imageblock right">
+<div class="imageblock left">
 <div class="content">
-<img src="images/type-inst-q.png" alt="type inst q" width="150">
+<img src="images/type-inst.png" alt="type inst" width="220">
 </div>
 </div>
 <div class="paragraph">
-<p>The infinite set of all mm-ADT types can be constructed inductively via a finite set of <em>base types</em> composed with
-<strong>instructions</strong> (<code>inst</code>) and <strong>quantifiers</strong> (<code>q</code>) products. Instructions and quantifiers form the carrier sets of two
-independent <a href="https://en.wikipedia.org/wiki/Ring_(mathematics)">rings</a> with unity whose direct product forms the
+<p>mm-ADT <strong>types</strong> are the product of a type and an instruction (<code>inst</code>).
+\[ \tt{type} = \tt{type} * \tt{inst}  \]
+This recursive definition is grounded at the 6 <strong>canonical types</strong>: <code>bool</code>, <code>int</code>, <code>real</code>, <code>str</code>, <code>lst</code>, and <code>rec</code>. The type of every canonical type is itself and the instruction of every canonical type is the identity instruction <code>[id]</code>.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/ctypes.png" alt="ctypes" width="225">
+</div>
+</div>
+<div class="paragraph">
+<p>From the canonical types, the set of all <strong>derived type</strong> can be constructed.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/dtype.png" alt="dtype" width="425">
+</div>
+</div>
+<div class="paragraph">
+<p>Instructions are <a href="https://en.wikipedia.org/wiki/Partial_function#Total_function">total functions</a> that map mm-ADT <code>objs</code> of type <code>X</code> to mm-ADT <code>objs</code> of type <code>Y</code>.</p>
+</div>
+<div class="paragraph">
+<p>Instructions and quantifiers are the carrier sets of two independent <a href="https://en.wikipedia.org/wiki/Ring_(mathematics)">rings</a> with unity whose <a href="https://en.wikipedia.org/wiki/Direct_product">direct product</a> forms the
 mm-ADT <strong>type ring</strong> and is the subject of study in <a href="https://zenodo.org/record/2565243">stream ring theory</a> (SRT).</p>
-</div>
-<div class="paragraph">
-<p>\[ \texttt{type} = \texttt{inst} * \texttt{q} \]</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -696,7 +715,7 @@ mm-ADT <strong>type ring</strong> and is the subject of study in <a href="https:
 </td>
 <td class="content">
 In stream ring theory, instructions are called <em>functions</em> and quantifiers are called <em>coefficients</em>.
-A function-coefficient pair is called a <em>stream</em>. The equivalence highlights the fact that mm-ADT types are referents
+A function-coefficient pair is called a <em>stream</em>. The equivalence highlights the fact that mm-ADT types refer
 to streams of objects (i.e. <a href="https://en.wikipedia.org/wiki/Multiset">multi-sets</a> or bags).
 </td>
 </tr>
@@ -713,33 +732,72 @@ two primary components of an mm-ADT type: <em>signature</em> and <em>definition<
   <span class="keyword">type</span> signature                     <span class="keyword">type</span> definition</code></pre>
 </div>
 </div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Expressions of mmlang</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">obj   := (<span class="keyword">type</span> | value)<span class="comment">{q}</span>
+<span class="keyword">type</span>  := ctype | dtype
+ctype := bool | int | real | str | rec | inst
+q     := int,int
+dtype := ctype&lt;=ctype([inst]+)
+rec   := [:] | [obj:obj(,obj:obj)*]
+inst  := [op(,obj*)]
+op    := a, <span class="keyword">as</span>, branch, choose, plus, mult, <span class="keyword">is</span>, ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following equations have variables <code>x</code>, <code>y</code>, and <code>z</code> in <code>ctype</code> and <code>[a]</code> and <code>[b]</code> in <code>inst</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">id(x)                      := x&lt;=x[id]
+domain(y&lt;=x[a])            := x
+range(y&lt;=x[a])             := y
+domain(x)                  := x
+range(x)                   := x
+scompose(y&lt;=x[a],z&lt;=y[b])  := z&lt;=x[a][b]
+pcompose(y&lt;=x[a],y&lt;=x[b])  := y&lt;=x[branch,y&lt;=x[a],y&lt;=x[b]]
+pcompose(y&lt;=x[a],z&lt;=x[b])  := obj&lt;=x[branch,y&lt;=x[a],z&lt;=x[b]]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The quantifiers of an <code>mmlang</code> program are elements of a ring with unity (the quantifier ring). In the following equations, <code>*</code> and <code>+</code> refer to the respective monoid and group operations of the program&#8217;s associated quantifier ring.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">scompose(y<span class="comment">{q1}</span>&lt;=x[a],z<span class="comment">{q2}</span>&lt;=y[b]) := z<span class="comment">{q1*q2}</span>&lt;=x[a][b]
+pcompose(y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[a]) := y<span class="comment">{q1+q2}</span>&lt;=x[a]
+pcompose(y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[b]) := y<span class="comment">{q1+q2}</span>&lt;=x[branch,y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[b]]
+pcompose(y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[b]) := obj<span class="comment">{q1+q2}</span>&lt;=x[branch,y<span class="comment">{q1}</span>&lt;=x[a],z<span class="comment">{q2}</span>&lt;=x[b]]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following inference rules reuse the same variables as the equations above.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">xxx   yyy      xxx   yyy
+_________      _________
+    zz            zz</code></pre>
+</div>
+</div>
+</div>
+</div>
 <div class="sect3">
 <h4 id="_type_signatures">Type Signatures</h4>
+<div class="paragraph">
+<p>Every mm-ADT type can be generally understood as a function that maps an <code>obj</code> of one type to an <code>obj</code> of another (potentially
+equivalent) type. A <strong>type signature</strong> specifies the source and target of this mapping.</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="Delphi">range<span class="comment">{q}</span>&lt;=domain<span class="comment">{q}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Every mm-ADT type can be generally understood as a function that maps an <code>obj</code> of one type to an <code>obj</code> of another (potentially
-equivalent) type. A <strong>type signature</strong> specifies the source and target of this mapping.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Domain</strong>: An mm-ADT type composed of an identity instruction and a quantifier.</p>
-</li>
-<li>
-<p><strong>Range</strong>: An mm-ADT type composed of an identity instruction and a quantifier.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>There are 6 <strong>identity instructions</strong> in mm-ADT: <code>bool</code>, <code>int</code>, <code>real</code>, <code>str</code>, <code>lst</code>, and <code>rec</code>. Each is associated with a
-base type specified outside the mm-ADT VM within the context of the executing environment. For instance, if an mm-ADT
-VM is implemented on the JVM, then <code>int</code> is an identity function over <code>java.math.BigInteger</code>. The semantics of quantification
-varies depending on the user&#8217;s chosen quantifier ring, but in general, the intuition is that the quantifier denotes the "number"
-of <code>objs</code> being referred to by the type.</p>
+<p>Type&#8217;s that can be fully specified by the type signature are always canonical types. The examples below demonstrates various expressions in <code>mmlang</code>, highlighting various syntax sugars.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -747,11 +805,13 @@ of <code>objs</code> being referred to by the type.</p>
 ==&gt;int
 mmlang&gt; int&lt;=int              <i class="conum" data-value="2"></i><b>(2)</b>
 ==&gt;int
-mmlang&gt; int<span class="comment">{5}</span>                <i class="conum" data-value="3"></i><b>(3)</b>
+mmlang&gt; int&lt;=bool             <i class="conum" data-value="3"></i><b>(3)</b>
+error: bool <span class="keyword">is</span> <span class="keyword">not</span> a int
+mmlang&gt; int<span class="comment">{5}</span>                <i class="conum" data-value="4"></i><b>(4)</b>
 ==&gt;int<span class="comment">{5}</span>
-mmlang&gt; int<span class="comment">{0,5}</span>              <i class="conum" data-value="4"></i><b>(4)</b>
+mmlang&gt; int<span class="comment">{0,5}</span>              <i class="conum" data-value="5"></i><b>(5)</b>
 ==&gt;int<span class="comment">{0,5}</span>
-mmlang&gt; int<span class="comment">{0,5}</span>&lt;=int<span class="comment">{0,5}</span>    <i class="conum" data-value="5"></i><b>(5)</b>
+mmlang&gt; int<span class="comment">{0,5}</span>&lt;=int<span class="comment">{0,5}</span>    <i class="conum" data-value="6"></i><b>(6)</b>
 ==&gt;int<span class="comment">{0,5}</span></code></pre>
 </div>
 </div>
@@ -759,35 +819,27 @@ mmlang&gt; int<span class="comment">{0,5}</span>&lt;=int<span class="comment">{0
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>In most programming languages, a value can be typed <code>int</code> as in <code>val x:int</code>. Such
-<a href="https://en.wikipedia.org/wiki/Declaration_(computer_programming)">declarations</a> state that the value referred to by <code>x</code>
-is a <em>single</em> element within the set of integers. The concept of a "single element" is captured in mm-ADT via quantification,
-where when the quantifier is the <a href="https://en.wikipedia.org/wiki/Unit_(ring_theory)">unit</a> of the underlying quantifier ring,
-then it is simply not displayed in <code>mmlang</code>.</td>
+<td>In most programming languages, a value can be typed <code>int</code> as in <code>val x:int</code>. Such <a href="https://en.wikipedia.org/wiki/Declaration_(computer_programming)">declarations</a> state that the value referred to by <code>x</code> is a <em>single</em> element within the set of integers. The concept of a "single element" is captured in mm-ADT via quantification. When the quantifier is the <a href="https://en.wikipedia.org/wiki/Unit_(ring_theory)">unit</a> of the underlying quantifier ring, then the quantifier is not displayed in <code>mmlang</code>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>An mm-ADT <code>int</code> is a <a href="https://en.wikipedia.org/wiki/NOP_(code)">no-op</a> identity instruction on the set of integers.
-Given an integer, <code>int</code> returns the integer. In <code>mmlang</code>, when the domain and range are the same, the <code>&#8656;</code> and repeated
-type are not displayed.</td>
+<td>An mm-ADT <code>int</code> is a <a href="https://en.wikipedia.org/wiki/NOP_(code)">no-op</a> identity instruction on the set of integers. Given an integer, <code>int</code> returns the integer. In <code>mmlang</code>, when the domain and range are the same, the <code>&#8656;</code> and repeated type are not displayed.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>An mm-ADT type always refers to an unordered <a href="https://en.wikipedia.org/wiki/Multiset">multi-set</a> (or bag) of elements
-known as a <em>stream</em>. <code>int{5}</code> is a type referring to 5 integers (with repeats possible). As a point of comparison,
-<code>int</code> denotes a stream containing a single integer. This is why <code>int</code> is syntactic sugar for <code>int{1}</code> in <code>mmlang</code>.</td>
+<td>Without any instructions, there is no way for a type to legally map a <code>bool</code> to an <code>int</code>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The quantifier ring can be any ring with unity. In the previous examples, the chosen ring&#8217;s
-<a href="https://en.wikipedia.org/wiki/Algebraic_structure">carrier set</a> was the set of integers. In this example, the
-carrier set is two integers and is used to capture uncertainty as
-to the number of elements being referred to. <code>int{0,5}</code> is a type referring to either 0, 1, 2, 3, 4, or 5 integers.</td>
+<td>An mm-ADT type always refers to an unordered <a href="https://en.wikipedia.org/wiki/Multiset">multi-set</a> (or bag) of elements known as a <em>stream</em>. <code>int{5}</code> is a type referring to 5 integers (with repeats possible). As a point of comparison, <code>int</code> denotes a stream containing a single integer. This is why <code>int</code> is syntactic sugar for <code>int{1}</code> in <code>mmlang</code>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>This example emphasizes the point that every mm-ADT type is ultimately a function with a quantified domain and a
-quantified range.</td>
+<td>The quantifier ring can be any ring with unity. In the previous examples, the chosen ring&#8217;s <a href="https://en.wikipedia.org/wiki/Algebraic_structure">carrier set</a> was the set of integers. In this example, the carrier set is two integers and is used to capture uncertainty as to the number of elements being referred to. <code>int{0,5}</code> is a type referring to either 0, 1, 2, 3, 4, or 5 integers.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>This further emphasizes the fact that every mm-ADT type (even canonical types) are functions with a quantified domain and a quantified range.</td>
 </tr>
 </table>
 </div>
@@ -795,10 +847,7 @@ quantified range.</td>
 <div class="sect3">
 <h4 id="_type_definition">Type Definition</h4>
 <div class="paragraph">
-<p>mm-ADT type signatures specify the base type and quantity of the types domain and range.
-Further specification of the nature of the type&#8217;s referent values is accomplished
-via the <strong>type definitions</strong>. The following mm-ADT type is a
-<a href="https://en.wikipedia.org/wiki/Refinement_type">refinement type</a>&#8201;&#8212;&#8201;it provides further
+<p>mm-ADT type signatures specify the base type and quantity of the type&#8217;s domain and range. Further specification of the nature of the elements of the type is accomplished via a <strong>type definition</strong>. The following mm-ADT type is a <a href="https://en.wikipedia.org/wiki/Refinement_type">refinement type</a>&#8201;&#8212;&#8201;it provides further
 constraint/refinement to <code>int</code>. In particular, it is the mm-ADT definition of a natural number in \$\mathbb{N}\$.</p>
 </div>
 <div class="listingblock">
@@ -811,15 +860,10 @@ constraint/refinement to <code>int</code>. In particular, it is the mm-ADT defin
 </div>
 </div>
 <div class="paragraph">
-<p>The structure <code>[is,[gte,0]]</code> is an <strong>instruction</strong> with a single argument. mm-ADT instruction opcodes denote specific operations
-explicitly implemented by the mm-ADT virtual machine. The set of all mm-ADT instructions forms the
-machine&#8217;s <a href="https://en.wikipedia.org/wiki/Instruction_set_architecture">instruction set architecture</a>.</p>
+<p>The structure <code>[is,[gte,0]]</code> is an <strong>instruction</strong> with a single argument. mm-ADT instruction opcodes denote specific operations explicitly implemented by the mm-ADT virtual machine. The set of all mm-ADT instructions forms the machine&#8217;s <a href="https://en.wikipedia.org/wiki/Instruction_set_architecture">instruction set architecture</a>.</p>
 </div>
 <div class="paragraph">
-<p>A type is transformed into another type via an instruction application. Every instruction is able to operate on both
-types and values. In this way, instruction application on types yields program <em>compilation</em> and instruction application
-on values yields <em>evaluation</em>. The compilation of a type produces a type, where quantification and domain/range specifications
-are inferred when unspecified by the user.</p>
+<p>A type is transformed into another type via an instruction application. Every instruction is able to operate on both types and values. In this way, instruction application on types yields program <em>compilation</em> and instruction application on values yields <em>evaluation</em>. The compilation of a type produces a type, where quantification and domain/range specifications are inferred when unspecified by the user.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1378,7 +1422,7 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-29 11:40:39 -0600
+Last updated 2020-03-30 13:11:36 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
