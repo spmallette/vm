@@ -1087,25 +1087,7 @@ mmlang&gt; [plus,<span class="integer">10</span>] ++ [gt,<span class="integer">5
 </div>
 <div class="sect4">
 <h5 id="_the_quantifier_ring">The Quantifier Ring</h5>
-<div class="paragraph">
-<p>In the <a href="https://en.wikipedia.org/wiki/Type_theory#Difference_from_set_theory">set-theoretic interpretation of types</a>, a type denotes a set in <strong>Set</strong>. A set does not contain repeated elements. A <em>stream</em> generalizes a set. A stream is an unordered collection of <code>objs</code> of varying cardinality (a multi-set, or bag). For example, in mm-ADT, <code>int</code> is shorthand for <code>int{1}</code>--a single integer. This is analogous to other languages, where when <code>int</code> is used to define a value, it is referring to a single integer from the set of all integers&#8212;&#8203;e.g., <code>val answer:int = 42</code>. Where mm-ADT differs from other languages is that <code>bool{42}</code> is a type denoting <code>42</code> boolean values.</p>
-</div>
-<div class="paragraph">
-<p>All <code>mmlang</code> expressions within <code>{ }</code> operate on the mm-ADT VM&#8217;s <strong><em>quantifier ring</em></strong> (w/ unity). Any object that supports <code>+</code>/<code>*</code>/<code>0</code>/<code>1</code> and the axioms governing their composition can be used as an mm-ADT quantifier. Along with Turing Complete types specifications, type definitions can be specified to as accurate or fuzzy a degree as computationally and conceptually possible.</p>
-</div>
-<div class="paragraph">
-<p>Typically, the quantifier of choice for most applications is the <code>int</code> ring (or <code>int</code> range ring&#8201;&#8212;&#8201;<code>{2,13}</code>). Common programming concepts that are usually captured by typeclasses or functors (via <a href="https://en.wikipedia.org/wiki/Lift_(mathematics)">lifting</a>) are expressed in mm-ADT via quantification.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">int                          <span class="comment">// a single int (just/some)</span>
-int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,[gt,<span class="integer">0</span>]]       <span class="comment">// 0 or 1 int   (maybe/option)</span>
-int<span class="comment">{0}</span>&lt;=int[<span class="keyword">is</span>,false]        <span class="comment">// 0 ints       (none)</span>
-int<span class="comment">{4}</span>&lt;=int<span class="comment">{2}</span>[[id]+[id]]    <span class="comment">// 4 ints</span>
-int<span class="comment">{*}</span>&lt;=[=db][get,<span class="string"><span class="delimiter">'</span><span class="content">costs</span><span class="delimiter">'</span></span>]   <span class="comment">// 0 or more ints</span></code></pre>
-</div>
-</div>
-<table class="tableblock frame-all grid-all" style="width: 35%;">
+<table class="tableblock frame-all grid-all right" style="width: 35%;">
 <caption class="title">Table 4. Quantifier Symbols in mmlang</caption>
 <colgroup>
 <col style="width: 25%;">
@@ -1152,6 +1134,24 @@ int<span class="comment">{*}</span>&lt;=[=db][get,<span class="string"><span cla
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>In the <a href="https://en.wikipedia.org/wiki/Type_theory#Difference_from_set_theory">set-theoretic interpretation of types</a>, a type denotes a set in <strong>Set</strong>. A set does not contain repeated elements. A <em>stream</em> generalizes a set. A stream is an unordered collection of <code>objs</code> of varying cardinality (a multi-set, or bag). For example, in mm-ADT, <code>int</code> is shorthand for <code>int{1}</code>--a single integer. This is analogous to other languages, where when <code>int</code> is used to define a value, it is referring to a single integer from the set of all integers&#8212;&#8203;e.g., <code>val answer:int = 42</code>. Where mm-ADT differs from other languages is that <code>bool{42}</code> is a type denoting <code>42</code> boolean values.</p>
+</div>
+<div class="paragraph">
+<p>All <code>mmlang</code> expressions within <code>{ }</code> operate on the mm-ADT VM&#8217;s <strong><em>quantifier ring</em></strong> (w/ unity). Any object that supports <code>+</code>/<code>*</code>/<code>0</code>/<code>1</code> and the axioms governing their composition can be used as an mm-ADT quantifier. Along with Turing Complete types specifications, type definitions can be specified to as accurate or fuzzy a degree as computationally and conceptually possible.</p>
+</div>
+<div class="paragraph">
+<p>Typically, the quantifier of choice for most applications is the <code>int</code> ring (or <code>int</code> range ring&#8201;&#8212;&#8201;<code>{2,13}</code>). Common programming concepts that are usually captured by typeclasses or functors (via <a href="https://en.wikipedia.org/wiki/Lift_(mathematics)">lifting</a>) are expressed in mm-ADT via quantification.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">int                          <span class="comment">// a single int (just/some)</span>
+int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,[gt,<span class="integer">0</span>]]       <span class="comment">// 0 or 1 int   (maybe/option)</span>
+int<span class="comment">{0}</span>&lt;=int[<span class="keyword">is</span>,false]        <span class="comment">// 0 ints       (none)</span>
+int<span class="comment">{4}</span>&lt;=int<span class="comment">{2}</span>[[id]+[id]]    <span class="comment">// 4 ints</span>
+int<span class="comment">{*}</span>&lt;=[=db][get,<span class="string"><span class="delimiter">'</span><span class="content">costs</span><span class="delimiter">'</span></span>]   <span class="comment">// 0 or more ints</span></code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -1164,7 +1164,7 @@ below, a type equivalence is specified via the <code>[id]</code>-instruction edg
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="type-graph.png" alt="type graph" width="700" height="182">
+<img src="images/type-equiv.png" alt="type equiv" width="600">
 </div>
 </div>
 <div class="paragraph">
@@ -1175,11 +1175,6 @@ canonical type graph derived by from the previous type graph via a
 denote the 6 base types and the edges denote
 <a href="https://en.wikipedia.org/wiki/Endomorphism">endomorphisms</a> of the base type
 monoid or <a href="https://en.wikipedia.org/wiki/Homomorphism">homomorphisms</a> between two type monoids.</p>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="canonical-type-graph.png" alt="canonical type graph" width="380" height="210">
-</div>
 </div>
 </div>
 </div>
@@ -1545,7 +1540,7 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-31 01:52:58 -0600
+Last updated 2020-03-31 02:24:33 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
