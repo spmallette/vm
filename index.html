@@ -551,7 +551,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_the_quantifier_ring">The Quantifier Ring</a></li>
 </ul>
 </li>
-<li><a href="#_the_commutative_type_graph">The Commutative Type Graph</a></li>
+<li><a href="#_type_categories">Type Categories</a></li>
 </ul>
 </li>
 <li><a href="#_values">Values</a></li>
@@ -975,10 +975,10 @@ over the <em>quantifier</em> and <em>instruction</em> rings. The direct product 
 <p><code>inst</code> is the carrier set,</p>
 </li>
 <li>
-<p><code>*</code> is <em>serial composition</em>,</p>
+<p><code>*</code> is serial composition,</p>
 </li>
 <li>
-<p><code>+</code> is <em>parallel composition</em>,</p>
+<p><code>+</code> is parallel composition,</p>
 </li>
 <li>
 <p><code>0</code> is <code>[none]</code> and</p>
@@ -1051,6 +1051,11 @@ A known "bug" in stream ring theory is that not all instructions in <code>inst</
 </table>
 </div>
 <div class="paragraph">
+<p>\[
+\texttt{x[branch,[a],[b]]} = &lt;\texttt{x[a]},\texttt{x[b]}&gt;
+\]</p>
+</div>
+<div class="paragraph">
 <p>As an example, the instructions <code>[plus,10]</code> and <code>[gt,5]</code> can be combined via serial and/or parallel composition. In general, all serial and parallel compositions are <a href="https://en.wikipedia.org/wiki/Associative_property">associative</a> except for those that use instructions from a particular <code>inst</code> subring: <em>the reduce near-ring</em> (discussed later).</p>
 </div>
 <div class="listingblock">
@@ -1090,45 +1095,55 @@ mmlang&gt; [plus,<span class="integer">10</span>] ++ [gt,<span class="integer">5
 <table class="tableblock frame-all grid-all right" style="width: 35%;">
 <caption class="title">Table 4. Quantifier Symbols in mmlang</caption>
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
 </colgroup>
 <thead>
 <tr>
+<th class="tableblock halign-left valign-top">usage</th>
 <th class="tableblock halign-left valign-top">sugar</th>
-<th class="tableblock halign-left valign-top">unsugared form</th>
+<th class="tableblock halign-left valign-top">unsugared</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://en.wikipedia.org/wiki/Option_type">none</a>/nothing</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{0}</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{0,0}</code></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://en.wikipedia.org/wiki/Option_type">some</a>/just</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{1,1}</code></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">exact</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{x}</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{x,x}</code></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">least <sup class="footnote" id="_footnote_order">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{x,}</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{x,max}</code></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">most <sup class="footnoteref">[<a class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{,x}</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{min,x}</code></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://en.wikipedia.org/wiki/Option_type">option</a>/maybe</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{?}</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{0,1}</code></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">given <sup class="footnoteref">[<a class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{+}</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{1,max}</code></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">any <sup class="footnoteref">[<a class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{*}</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{1,max}</code></p></td>
 </tr>
@@ -1145,22 +1160,37 @@ mmlang&gt; [plus,<span class="integer">10</span>] ++ [gt,<span class="integer">5
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">int                          <span class="comment">// a single int (just/some)</span>
-int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,[gt,<span class="integer">0</span>]]       <span class="comment">// 0 or 1 int   (maybe/option)</span>
-int<span class="comment">{0}</span>&lt;=int[<span class="keyword">is</span>,false]        <span class="comment">// 0 ints       (none)</span>
-int<span class="comment">{4}</span>&lt;=int<span class="comment">{2}</span>[[id]+[id]]    <span class="comment">// 4 ints</span>
-int<span class="comment">{*}</span>&lt;=[=db][get,<span class="string"><span class="delimiter">'</span><span class="content">costs</span><span class="delimiter">'</span></span>]   <span class="comment">// 0 or more ints</span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="Delphi">int                                  <span class="comment">// a single int   (some)</span>
+int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,[gt,<span class="integer">0</span>]]               <span class="comment">// 0 or 1 int     (option)</span>
+int<span class="comment">{0}</span>&lt;=int[<span class="keyword">is</span>,false]                <span class="comment">// 0 ints         (none)</span>
+int<span class="comment">{4}</span>&lt;=int<span class="comment">{2}</span>[branch,[id],[id]]     <span class="comment">// 4 ints         (exact)</span>
+int<span class="comment">{*}</span>&lt;=[=db][get,<span class="string"><span class="delimiter">'</span><span class="content">costs</span><span class="delimiter">'</span></span>]           <span class="comment">// 0 or more ints (any)</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_the_commutative_type_graph">The Commutative Type Graph</h4>
+<h4 id="_type_categories">Type Categories</h4>
+<div class="openblock">
+<div class="content">
 <div class="paragraph">
-<p>The mm-ADT <strong>type graph</strong> is composed of <em>type vertices</em> connected by <em>instruction edges</em> referring to a single instruction
-that distinguishes them while ensuring that the <a href="https://en.wikipedia.org/wiki/Diagram_(category_theory)">categorical diagram</a>
-isomorphic to the type graph <a href="https://en.wikipedia.org/wiki/Commutative_diagram">commutes</a>. In the example graph/diagram
-below, a type equivalence is specified via the <code>[id]</code>-instruction edge/arrow between <code>int[plus,10]</code> and <code>int[plus,2][plus,8]</code>.</p>
+<div class="title">Definition: Type Category</div>
+<p>An mm-ADT <strong>Type</strong> category is composed of <code>obj</code> <em>objects</em> denoted <code>type</code> and a set of instruction <em>morphisms</em> denoted <code>inst</code>. If two types objects are distinct by a single tail instruction, then there exists an <code>inst</code> morphism \$\tt{[a]}: X&#8594;Y\$ where the \$\mathcal{Dom}(\tt{[a]})\ * \tt{[a]} = \mathcal{Cod}(\tt{[a]})\$. The identity morphism of every <code>type</code> object is the <code>[id]</code> instruction. Every mm-ADT type category <a href="https://en.wikipedia.org/wiki/Commutative_diagram">commutes</a>.</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The <a href="https://en.wikipedia.org/wiki/Commutative_diagram">commutative diagram</a> of a simple type category is presented below where:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><em>Objects</em>: <code>int</code>, <code>int[plus,2]</code>, <code>int[plus,2][plus,8]</code>, and <code>int[plus,2][plus,10]</code></p>
+</li>
+<li>
+<p><em>Morphisms</em>: <code>[plus,2]</code>, <code>[plus,8]</code>, <code>[plus,10]</code>, and respective identity instructions.</p>
+</li>
+</ol>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -1168,13 +1198,10 @@ below, a type equivalence is specified via the <code>[id]</code>-instruction edg
 </div>
 </div>
 <div class="paragraph">
-<p>Every path through the graph specifies a particular mm-ADT type construction, where an mm-ADT <strong>program</strong> is simply
-a type denoted by a terminal vertex. Thus, every mm-ADT program is an mm-ADT type. There exists an mm-ADT
-canonical type graph derived by from the previous type graph via a
-<a href="https://en.wikipedia.org/wiki/Forgetful_functor">forgetful functor</a>, where the vertices
-denote the 6 base types and the edges denote
-<a href="https://en.wikipedia.org/wiki/Endomorphism">endomorphisms</a> of the base type
-monoid or <a href="https://en.wikipedia.org/wiki/Homomorphism">homomorphisms</a> between two type monoids.</p>
+<p>Every path through the diagram specifies a particular type construction</p>
+</div>
+<div class="paragraph">
+<p>Thus, every mm-ADT program is an mm-ADT type. There exists an mm-ADT canonical type graph derived by from the previous type graph via a <a href="https://en.wikipedia.org/wiki/Forgetful_functor">forgetful functor</a>, where the vertices denote the 6 base types and the edges denote <a href="https://en.wikipedia.org/wiki/Endomorphism">endomorphisms</a> of the base type monoid or <a href="https://en.wikipedia.org/wiki/Homomorphism">homomorphisms</a> between two type monoids.</p>
 </div>
 </div>
 </div>
@@ -1538,9 +1565,15 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 </div>
 </div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. Applicable to quantifier rings with an total order over the carrier.
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-31 02:24:33 -0600
+Last updated 2020-03-31 06:43:39 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
