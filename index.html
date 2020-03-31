@@ -1042,38 +1042,37 @@ A known "bug" in stream ring theory is that not all instructions in <code>inst</
 </table>
 </div>
 <div class="paragraph">
-<p>As an example, the types <code>int[plus,10]</code> and <code>bool&#8656;int[gt,5]</code> can be combined via serial and/or parallel composition.</p>
+<p>As an example, the instructions <code>[plus,10]</code> and <code>[gt,5]</code> can be combined via serial and/or parallel composition. In general, all serial and parallel compositions are <a href="https://en.wikipedia.org/wiki/Associative_property">associative</a> except for those that use instructions from a particular <code>inst</code> subring: <em>the reduce near-ring</em> (discussed later).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">int[plus,<span class="integer">10</span>] * bool&lt;=int[gt,<span class="integer">5</span>]   ==   bool&lt;=int[plus,<span class="integer">10</span>][gt,<span class="integer">5</span>]
-int[plus,<span class="integer">10</span>] + bool&lt;=int[gt,<span class="integer">5</span>]   ==    obj&lt;=int[branch,[plus,<span class="integer">10</span>],[gt,<span class="integer">5</span>]]</code></pre>
+<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; [plus,<span class="integer">10</span>] ** [gt,<span class="integer">5</span>]
+==&gt;[plus,<span class="integer">10</span>][gt,<span class="integer">5</span>]
+mmlang&gt; [plus,<span class="integer">10</span>] ++ [gt,<span class="integer">5</span>]
+==&gt;[branch,[plus,<span class="integer">10</span>],[gt,<span class="integer">5</span>]]</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>All serial and parallel compositions are <a href="https://en.wikipedia.org/wiki/Associative_property">associative</a> except for
-those that use instructions from the <code>inst</code> sub-ring: <em>the reduce near-ring</em> (discussed later).
-Finally, the <a href="https://en.wikipedia.org/wiki/Distributive_property">distributivity</a> of multiplications over addition
-is made apparent via:</p>
+<p>Finally, the <a href="https://en.wikipedia.org/wiki/Distributive_property">distributivity</a> of multiplications over addition is made apparent with expressions below which have a diagrammatic representation, where the edges/arrows are streams of <code>objs</code> that are being operated on by the <code>insts</code> vertex/objects they meet along the way. Whenever the diagram branches, the <code>obj</code> at the branch is cloned, taking <strong>both</strong> branches.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">[plus,<span class="integer">10</span>] * ([gt,<span class="integer">5</span>] + [lt,<span class="integer">2</span>])     ==   [plus,<span class="integer">10</span>][gt,<span class="integer">5</span>] + [plus,<span class="integer">10</span>][lt,<span class="integer">2</span>]
-([plus,<span class="integer">10</span>] + [mult,<span class="integer">5</span>]) * [gt,<span class="integer">7</span>]   ==   [plus,<span class="integer">10</span>][gt,<span class="integer">7</span>] + [mult,<span class="integer">5</span>][gt,<span class="integer">7</span>]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The above expressions have a diagrammatic representation where the lines are streams of <code>objs</code> that are being operated on by the <code>insts</code> they meet along the way.
-Whenever the diagram branches, the <code>obj</code> at the branch is cloned, taking <strong>both</strong> branches.</p>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="inst-left-distributivity.png" alt="inst left distributivity" width="690" height="140">
+<pre class="CodeRay highlight"><code data-lang="Delphi">[plus,<span class="integer">10</span>][branch,[gt,<span class="integer">5</span>],[lt,<span class="integer">2</span>]]    ==  [branch,[plus,<span class="integer">10</span>][gt,<span class="integer">5</span>],[plus,<span class="integer">10</span>][lt,<span class="integer">2</span>]]</code></pre>
 </div>
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="inst-right-distributivity.png" alt="inst right distributivity" width="690" height="126">
+<img src="images/inst-left-distrib.png" alt="inst left distrib" width="750">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">[branch,[plus,<span class="integer">10</span>],[mult,<span class="integer">5</span>]][gt,<span class="integer">7</span>]  ==  [branch,[plus,<span class="integer">10</span>][gt,<span class="integer">7</span>],[mult,<span class="integer">5</span>][gt,<span class="integer">7</span>]]</code></pre>
+</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/inst-right-distrib.png" alt="inst right distrib" width="750">
 </div>
 </div>
 </div>
@@ -1517,7 +1516,7 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-30 23:50:01 -0600
+Last updated 2020-03-31 00:26:27 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
