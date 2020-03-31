@@ -546,7 +546,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_type_signatures">Type Signatures</a></li>
 <li><a href="#_type_definition">Type Definition</a></li>
 <li><a href="#_ring_theoretic_type_composition">Ring Theoretic Type Composition</a></li>
-<li><a href="#_type_graphs_and_their_commutative_diagrams">Type Graphs and their Commutative Diagrams</a></li>
+<li><a href="#_type_ring">Type Ring</a></li>
 </ul>
 </li>
 <li><a href="#_values">Values</a></li>
@@ -1079,21 +1079,13 @@ mmlang&gt; [plus,<span class="integer">10</span>] ++ [gt,<span class="integer">5
 <div class="sect4">
 <h5 id="_the_quantifier_ring">The Quantifier Ring</h5>
 <div class="paragraph">
-<p>In the set-theoretic interpretation of types, a type denotes a set in <strong>Set</strong>.
-A set does not contain repeated elements.
-A <em>stream</em> generalizes a set.
-A stream is an unordered collection of <code>objs</code> of varying cardinality (a multi-set, or bag).
-In mm-ADT, <code>int</code> is shorthand for <code>int{1}</code>--a single integer.
-This is analogous to other languages, where when <code>int</code> is used to define a value, it is referring to a single integer from the set of all integers&#8212;&#8203;e.g., <code>val answer:int = 42</code>.
-Where mm-ADT differs from other languages is that <code>bool{42}</code> is a type denoting <code>42</code> boolean values.
-All <code>mmlang</code> expressions within <code>{ }</code> operate on the mm-ADT VM&#8217;s <strong><em>quantifier ring</em></strong> (w/ unity).
-Any <code>obj</code> that supports <code>+</code>/<code>*</code>/<code>0</code>/<code>1</code> and the axioms governing their composition is supported by mm-ADT.
-In mm-ADT, types can be specified to an as accurate or fuzzy degree as computationally and conceptually possible.</p>
+<p>In the <a href="https://en.wikipedia.org/wiki/Type_theory#Difference_from_set_theory">set-theoretic interpretation of types</a>, a type denotes a set in <strong>Set</strong>. A set does not contain repeated elements. A <em>stream</em> generalizes a set. A stream is an unordered collection of <code>objs</code> of varying cardinality (a multi-set, or bag). For example, in mm-ADT, <code>int</code> is shorthand for <code>int{1}</code>--a single integer. This is analogous to other languages, where when <code>int</code> is used to define a value, it is referring to a single integer from the set of all integers&#8212;&#8203;e.g., <code>val answer:int = 42</code>. Where mm-ADT differs from other languages is that <code>bool{42}</code> is a type denoting <code>42</code> boolean values.</p>
 </div>
 <div class="paragraph">
-<p>Typically, the quantifier of choice for most applications is the <code>int</code> ring (or <code>int</code> range ring&#8201;&#8212;&#8201;<code>{2,13}</code>).
-Common programming concepts that are usually captured by typeclasses or functors (via
-<a href="https://en.wikipedia.org/wiki/Lift_(mathematics)">lifting</a>) are expressed in mm-ADT via quantification.</p>
+<p>All <code>mmlang</code> expressions within <code>{ }</code> operate on the mm-ADT VM&#8217;s <strong><em>quantifier ring</em></strong> (w/ unity). Any object that supports <code>+</code>/<code>*</code>/<code>0</code>/<code>1</code> and the axioms governing their composition can be used as an mm-ADT quantifier. Along with Turing Complete types specifications, type definitions can be specified to as accurate or fuzzy a degree as computationally and conceptually possible.</p>
+</div>
+<div class="paragraph">
+<p>Typically, the quantifier of choice for most applications is the <code>int</code> ring (or <code>int</code> range ring&#8201;&#8212;&#8201;<code>{2,13}</code>). Common programming concepts that are usually captured by typeclasses or functors (via <a href="https://en.wikipedia.org/wiki/Lift_(mathematics)">lifting</a>) are expressed in mm-ADT via quantification.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1104,6 +1096,45 @@ int<span class="comment">{4}</span>&lt;=int<span class="comment">{2}</span>[[id]
 int<span class="comment">{*}</span>&lt;=[=db][get,<span class="string"><span class="delimiter">'</span><span class="content">costs</span><span class="delimiter">'</span></span>]   <span class="comment">// 0 or more ints</span></code></pre>
 </div>
 </div>
+<table class="tableblock frame-all grid-all" style="width: 35%;">
+<caption class="title">Table 4. Quantifier Symbols in mmlang</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">sugar</th>
+<th class="tableblock halign-left valign-top">unsugared form</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{0}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{0,0}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{1,1}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{x}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{x,x}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{?}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{0,1}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{+}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{1,maxInt}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{*}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{1,maxInt}</code></p></td>
+</tr>
+</tbody>
+</table>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1116,6 +1147,10 @@ int<span class="comment">{*}</span>&lt;=[=db][get,<span class="string"><span cla
 </tr>
 </table>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_type_ring">Type Ring</h4>
 <div class="paragraph">
 <p>The type system of mm-ADT is characterized by a particular formulation of the <a href="https://en.wikipedia.org/wiki/Product_ring">direct product of rings</a>
 over the <em>quantifier</em> and <em>instruction</em> rings.
@@ -1123,10 +1158,6 @@ The direct product of these two rings is a ring itself.
 Thus, mm-ADT&#8217;s types are founded on ring theory whose operations are associative w/ identities and therefore,
 also form a category.</p>
 </div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_type_graphs_and_their_commutative_diagrams">Type Graphs and their Commutative Diagrams</h4>
 <div class="paragraph">
 <p>The mm-ADT <strong>type graph</strong> is composed of <em>type vertices</em> connected by <em>instruction edges</em> referring to a single instruction
 that distinguishes them while ensuring that the <a href="https://en.wikipedia.org/wiki/Diagram_(category_theory)">categorical diagram</a>
@@ -1516,7 +1547,7 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-31 00:26:27 -0600
+Last updated 2020-03-31 01:22:38 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
