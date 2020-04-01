@@ -675,13 +675,21 @@ mmlang&gt; <span class="integer">1</span>[plus,<span class="integer">2</span>]
 \]</p>
 </div>
 <div class="paragraph">
-<p>A type denotes a <em>stream</em> (i.e. <a href="https://en.wikipedia.org/wiki/Multiset">multi-set</a> or bag) of <code>obj</code> values. Values denote atomic or composite datum existing outside the mm-ADT VM within it&#8217;s execution environment. For instance, if an mm-ADT VM is implemented on the <a href="https://en.wikipedia.org/wiki/Java_virtual_machine">JVM</a>, then the <code>str</code> value <code>'mmadt'</code> refers to the <code>java.lang.String</code> instance <code>"mmadt"</code>. Both <code>obj</code> types and values have associated <strong>quantifiers</strong> (<code>q</code>), where the semantics of quantification depends on the quantifier used across an mm-ADT program (e.g. integers, reals, unitary matrices, etc.). However, in general, the intuition is that the quantifier denotes the <em>amount</em> of objects being referred to.</p>
+<p>A type denotes a <em>stream</em> (i.e. <a href="https://en.wikipedia.org/wiki/Multiset">multi-set</a> or bag) of <code>obj</code> values. Values denote atomic or composite datum existing outside the mm-ADT VM within it&#8217;s execution environment. For instance, if an mm-ADT VM is implemented on the <a href="https://en.wikipedia.org/wiki/Java_virtual_machine">JVM</a>, then the <code>str</code> value <code>'mmadt'</code> refers to the <code>java.lang.String</code> instance <code>"mmadt"</code>. Both <code>obj</code> types and values have associated <strong>quantifiers</strong> (<code>q</code>). The meaning of quantification is dependent on the quantifier type used with an mm-ADT program (e.g. integers, reals, unitary matrices, etc.). However, in general, the intuition is that the quantifier denotes the <em>amount</em> of values being referred to.</p>
 </div>
 <div class="paragraph">
-<p>It is via types and their composition that programs are written, streams are constructed, functions are defined, and functorial mappings between different abstract data types are specified. mm-ADT types serve numerous roles which are realized by many different sorts of objects in traditional abstract computing machines. The reason being is that the fundamental idea of an mm-ADT type is that it refers to a stream of values that when <em>dereferenced</em> (evaluated), those values are returned. Thus, at the level of an mm-ADT program (which is simply a "complex" type), the referent values are the program&#8217;s results.</p>
+<p>The axioms of <a href="https://en.wikipedia.org/wiki/Ring_theory">algebraic ring theory</a> specify that rules of type composition and thus, how programs are written, streams are constructed, functions are defined, and of particular import to mm-ADT, how functorial mappings between different <a href="https://en.wikipedia.org/wiki/Abstract_data_type">abstract data types</a> are specified.</p>
 </div>
 <div class="sect2">
 <h3 id="_types">Types</h3>
+<div class="imageblock right">
+<div class="content">
+<img src="images/obj-monoid.png" alt="obj monoid" width="70">
+</div>
+</div>
+<div class="paragraph">
+<p>mm-ADT types serve numerous roles which are typically realized by many different sorts of objects in traditional programmable systems. The reason for this singular use is quite literally because the mm-ADT type system is generated from the <a href="https://en.wikipedia.org/wiki/Monoid">monoid</a> <code>obj{*}</code>, where it&#8217;s elements (i.e. types) ultimately refer to streams of values. mm-ADT program evaluation dereferences the type denoting the program in order to yield referent values&#8201;&#8212;&#8201;program results.</p>
+</div>
 <div class="imageblock left">
 <div class="content">
 <img src="images/type-inst.png" alt="type inst" width="220">
@@ -714,7 +722,7 @@ mmlang&gt; <span class="integer">1</span>[plus,<span class="integer">2</span>]
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><span class="image"><img src="images/ctypes.png" alt="ctypes"></span></code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><span class="image"><img src="images/ctypes.png" alt="ctypes" width="350"></span></code></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><code><span class="image"><img src="images/dtypes.png" alt="dtypes"></span></code></p></td>
 </tr>
 </tbody>
@@ -725,8 +733,10 @@ mmlang&gt; <span class="integer">1</span>[plus,<span class="integer">2</span>]
 <div class="paragraph">
 <p>\[
 \tt{int[plus,4][mult,2][gt,42]}\\
-\]
-<span class="image"><img src="images/type-data-structure.png" alt="type data structure" width="100%"></span></p>
+\]</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/type-data-structure.png" alt="type data structure" width="100%"></span></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1573,7 +1583,7 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-01 08:54:08 -0600
+Last updated 2020-04-01 11:16:44 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
