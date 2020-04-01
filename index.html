@@ -704,7 +704,7 @@ mmlang&gt; <span class="integer">1</span>[plus,<span class="integer">2</span>]
 </div>
 </div>
 <div class="paragraph">
-<p>This recursive definition is grounded at the 6 <strong>canonical types</strong> (called <em>ctypes</em>): <code>bool</code>, <code>int</code>, <code>real</code>, <code>str</code>, <code>lst</code>, and <code>rec</code>. The type of every canonical type is itself and the instruction of every canonical type is the identity instruction <code>[id]</code>.</p>
+<p>This recursive definition is grounded at the 6 <strong>canonical types</strong> (called <em>ctypes</em>): <code>bool</code>, <code>int</code>, <code>real</code>, <code>str</code>, <code>lst</code>, and <code>rec</code>. Every canonical type is it&#8217;s own domain and range, via the respective type generating instruction of the terminal object <code>obj{*}</code>.</p>
 </div>
 <table class="tableblock frame-none grid-all stretch">
 <caption class="title">Table 1. Canonical type and derived type morphisms</caption>
@@ -714,19 +714,19 @@ mmlang&gt; <span class="integer">1</span>[plus,<span class="integer">2</span>]
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><span class="image"><img src="images/ctypes.png" alt="ctypes" width="225"></span></code></p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><code><span class="image"><img src="images/ctype-dtype.png" alt="ctype dtype" width="340"></span></code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><span class="image"><img src="images/ctypes.png" alt="ctypes"></span></code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code><span class="image"><img src="images/dtypes.png" alt="dtypes"></span></code></p></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>From the canonical types, the set of all <strong>derived type</strong> (called <em>dtypes</em>) can be constructed via instruction application. Every mm-ADT <code>inst</code> processes both type and value <code>objs</code>. When processing a type, the <code>inst</code> yields a new <code>dtype</code> structurally related to the previous type by the respective <code>inst</code>. For instance:</p>
+<p>From the canonical types, the set of all <strong>derived type</strong> (called <em>dtypes</em>) can be inductively generated via the application of instructions from the mm-ADT VM instruction set architecture. Every mm-ADT <code>inst</code> processes both type and value <code>objs</code>. When processing a type, the <code>inst</code> yields a new <code>dtype</code> structurally related to the previous type by the respective <code>inst</code>. For instance:</p>
 </div>
 <div class="paragraph">
 <p>\[
 \tt{int[plus,4][mult,2][gt,42]}\\
 \]
-<span class="image"><img src="images/type-datastructure.png" alt="type datastructure" width="100%"></span></p>
+<span class="image"><img src="images/type-data-structure.png" alt="type data structure" width="100%"></span></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1573,7 +1573,7 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-31 06:43:39 -0600
+Last updated 2020-04-01 08:28:08 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
