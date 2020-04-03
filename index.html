@@ -550,7 +550,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_type_monoid">Type Monoid</a></li>
 <li><a href="#_type_graph">Type Graph</a></li>
 <li><a href="#_type_ring">Type Ring</a></li>
-<li><a href="#_the_type_category">The Type Category</a></li>
+<li><a href="#_type_category">Type Category</a></li>
 </ul>
 </li>
 </ul>
@@ -1045,7 +1045,7 @@ In stream ring theory, instructions are called <em>functions</em> and quantifier
 <p>&nbsp;</p>
 </div>
 <div class="paragraph">
-<p>The type system of mm-ADT is characterized by a particular formulation of the <a href="https://en.wikipedia.org/wiki/Product_ring">direct product of rings</a> over the <em>quantifier</em> and <em>instruction</em> rings (discussed next). The direct product of these two rings is a ring itself called the <em>stream ring</em>. Thus, mm-ADT&#8217;s types are founded on ring theory in general and stream ring theory in particular.</p>
+<p>The type system of mm-ADT is characterized by a particular formulation of the <a href="https://en.wikipedia.org/wiki/Product_ring">direct product of rings</a> over the <em>quantifier</em> and <em>instruction</em> rings (discussed next). The product of these two rings is a ring itself called the <em>stream ring</em>. Thus, mm-ADT&#8217;s types are founded on ring theory in general and stream ring theory in particular.</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
@@ -1089,10 +1089,10 @@ Instructions and quantifiers are the carrier sets of two independent <a href="ht
 </ul>
 </div>
 <div class="paragraph">
-<p>In the examples below <code>[a]</code>, <code>[b]</code>, and <code>[c]</code> are variable instructions in <code>inst</code>.</p>
+<p>In the table below <code>[a]</code>, <code>[b]</code>, and <code>[c]</code> are variable instructions in <code>inst</code>.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. The Ring Axioms Expressed in mmlang</caption>
+<caption class="title">Table 4. The Ring Axioms in mmlang</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 66.6667%;">
@@ -1110,11 +1110,11 @@ Instructions and quantifiers are the carrier sets of two independent <a href="ht
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>0 + a = a + 0 = a</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[branch,[none],[all]] == [branch,[all],[none]] == [all]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[branch,[none],[a]] == [branch,[a],[none]] == [a]</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>a - a = a + (-a) = 0</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[branch,[id],[id]{-1}] == [none]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[branch,[a],[a]{-1}] == [none]</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>a + b = b + a</code></p></td>
@@ -1151,27 +1151,27 @@ A known "bug" in stream ring theory is that not all instructions in <code>inst</
 </table>
 </div>
 <div class="paragraph">
-<p>\[
-\texttt{x[branch,[a],[b]]} = &lt;\texttt{x[a]},\texttt{x[b]}&gt;
-\]</p>
-</div>
-<div class="paragraph">
-<p>As an example, the instructions <code>[plus,10]</code> and <code>[gt,5]</code> can be combined via serial and/or parallel composition. In general, all serial and parallel compositions are <a href="https://en.wikipedia.org/wiki/Associative_property">associative</a> except for those that use instructions from a particular <code>inst</code> subring: <em>the reduce near-ring</em> (discussed later).</p>
+<p>As an example, the instructions <code>[plus,10]</code> and <code>[gt,5]</code> can be combined via serial and/or parallel composition. In general, all serial and parallel compositions are <a href="https://en.wikipedia.org/wiki/Associative_property">associative</a> except for those that use instructions from a particular <code>inst</code> subring known as the <em>the reduce near-ring</em> (discussed later).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; [plus,<span class="integer">10</span>] ** [gt,<span class="integer">5</span>]
+<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; [plus,<span class="integer">10</span>] inst[mult,[gt,<span class="integer">5</span>]]
 ==&gt;[plus,<span class="integer">10</span>][gt,<span class="integer">5</span>]
-mmlang&gt; [plus,<span class="integer">10</span>] ++ [gt,<span class="integer">5</span>]
+mmlang&gt; [plus,<span class="integer">10</span>] inst[plus,[gt,<span class="integer">5</span>]]
 ==&gt;[branch,[plus,<span class="integer">10</span>],[gt,<span class="integer">5</span>]]</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Finally, the <a href="https://en.wikipedia.org/wiki/Distributive_property">distributivity</a> of multiplications over addition is made apparent with expressions below which have a diagrammatic representation, where the edges/arrows are streams of <code>objs</code> that are being operated on by the <code>insts</code> vertex/objects they meet along the way. Whenever the diagram branches, the <code>obj</code> at the branch is cloned, taking <strong>both</strong> branches.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/Distributive_property">distributivity</a> of multiplications over addition is made apparent with expressions below which have a diagrammatic representation, where the edges/arrows are streams of <code>objs</code> that are being operated on by the <code>insts</code> vertex/objects they meet along the way. Whenever the diagram branches, the <code>obj</code> at the branch is cloned, taking <em>both</em> branches.</p>
+</div>
+<div class="paragraph">
+<p>\[
+\texttt{x[branch,[a],[b]]} = \uplus &lt;\texttt{x[a]},\texttt{x[b]}&gt;
+\]</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">[plus,<span class="integer">10</span>][branch,[gt,<span class="integer">5</span>],[lt,<span class="integer">2</span>]]    ==  [branch,[plus,<span class="integer">10</span>][gt,<span class="integer">5</span>],[plus,<span class="integer">10</span>][lt,<span class="integer">2</span>]]</code></pre>
+<pre class="CodeRay highlight"><code data-lang="Delphi">[plus,<span class="integer">10</span>][branch,[gt,<span class="integer">5</span>],[lt,<span class="integer">2</span>]]  ==  [branch,[plus,<span class="integer">10</span>][gt,<span class="integer">5</span>],[plus,<span class="integer">10</span>][lt,<span class="integer">2</span>]]</code></pre>
 </div>
 </div>
 <div class="imageblock text-center">
@@ -1270,7 +1270,7 @@ int<span class="comment">{*}</span>&lt;=[=db][get,<span class="string"><span cla
 </div>
 </div>
 <div class="sect4">
-<h5 id="_the_type_category">The Type Category</h5>
+<h5 id="_type_category">Type Category</h5>
 <div class="openblock">
 <div class="content">
 <div class="paragraph">
@@ -1674,7 +1674,7 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-03 13:00:10 -0600
+Last updated 2020-04-03 15:06:54 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
