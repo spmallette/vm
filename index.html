@@ -553,6 +553,16 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_type_category">Type Category</a></li>
 </ul>
 </li>
+<li><a href="#_type_examples">Type Examples</a>
+<ul class="sectlevel4">
+<li><a href="#_canonical_types">Canonical Types</a></li>
+<li><a href="#_refinement_types">Refinement Types</a></li>
+<li><a href="#_quantified_types">Quantified Types</a></li>
+<li><a href="#_dependent_types">Dependent Types</a></li>
+<li><a href="#_translating_types">Translating Types</a></li>
+<li><a href="#_recursive_types">Recursive Types</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_values">Values</a></li>
@@ -919,8 +929,40 @@ Any <code>obj</code> with the the quantifier ring&#8217;s additive identity (<co
 </div>
 <div class="sect4">
 <h5 id="_type_monoid">Type Monoid</h5>
+<div class="sidebarblock">
+<div class="content">
 <div class="paragraph">
-<p>The <strong>type monoid</strong> is the universal, terminal type <code>obj{*}</code> is the product of the object <code>obj</code> and the quantifier <code>{min,max}</code>.</p>
+<div class="title">Definition: Monoid</div>
+<p>A <a href="https://en.wikipedia.org/wiki/Monoid">monoid</a> is a structure of the form \$\langleA,\ast\rangle\$, where \$A\$ is the carrier set closed under the associative binary operator \$\ast: A \times A \rightarrow A\$ with \$1 \in A\$ being the identity such that for every \$a,b,c \in A\$, \$(a \ast b) \ast c = a \ast (b \ast c)\$ and \$a \ast 1 = 1 \ast a = a\$.</p>
+</div>
+<div class="paragraph">
+<div class="title">Model: mmmonoid</div>
+<p>The <code>mmmonoid</code> model-ADT models the mm-ADT VM as a monoid whose carrier set elements are all the inductively derived types of <code>obj{*}</code> and where any two types can be composed using <code>[mult]</code>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>\$A\$: types (\$\tt{ctype} \cup \tt{dtypes}\$)</p>
+</li>
+<li>
+<p>\$\ast\:A \times A \rightarrow A \$: <code>[mult]</code>-type composition</p>
+</li>
+<li>
+<p>\$1 \in A\$: <code>[noop]</code> identity element</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int<span class="comment">{2}</span>[plus,<span class="integer">4</span>][mult,bool&lt;=int[gt,<span class="integer">10</span>]]
+==&gt;bool<span class="comment">{2}</span>&lt;=int<span class="comment">{2}</span>[plus,<span class="integer">4</span>][gt,<span class="integer">10</span>]
+mmlang&gt; int<span class="comment">{2}</span>[plus,<span class="integer">4</span>] * bool&lt;=int[gt,<span class="integer">10</span>]
+==&gt;bool<span class="comment">{2}</span>&lt;=int<span class="comment">{2}</span>[plus,<span class="integer">4</span>][gt,<span class="integer">10</span>]
+mmlang&gt; int<span class="comment">{2}</span> * int[plus,<span class="integer">4</span>] * bool&lt;=int[gt,<span class="integer">10</span>]
+==&gt;bool<span class="comment">{2}</span>&lt;=int<span class="comment">{2}</span>[plus,<span class="integer">4</span>][gt,<span class="integer">10</span>]</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect4">
@@ -1305,6 +1347,58 @@ int<span class="comment">{*}</span>&lt;=[=db][get,<span class="string"><span cla
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_type_examples">Type Examples</h4>
+<div class="paragraph">
+<p>mm-ADT types differ from convention in that they serve to denote:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Canonical types</strong>: sets of elements denoted as <code>int</code> or <code>str</code>, etc.</p>
+</li>
+<li>
+<p><strong>Refined types</strong>: constraints on the canonical set types such as <code>nat&#8656;int[is,[gt,0]]</code></p>
+</li>
+<li>
+<p><strong>Quantified types</strong>: specifying the cardinality of a set via quantification <code>int{0,5}</code> (a type of 0 to 5 <code>int</code> values).</p>
+</li>
+<li>
+<p><strong>Dependent types</strong>:</p>
+</li>
+<li>
+<p><strong>Translating types</strong>: specify a mapping from a domain set of elements to a range set of elements as in <code>int[plus,2]</code>.</p>
+</li>
+<li>
+<p><strong>Recursive types</strong>:</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_canonical_types">Canonical Types</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_refinement_types">Refinement Types</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_quantified_types">Quantified Types</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_dependent_types">Dependent Types</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_translating_types">Translating Types</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_recursive_types">Recursive Types</h5>
+
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_values">Values</h3>
@@ -1674,7 +1768,7 @@ mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&g
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-03 15:06:54 -0600
+Last updated 2020-04-04 20:07:20 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
