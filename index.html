@@ -1600,8 +1600,70 @@ _________      _________
 <div class="sect3">
 <h4 id="_instructions">Instructions</h4>
 <div class="paragraph">
-<p>The mm-ADT VM <a href="https://en.wikipedia.org/wiki/Instruction_set_architecture">instruction set architecture</a> is itemized below, where the instructions are ordered by their instruction classification and within a classification, alphabetically ordered.</p>
+<p>The mm-ADT VM <a href="https://en.wikipedia.org/wiki/Instruction_set_architecture">instruction set architecture</a> is presented below, where the instructions are ordered by their classification and within each classification, they are ordered alphabetically.</p>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 6. Instruction classes</caption>
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 20%;">
+<col style="width: 70%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Class</th>
+<th class="tableblock halign-left valign-top">Signature</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Branch</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>y{*}&#8656;x[branch]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for splitting a traverser across parallel sequences</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Filter</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>x{?}&#8656;x[filter]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for removing traversers from an evaluation</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Initial</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>obj{0}&#8656;x[initial]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for finalizing objects in an evaluation</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Map</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x[map]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for moving traversers between objects</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Model</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x[model]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for transforming types between model-ADTs</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Reduce</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x{*}[reduce]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for funneling traversers down to a single traverser</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">SideEffect</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>x&#8656;x[sideeffect]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Instructions that yield global state mutations</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Terminal</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>x{*}&#8656;[terminal]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for generating objects for evaluation</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Traverser</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x[traverser]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Instructions that operate on the traverser itself</p></td>
+</tr>
+</tbody>
+</table>
 <div class="sect4">
 <h5 id="_branch_instructions">Branch Instructions</h5>
 <div class="paragraph">
