@@ -574,7 +574,11 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_processor_structures">Processor Structures</a>
 <ul class="sectlevel2">
-<li><a href="#_traverser">Traverser</a></li>
+<li><a href="#_traverser">Traverser</a>
+<ul class="sectlevel3">
+<li><a href="#_applying_instructions">Applying Instructions</a></li>
+</ul>
+</li>
 <li><a href="#_instruction_classes">Instruction Classes</a>
 <ul class="sectlevel3">
 <li><a href="#_branching">Branching</a>
@@ -1537,6 +1541,33 @@ mmlang&gt; .a
 <p>\[
 \texttt{range&#8656;domain[inst]}: T  \rightarrow (T \times \texttt{range})
 \]</p>
+</div>
+<div class="sect3">
+<h4 id="_applying_instructions">Applying Instructions</h4>
+<div class="paragraph">
+<p>An <code>inst</code> can be applied to a traverser via:</p>
+</div>
+<div class="paragraph">
+<p>\[
+\texttt{b&#8656;a[inst]}: T(A) \rightarrow T(B).
+\]</p>
+</div>
+<div class="paragraph">
+<p>However, this simple specification is further complicated by instruction arguments. For example, assume the following single instruction type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int[plus,[mult,<span class="integer">2</span>]]
+==&gt;int[plus,int[mult,<span class="integer">2</span>]]
+mmlang&gt; <span class="integer">10</span>[plus,[mult,<span class="integer">2</span>]]
+==&gt;<span class="integer">30</span></code></pre>
+</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/instruction-arguments.png" alt="instruction arguments" width="90%">
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
