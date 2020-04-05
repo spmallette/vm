@@ -442,7 +442,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="images/traverser-fold.png" alt="traverser fold" width="60%">
+<img src="images/traverser-fold.png" alt="traverser fold" width="65%">
 </div>
 </div>
 <div class="paragraph">
@@ -466,7 +466,70 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="sect2">
 <h3 id="_instruction_classes">Instruction Classes</h3>
-
+<div class="sect3">
+<h4 id="_branching">Branching</h4>
+<div class="paragraph">
+<p>The <code>[branch]</code> instruction is a general-purpose instruction for creating and merging parallel streams of objects. All other branching instructions are founded on <code>[branch]</code> and extend it with added usability-parametrization. In general, all branching instructions can be understood as generating a product (<strong>splitting</strong>) and then generating a co-product (<strong>merging</strong>).</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/branch-prod-coprod.png" alt="branch prod coprod" width="75%">
+</div>
+</div>
+<div class="paragraph">
+<p>When a traverser at an \$\tt{obj} \in A\$ arrives at <code>[branch]</code>, the traverser is split across the respective internal types&#8201;&#8212;&#8201;called <em>branches</em>. Splitting is a cloning process by which a product is formed and then each component of the product is projected to each respective branch via \$\pi_n\$.</p>
+</div>
+<div class="paragraph">
+<p>\[\texttt{split}: A \rightarrow A \times \ldots \times A\]</p>
+</div>
+<div class="imageblock left">
+<div class="content">
+<img src="images/branch-traversers.png" alt="branch traversers" width="600">
+</div>
+</div>
+<div class="paragraph">
+<p>Every branch can operate independently, where no global communication is required between branches. This is an important feature of <code>[branch]</code> and the branch instructions in general because each branch can be isolated and migrated for physical distribution and parallelization. All other instructions that make use of internal types for parametrization do not enjoy this feature.</p>
+</div>
+<div class="paragraph">
+<p>Finally, the resultant traversers of each individual branch are then summed via \$\iota_n\$ to yield a single stream co-product of outgoing traversers.</p>
+</div>
+<div class="paragraph">
+<p>\[\texttt{merge}: (B \times \ldots \times D) \rightarrow (B + \ldots + D)\]</p>
+</div>
+<div class="sect4">
+<h5 id="_branching_specifications">Branching Specifications</h5>
+<div class="paragraph">
+<p>There are two ways of programming a <code>[branch]</code> instruction.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Using a <code>rec</code> structure where the keys are <code>{0}</code>-predicate filters and the values are the branch transformations.</p>
+</li>
+<li>
+<p>Using a <code>lst</code> structure where the values are the branch transformations.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Every <code>lst</code>-form can be expressed as a <code>rec</code>-form via and every <code>rec</code>-form can be expressed as a <code>lst</code>-form. The general rule for transformation is detailed in the source fragment below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>[branch,[[a];[b];[c]]]    =&gt; [branch,[x:a,y:b,z:c]]
+[branch,rec[x:a,y:b,z:c]] =&gt; [branch,[[is,x][a];[is,y][b];[is,z][c]]]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>[branch]</code> instruction takes a single <code>rec</code>-type argument. The record keys are <code>{0}</code>-predicates where if the incoming <code>obj</code> matches the key, then the <code>obj</code> is processed by the value. <em>Every key</em> that matches has it&#8217;s respective value processed for the incoming <code>obj</code>.</p>
+</div>
+<div class="paragraph">
+<p>\[
+\tt x[branch]:[tk_1:tv_1] \times \ldots \times [tk_n:tv_n] \rightarrow \biguplus_{i \in 1 \to n} x[tv_i] \; \text{iff} \; x[tk_i][q] \neq 0
+\]</p>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_processor_implementations">Processor Implementations</h3>
@@ -477,7 +540,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-05 04:29:43 -0600
+Last updated 2020-04-05 12:32:37 -0600
 </div>
 </div>
 </body>

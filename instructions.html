@@ -442,60 +442,65 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. Instruction classes</caption>
 <colgroup>
-<col style="width: 10%;">
-<col style="width: 20%;">
-<col style="width: 70%;">
+<col style="width: 9.0909%;">
+<col style="width: 27.2727%;">
+<col style="width: 63.6364%;">
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Class</th>
+<th class="tableblock halign-center valign-top">Class</th>
 <th class="tableblock halign-left valign-top">Signature</th>
 <th class="tableblock halign-left valign-top">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Branch</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Branch</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>y{*}&#8656;x[branch]</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for splitting a traverser across parallel sequences</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for splitting traversers across instructions.</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Filter</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Filter</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>x{?}&#8656;x[filter]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for removing traversers from an evaluation</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Initial</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Flatmap</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>y{*}&#8656;x[flatmap]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for splitting traversers across objects.</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Initial</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>obj{0}&#8656;x[initial]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for finalizing objects in an evaluation</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Map</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Map</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x[map]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for moving traversers between objects</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Model</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Model</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x[model]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for transforming types between model-ADTs</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Reduce</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Reduce</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x{*}[reduce]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for funneling traversers down to a single traverser</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">SideEffect</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">SideEffect</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>x&#8656;x[sideeffect]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions that yield global state mutations</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Terminal</p></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>x{*}&#8656;[terminal]</code></p></td>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Terminal</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>x{*}&#8656;obj{0}[terminal]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for generating objects for evaluation</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Traverser</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Traverser</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x[traverser]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions that operate on the traverser itself</p></td>
 </tr>
@@ -508,14 +513,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="sect4">
 <h5 id="_branch">[branch]</h5>
-<div class="paragraph">
-<p>The <code>[branch]</code> instruction takes a single <code>rec</code>-type argument. The record keys are <code>{0}</code>-predicates where if the incoming <code>obj</code> matches the key, then the <code>obj</code> is processed by the value. <em>Every key</em> that matches has it&#8217;s respective value processed for the incoming <code>obj</code>.</p>
-</div>
-<div class="paragraph">
-<p>\[
-\tt x[branch]:[tk_1:tv_1] \times \ldots \times [tk_n:tv_n] \rightarrow \biguplus_{i \in 1 \to n} x[tv_i] \; \text{iff} \; x[tk_i][q] \neq 0
-\]</p>
-</div>
 <table class="tableblock frame-all grid-all" style="width: 50%;">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -864,7 +861,7 @@ mmlang&gt; int{2}[is&gt;10]
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-05 11:05:46 -0600
+Last updated 2020-04-05 11:46:07 -0600
 </div>
 </div>
 </body>

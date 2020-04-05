@@ -575,7 +575,15 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_processor_structures">Processor Structures</a>
 <ul class="sectlevel2">
 <li><a href="#_traverser">Traverser</a></li>
-<li><a href="#_instruction_classes">Instruction Classes</a></li>
+<li><a href="#_instruction_classes">Instruction Classes</a>
+<ul class="sectlevel3">
+<li><a href="#_branching">Branching</a>
+<ul class="sectlevel4">
+<li><a href="#_branching_specifications">Branching Specifications</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#_processor_implementations">Processor Implementations</a></li>
 </ul>
 </li>
@@ -1509,7 +1517,7 @@ mmlang&gt; .a
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="images/traverser-fold.png" alt="traverser fold" width="60%">
+<img src="images/traverser-fold.png" alt="traverser fold" width="65%">
 </div>
 </div>
 <div class="paragraph">
@@ -1533,7 +1541,70 @@ mmlang&gt; .a
 </div>
 <div class="sect2">
 <h3 id="_instruction_classes">Instruction Classes</h3>
-
+<div class="sect3">
+<h4 id="_branching">Branching</h4>
+<div class="paragraph">
+<p>The <code>[branch]</code> instruction is a general-purpose instruction for creating and merging parallel streams of objects. All other branching instructions are founded on <code>[branch]</code> and extend it with added usability-parametrization. In general, all branching instructions can be understood as generating a product (<strong>splitting</strong>) and then generating a co-product (<strong>merging</strong>).</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/branch-prod-coprod.png" alt="branch prod coprod" width="75%">
+</div>
+</div>
+<div class="paragraph">
+<p>When a traverser at an \$\tt{obj} \in A\$ arrives at <code>[branch]</code>, the traverser is split across the respective internal types&#8201;&#8212;&#8201;called <em>branches</em>. Splitting is a cloning process by which a product is formed and then each component of the product is projected to each respective branch via \$\pi_n\$.</p>
+</div>
+<div class="paragraph">
+<p>\[\texttt{split}: A \rightarrow A \times \ldots \times A\]</p>
+</div>
+<div class="imageblock left">
+<div class="content">
+<img src="images/branch-traversers.png" alt="branch traversers" width="600">
+</div>
+</div>
+<div class="paragraph">
+<p>Every branch can operate independently, where no global communication is required between branches. This is an important feature of <code>[branch]</code> and the branch instructions in general because each branch can be isolated and migrated for physical distribution and parallelization. All other instructions that make use of internal types for parametrization do not enjoy this feature.</p>
+</div>
+<div class="paragraph">
+<p>Finally, the resultant traversers of each individual branch are then summed via \$\iota_n\$ to yield a single stream co-product of outgoing traversers.</p>
+</div>
+<div class="paragraph">
+<p>\[\texttt{merge}: (B \times \ldots \times D) \rightarrow (B + \ldots + D)\]</p>
+</div>
+<div class="sect4">
+<h5 id="_branching_specifications">Branching Specifications</h5>
+<div class="paragraph">
+<p>There are two ways of programming a <code>[branch]</code> instruction.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Using a <code>rec</code> structure where the keys are <code>{0}</code>-predicate filters and the values are the branch transformations.</p>
+</li>
+<li>
+<p>Using a <code>lst</code> structure where the values are the branch transformations.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Every <code>lst</code>-form can be expressed as a <code>rec</code>-form via and every <code>rec</code>-form can be expressed as a <code>lst</code>-form. The general rule for transformation is detailed in the source fragment below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">[branch,[[a];[b];[c]]]    =&gt; [branch,[x:a,y:b,z:c]]
+[branch,rec[x:a,y:b,z:c]] =&gt; [branch,[[<span class="keyword">is</span>,x][a];[<span class="keyword">is</span>,y][b];[<span class="keyword">is</span>,z][c]]]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>[branch]</code> instruction takes a single <code>rec</code>-type argument. The record keys are <code>{0}</code>-predicates where if the incoming <code>obj</code> matches the key, then the <code>obj</code> is processed by the value. <em>Every key</em> that matches has it&#8217;s respective value processed for the incoming <code>obj</code>.</p>
+</div>
+<div class="paragraph">
+<p>\[
+\tt x[branch]:[tk_1:tv_1] \times \ldots \times [tk_n:tv_n] \rightarrow \biguplus_{i \in 1 \to n} x[tv_i] \; \text{iff} \; x[tk_i][q] \neq 0
+\]</p>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_processor_implementations">Processor Implementations</h3>
@@ -1605,60 +1676,65 @@ _________      _________
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 6. Instruction classes</caption>
 <colgroup>
-<col style="width: 10%;">
-<col style="width: 20%;">
-<col style="width: 70%;">
+<col style="width: 9.0909%;">
+<col style="width: 27.2727%;">
+<col style="width: 63.6364%;">
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Class</th>
+<th class="tableblock halign-center valign-top">Class</th>
 <th class="tableblock halign-left valign-top">Signature</th>
 <th class="tableblock halign-left valign-top">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Branch</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Branch</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>y{*}&#8656;x[branch]</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for splitting a traverser across parallel sequences</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for splitting traversers across instructions.</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Filter</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Filter</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>x{?}&#8656;x[filter]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for removing traversers from an evaluation</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Initial</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Flatmap</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>y{*}&#8656;x[flatmap]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for splitting traversers across objects.</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Initial</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>obj{0}&#8656;x[initial]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for finalizing objects in an evaluation</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Map</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Map</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x[map]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for moving traversers between objects</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Model</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Model</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x[model]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for transforming types between model-ADTs</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Reduce</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Reduce</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x{*}[reduce]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for funneling traversers down to a single traverser</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">SideEffect</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">SideEffect</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>x&#8656;x[sideeffect]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions that yield global state mutations</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Terminal</p></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>x{*}&#8656;[terminal]</code></p></td>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Terminal</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>x{*}&#8656;obj{0}[terminal]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions for generating objects for evaluation</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-left valign-top"><p class="tableblock">Traverser</p></th>
+<th class="tableblock halign-center valign-top"><p class="tableblock">Traverser</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x[traverser]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Instructions that operate on the traverser itself</p></td>
 </tr>
@@ -1671,14 +1747,6 @@ _________      _________
 </div>
 <div class="sect5">
 <h6 id="_branch">[branch]</h6>
-<div class="paragraph">
-<p>The <code>[branch]</code> instruction takes a single <code>rec</code>-type argument. The record keys are <code>{0}</code>-predicates where if the incoming <code>obj</code> matches the key, then the <code>obj</code> is processed by the value. <em>Every key</em> that matches has it&#8217;s respective value processed for the incoming <code>obj</code>.</p>
-</div>
-<div class="paragraph">
-<p>\[
-\tt x[branch]:[tk_1:tv_1] \times \ldots \times [tk_n:tv_n] \rightarrow \biguplus_{i \in 1 \to n} x[tv_i] \; \text{iff} \; x[tk_i][q] \neq 0
-\]</p>
-</div>
 <table class="tableblock frame-all grid-all" style="width: 50%;">
 <colgroup>
 <col style="width: 33.3333%;">
