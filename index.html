@@ -581,7 +581,21 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_reference_guide">Reference Guide</a>
 <ul class="sectlevel2">
-<li><a href="#_mmlang_syntax_and_semantics">mmlang Syntax and Semantics</a></li>
+<li><a href="#_mmlang_syntax_and_semantics">mmlang Syntax and Semantics</a>
+<ul class="sectlevel3">
+<li><a href="#_instructions">Instructions</a>
+<ul class="sectlevel4">
+<li><a href="#_branch_instructions">Branch Instructions</a></li>
+<li><a href="#_filter_instructions">Filter Instructions</a></li>
+<li><a href="#_map_instructions">Map Instructions</a></li>
+<li><a href="#_model_instructions">Model Instructions</a></li>
+<li><a href="#_reduce_instructions">Reduce Instructions</a></li>
+<li><a href="#_sideeffect_instructions">SideEffect Instructions</a></li>
+<li><a href="#_traverser_instructions">Traverser Instructions</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1583,9 +1597,370 @@ _________      _________
     zz            zz</code></pre>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_instructions">Instructions</h4>
 <div class="paragraph">
-<p>include::instructions.adoc
-:leveloffset: -1</p>
+<p>The mm-ADT VM <a href="https://en.wikipedia.org/wiki/Instruction_set_architecture">instruction set architecture</a> is itemized below, where the instructions are ordered by their instruction classification and within a classification, alphabetically ordered.</p>
+</div>
+<div class="sect4">
+<h5 id="_branch_instructions">Branch Instructions</h5>
+<div class="paragraph">
+<p>The branch instruction support the splitting and merging of parallel, data flows, where each branch is a type and, depending on the particular branch instruction, some types, all types, or only those types given a predicate are evaluated.</p>
+</div>
+<div class="sect5">
+<h6 id="_branch">[branch]</h6>
+<div class="paragraph">
+<p>The <code>[branch]</code> instruction takes a single <code>rec</code>-type argument. The record keys are <code>{0}</code>-predicates where if the incoming <code>obj</code> matches the key, then the <code>obj</code> is processed by the value. <em>Every key</em> that matches has it&#8217;s respective value processed for the incoming <code>obj</code>.</p>
+</div>
+<div class="paragraph">
+<p>\[
+\tt x[branch]:[tk_1:tv_1] \times \ldots \times [tk_n:tv_n] \rightarrow \biguplus_{i \in 1 \to n} x[tv_i] \; \text{iff} \; x[tk_i][q] \neq 0
+\]</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 50%;">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">branch syntax</th>
+<th class="tableblock halign-left valign-top">syntax style</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x[branch,rec[x:y]]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">vm instruction</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x[[x&#8594;y]+[x&#8594;y]]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">stream addition</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x[x&#8594;y &amp; x&#8594;y]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">inline aggregate</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int[branch,rec[[<span class="keyword">is</span>,[gt,<span class="integer">0</span>]] :[plus,<span class="integer">1</span>],
+                       [<span class="keyword">is</span>,[gt,<span class="integer">10</span>]]:[plus,<span class="integer">2</span>]]]
+==&gt;int<span class="comment">{0,2}</span>&lt;=int[branch,[int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,bool&lt;=int[gt,<span class="integer">0</span>]] :int[plus,<span class="integer">1</span>]
+                        <span class="error">&amp;</span>int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,bool&lt;=int[gt,<span class="integer">10</span>]]:int[plus,<span class="integer">2</span>]]]
+mmlang&gt; -<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">11</span>[branch,rec[[<span class="keyword">is</span>,[gt,<span class="integer">0</span>]]:[plus,<span class="integer">1</span>],[<span class="keyword">is</span>,[gt,<span class="integer">10</span>]]:[plus,<span class="integer">2</span>]]]
+==&gt;<span class="integer">2</span>
+==&gt;<span class="integer">12</span>
+==&gt;<span class="integer">13</span>
+mmlang&gt; -<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">11</span>[<span class="keyword">is</span>&gt;<span class="integer">0</span>-&gt;+<span class="integer">1</span> <span class="error">&amp;</span> <span class="keyword">is</span>&gt;<span class="integer">10</span>-&gt;+<span class="integer">2</span>]
+==&gt;<span class="integer">2</span>
+==&gt;<span class="integer">12</span>
+==&gt;<span class="integer">13</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_choose">[choose]</h6>
+<div class="paragraph">
+<p>The <code>[choose]</code> instruction takes a single <code>rec</code>-type argument. The record keys are <code>{0}</code>-predicates where if the incoming <code>obj</code> matches the key, then the <code>obj</code> is processed by the value. The <em>first key</em> that matches has it&#8217;s respective value processed for the incoming <code>obj</code>.</p>
+</div>
+<div class="paragraph">
+<p>\[
+\tt x[choose]:[tk_1:tv_1] \times \ldots \times [tk_n:tv_n] \rightarrow x[tv_m] : x[tk_m][q] \; \neq \;0
+\]</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 50%;">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">choose syntax</th>
+<th class="tableblock halign-left valign-top">syntax style</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x[choose,rec[x:y]]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">vm instruction</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x[[x&#8594;y][x&#8594;y]]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">stream division</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>y&#8656;x[x&#8594;y | x&#8594;y]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">inline selection</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int[choose,rec[[<span class="keyword">is</span>,[gt,<span class="integer">0</span>]] :[plus,<span class="integer">1</span>],
+                       [<span class="keyword">is</span>,[gt,<span class="integer">10</span>]]:[plus,<span class="integer">2</span>]]]
+==&gt;int[choose,[int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,bool&lt;=int[gt,<span class="integer">0</span>]] :int[plus,<span class="integer">1</span>]
+              |int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,bool&lt;=int[gt,<span class="integer">10</span>]]:int[plus,<span class="integer">2</span>]]]
+mmlang&gt; -<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">11</span>[choose,rec[[<span class="keyword">is</span>,[gt,<span class="integer">0</span>]]:[plus,<span class="integer">1</span>],[<span class="keyword">is</span>,[gt,<span class="integer">10</span>]]:[plus,<span class="integer">2</span>]]]
+==&gt;-<span class="integer">1</span>
+==&gt;<span class="integer">2</span>
+==&gt;<span class="integer">12</span>
+mmlang&gt; -<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">11</span>[<span class="keyword">is</span>&gt;<span class="integer">0</span>-&gt;+<span class="integer">1</span> | <span class="keyword">is</span>&gt;<span class="integer">10</span>-&gt;+<span class="integer">2</span>]
+==&gt;-<span class="integer">1</span>
+==&gt;<span class="integer">2</span>
+==&gt;<span class="integer">12</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_filter_instructions">Filter Instructions</h5>
+<div class="sect5">
+<h6 id="_is">[is]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">x&lt;=x[<span class="keyword">is</span>,bool]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>[is]</code> is the canonical filter instruction.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">&lt;x&gt;[<span class="keyword">is</span>,[<span class="keyword">as</span>,bool][[eq,true]  -&gt; &lt;x&gt;
+                |[eq,false] -&gt; &lt;x&gt;[none] ]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; <span class="integer">6</span>,<span class="integer">42</span>[<span class="keyword">is</span>,true]
+==&gt;<span class="integer">6</span>
+==&gt;<span class="integer">42</span>
+mmlang&gt; <span class="integer">6</span>,<span class="integer">42</span>[<span class="keyword">is</span>,false]
+mmlang&gt; <span class="integer">6</span>,<span class="integer">42</span>[<span class="keyword">is</span>,[a,int]]
+==&gt;<span class="integer">6</span>
+==&gt;<span class="integer">42</span>
+mmlang&gt; <span class="integer">6</span>,<span class="integer">42</span> <span class="keyword">is</span>[a,int]
+==&gt;<span class="integer">6</span>
+==&gt;<span class="integer">42</span>
+mmlang&gt; <span class="integer">6</span>,<span class="integer">42</span>[<span class="keyword">is</span>,[gt,<span class="integer">10</span>]]
+==&gt;<span class="integer">42</span>
+mmlang&gt; <span class="integer">6</span>,<span class="integer">42</span>[<span class="keyword">is</span>,[lt,<span class="integer">10</span>]]
+==&gt;<span class="integer">6</span>
+mmlang&gt; <span class="integer">6</span>,<span class="integer">42</span>[<span class="keyword">is</span>&gt;<span class="integer">10</span>]
+==&gt;<span class="integer">42</span>
+mmlang&gt; <span class="integer">6</span>,<span class="integer">42</span> <span class="keyword">is</span>&gt;<span class="integer">10</span>
+==&gt;<span class="integer">42</span>
+mmlang&gt; int<span class="comment">{2}</span>[<span class="keyword">is</span>&gt;<span class="integer">10</span>]
+==&gt;int<span class="comment">{0,2}</span>&lt;=int<span class="comment">{2}</span>[<span class="keyword">is</span>,bool<span class="comment">{2}</span>&lt;=int<span class="comment">{2}</span>[gt,<span class="integer">10</span>]]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_map_instructions">Map Instructions</h5>
+<div class="sect5">
+<h6 id="_a">[a]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">bool&lt;=x[a,y]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_and">[and]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">bool&lt;=bool[<span class="keyword">and</span>,bool]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_eq">[eq]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">bool&lt;=x[eq,y]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_get">[get]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">y &lt;= rec[x:y][get,x]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_gte">[gte]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">bool&lt;=x[gte,y]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_gt">[gt]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">bool&lt;=x[gt,y]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_id">[id]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">obj&lt;=obj[id]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_lte">[lte]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">bool&lt;=x[lte,x:ord]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_lt">[lt]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">bool&lt;=x[lt,x:ord]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_map">[map]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">x&lt;=obj[map,x:<span class="keyword">type</span>]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_mult">[mult]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">x&lt;=x[mult,x:mmonoid]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_neg">[neg]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">x&lt;=x[neg,x:pgroup]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_one">[one]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">x&lt;=x:mmonoid[one]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_or">[or]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">bool&lt;=bool[<span class="keyword">or</span>,bool]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_plus">[plus]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">x&lt;=x[plus,x:pmonoid]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_q">[q]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">ring&lt;=obj<span class="comment">{ring}</span>[q]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_zero">[zero]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">x&lt;=x:pmonoid[one]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_model_instructions">Model Instructions</h5>
+<div class="sect5">
+<h6 id="_as">[as]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">x&lt;=obj[<span class="keyword">as</span>,x:<span class="keyword">type</span>]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_reduce_instructions">Reduce Instructions</h5>
+<div class="sect5">
+<h6 id="_count">[count]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">ring:x&lt;=obj<span class="comment">{ring:x}</span>[count]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_fold">[fold]</h6>
+
+</div>
+</div>
+<div class="sect4">
+<h5 id="_sideeffect_instructions">SideEffect Instructions</h5>
+<div class="sect5">
+<h6 id="_error">[error]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">obj&lt;=obj[error,str]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_traverser_instructions">Traverser Instructions</h5>
+<div class="sect5">
+<h6 id="_explain">[explain]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">str&lt;=<span class="keyword">type</span>[explain]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_from">[from]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">y&lt;=obj&lt;x:y&gt;[from,x]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_to">[to]</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="Delphi">y&lt;x:y&gt;&lt;=y[<span class="keyword">to</span>,x]</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1599,7 +1974,7 @@ _________      _________
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-05 03:38:46 -0600
+Last updated 2020-04-05 04:32:44 -0600
 </div>
 </div>
 <script type="text/x-mathjax-config">
