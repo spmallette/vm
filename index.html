@@ -576,7 +576,7 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel2">
 <li><a href="#_traverser">Traverser</a>
 <ul class="sectlevel3">
-<li><a href="#_applying_instructions">Applying Instructions</a></li>
+<li><a href="#_instruction_evaluation">Instruction Evaluation</a></li>
 </ul>
 </li>
 <li><a href="#_instruction_classes">Instruction Classes</a>
@@ -1527,11 +1527,38 @@ mmlang&gt; .a
 <div class="paragraph">
 <p>It is the role of the processor to evaluate programs composed of types to yield streams composed of values. The primary structure of the processor component of mm-ADT is the <strong>traverser</strong>.</p>
 </div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Products and Coproducts</div>
+<div class="paragraph">
+<p><a href="https://en.wikipedia.org/wiki/Category_theory">Category theory</a> is the study of structure via manipulations that expose (or generate) other structures. Two important category theoretic concepts used throughout this section are <strong>products</strong> and <strong>coproducts</strong>.</p>
+</div>
+<div class="imageblock left">
+<div class="content">
+<img src="images/product.png" alt="product" width="220">
+</div>
+</div>
+<div class="paragraph">
+<p>A <a href="https://en.wikipedia.org/wiki/Product_(category_theory)">product</a> is any object defined in terms of it&#8217;s accessible component objects. That is, from a single object, via \$\pi_n\$ projection morphisms, a product can be decomposed into it&#8217;s constituent parts.</p>
+</div>
+<div class="imageblock right">
+<div class="content">
+<img src="images/coproduct.png" alt="coproduct" width="220">
+</div>
+</div>
+<div class="paragraph">
+<p>A <a href="https://en.wikipedia.org/wiki/Coproduct">coproduct</a> is any object defined in terms of constructing component objects. That is, from many objects, via \$\iota_n\$ injection morphisms, a coproduct can be composed from constituent parts.</p>
+</div>
+<div class="paragraph">
+<p>Along with these decomposition and composition morphisms, there exists an <a href="https://en.wikipedia.org/wiki/Isomorphism">isomorphism</a> between any two products (or coproducts) should they project (or inject) to the same component objects. That is, product and coproduct equality is defined via component equality.</p>
+</div>
+</div>
+</div>
 <div class="sect2">
 <h3 id="_traverser">Traverser</h3>
 <div class="imageblock right">
 <div class="content">
-<img src="images/traverser.png" alt="traverser" width="550">
+<img src="images/traverser-product.png" alt="traverser product" width="350">
 </div>
 </div>
 <div class="paragraph">
@@ -1542,8 +1569,16 @@ mmlang&gt; .a
 \texttt{range&#8656;domain[inst]}: T  \rightarrow (T \times \texttt{range})
 \]</p>
 </div>
+<div class="paragraph">
+<p>&nbsp;</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/traverser.png" alt="traverser" width="550">
+</div>
+</div>
 <div class="sect3">
-<h4 id="_applying_instructions">Applying Instructions</h4>
+<h4 id="_instruction_evaluation">Instruction Evaluation</h4>
 <div class="paragraph">
 <p>An <code>inst</code> can be applied to a traverser via:</p>
 </div>
@@ -1553,7 +1588,7 @@ mmlang&gt; .a
 \]</p>
 </div>
 <div class="paragraph">
-<p>However, this simple specification is further complicated by instruction arguments. For example, assume the following single instruction type:</p>
+<p>However, this simple specification is further complicated by instruction arguments. For example, assume the following dtype generated from the <code>int</code> ctype via the single instruction <code>[plus,[mult,2]]</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1567,6 +1602,9 @@ mmlang&gt; <span class="integer">10</span>[plus,[mult,<span class="integer">2</s
 <div class="content">
 <img src="images/instruction-arguments.png" alt="instruction arguments" width="90%">
 </div>
+</div>
+<div class="paragraph">
+<p>Every instruction argument that is a type is first resolved by applying the type. Once all arguments have been evaluated, the parent instruction can execute. In this way, every type-argument instruction has internal blocking branches.</p>
 </div>
 </div>
 </div>
