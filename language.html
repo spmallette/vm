@@ -5,9 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.8">
-<meta name="author" content="Marko A. Rodriguez">
-<link rel="icon" type="image/x-icon" href="./images/favicon.ico">
-<title>mm-ADT: The Virtual Machine</title>
+<title>Language Structures</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -431,239 +429,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
-/*pre.CodeRay {background-color:#f7f7f8;}*/
-.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
-.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
-.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
-table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
-table.CodeRay td{vertical-align: top;line-height:1.45}
-table.CodeRay td.line-numbers{text-align:right}
-table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
-table.CodeRay td.code{padding:0 0 0 .5em}
-table.CodeRay td.code>pre{padding:0}
-.CodeRay .debug{color:#fff !important;background:#000080 !important}
-.CodeRay .annotation{color:#007}
-.CodeRay .attribute-name{color:#000080}
-.CodeRay .attribute-value{color:#700}
-.CodeRay .binary{color:#509}
-.CodeRay .comment{color:#998;font-style:italic}
-.CodeRay .char{color:#04d}
-.CodeRay .char .content{color:#04d}
-.CodeRay .char .delimiter{color:#039}
-.CodeRay .class{color:#458;font-weight:bold}
-.CodeRay .complex{color:#a08}
-.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
-.CodeRay .color{color:#099}
-.CodeRay .class-variable{color:#369}
-.CodeRay .decorator{color:#b0b}
-.CodeRay .definition{color:#099}
-.CodeRay .delimiter{color:#000}
-.CodeRay .doc{color:#970}
-.CodeRay .doctype{color:#34b}
-.CodeRay .doc-string{color:#d42}
-.CodeRay .escape{color:#666}
-.CodeRay .entity{color:#800}
-.CodeRay .error{color:#808}
-.CodeRay .exception{color:inherit}
-.CodeRay .filename{color:#099}
-.CodeRay .function{color:#900;font-weight:bold}
-.CodeRay .global-variable{color:#008080}
-.CodeRay .hex{color:#058}
-.CodeRay .integer,.CodeRay .float{color:#099}
-.CodeRay .include{color:#555}
-.CodeRay .inline{color:#000}
-.CodeRay .inline .inline{background:#ccc}
-.CodeRay .inline .inline .inline{background:#bbb}
-.CodeRay .inline .inline-delimiter{color:#d14}
-.CodeRay .inline-delimiter{color:#d14}
-.CodeRay .important{color:#555;font-weight:bold}
-.CodeRay .interpreted{color:#b2b}
-.CodeRay .instance-variable{color:#008080}
-.CodeRay .label{color:#970}
-.CodeRay .local-variable{color:#963}
-.CodeRay .octal{color:#40e}
-.CodeRay .predefined{color:#369}
-.CodeRay .preprocessor{color:#579}
-.CodeRay .pseudo-class{color:#555}
-.CodeRay .directive{font-weight:bold}
-.CodeRay .type{font-weight:bold}
-.CodeRay .predefined-type{color:inherit}
-.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
-.CodeRay .key{color:#808}
-.CodeRay .key .delimiter{color:#606}
-.CodeRay .key .char{color:#80f}
-.CodeRay .value{color:#088}
-.CodeRay .regexp .delimiter{color:#808}
-.CodeRay .regexp .content{color:#808}
-.CodeRay .regexp .modifier{color:#808}
-.CodeRay .regexp .char{color:#d14}
-.CodeRay .regexp .function{color:#404;font-weight:bold}
-.CodeRay .string{color:#d20}
-.CodeRay .string .string .string{background:#ffd0d0}
-.CodeRay .string .content{color:#d14}
-.CodeRay .string .char{color:#d14}
-.CodeRay .string .delimiter{color:#d14}
-.CodeRay .shell{color:#d14}
-.CodeRay .shell .delimiter{color:#d14}
-.CodeRay .symbol{color:#990073}
-.CodeRay .symbol .content{color:#a60}
-.CodeRay .symbol .delimiter{color:#630}
-.CodeRay .tag{color:#008080}
-.CodeRay .tag-special{color:#d70}
-.CodeRay .variable{color:#036}
-.CodeRay .insert{background:#afa}
-.CodeRay .delete{background:#faa}
-.CodeRay .change{color:#aaf;background:#007}
-.CodeRay .head{color:#f8f;background:#505}
-.CodeRay .insert .insert{color:#080}
-.CodeRay .delete .delete{color:#800}
-.CodeRay .change .change{color:#66f}
-.CodeRay .head .head{color:#f4f}
-</style>
 </head>
-<body class="book toc2 toc-left">
+<body class="article">
 <div id="header">
-<h1>mm-ADT: The Virtual Machine</h1>
-<div class="details">
-<span id="author" class="author">Marko A. Rodriguez</span><br>
-<span id="email" class="email"><a href="mailto:marko@rredux.com">marko@rredux.com</a></span><br>
-</div>
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_virtual_machine_components">Virtual Machine Components</a>
-<ul class="sectlevel2">
-<li><a href="#_the_mm_adt_console">The mm-ADT Console</a></li>
-</ul>
-</li>
-<li><a href="#_language_structures">Language Structures</a>
-<ul class="sectlevel2">
-<li><a href="#_types">Types</a>
-<ul class="sectlevel3">
-<li><a href="#_type_signatures">Type Signatures</a></li>
-<li><a href="#_type_definitions">Type Definitions</a></li>
-<li><a href="#_type_structures">Type Structures</a>
-<ul class="sectlevel4">
-<li><a href="#_type_monoid">Type Monoid</a></li>
-<li><a href="#_type_graph">Type Graph</a></li>
-<li><a href="#_type_ring">Type Ring</a></li>
-<li><a href="#_type_category">Type Category</a></li>
-</ul>
-</li>
-<li><a href="#_type_examples">Type Examples</a>
-<ul class="sectlevel4">
-<li><a href="#_canonical_types">Canonical Types</a></li>
-<li><a href="#_refinement_types">Refinement Types</a></li>
-<li><a href="#_quantified_types">Quantified Types</a></li>
-<li><a href="#_dependent_types">Dependent Types</a></li>
-<li><a href="#_translation_types">Translation Types</a></li>
-<li><a href="#_recursive_types">Recursive Types</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#_storage_structures">Storage Structures</a>
-<ul class="sectlevel2">
-<li><a href="#_values">Values</a></li>
-</ul>
-</li>
-<li><a href="#_processor_structures">Processor Structures</a>
-<ul class="sectlevel2">
-<li><a href="#_traverser">Traverser</a></li>
-<li><a href="#_instruction_classes">Instruction Classes</a></li>
-<li><a href="#_processor_implementations">Processor Implementations</a></li>
-</ul>
-</li>
-<li><a href="#_reference_guide">Reference Guide</a>
-<ul class="sectlevel2">
-<li><a href="#_mmlang_syntax_and_semantics">mmlang Syntax and Semantics</a></li>
-</ul>
-</li>
-</ul>
-</div>
 </div>
 <div id="content">
-<div id="preamble">
-<div class="sectionbody">
-<div class="imageblock left">
-<div class="content">
-<img src="images/mm-adt-logo.png" alt="mm-ADT Logo" width="150">
-</div>
-</div>
-<div class="paragraph">
-<p><a href="http://mm-adt.org">mm-ADT</a> is a dual licensed <a href="https://www.gnu.org/licenses/agpl-3.0.txt">AGPL3</a>/commercial open source project that offers software engineers, computer scientists, mathematicians, and others in the software industry a royalty-based OSS model. The Turing Complete mm-ADT virtual machine (VM) integrates disparate data technologies via algebraic composition, yielding <em>synthetic data systems</em>  tailored to the computational requirements of a problem. As an economic model, each integration point offers the respective development team access to the revenue streams generated by any for-profit organization leveraging mm-ADT.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_virtual_machine_components">Virtual Machine Components</h2>
-<div class="sectionbody">
-<div class="imageblock right text-center">
-<div class="content">
-<img src="vm-components.png" alt="vm components" width="360" height="294">
-</div>
-</div>
-<div class="paragraph">
-<p>The mm-ADT VM is the integration point for the following data processing technologies:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Programming Languages</strong>: Language designers can create custom languages or develop parsers for existing languages that compile to mm-ADT VM bytecode (binary machine code) or unicode (text assembly code).</p>
-</li>
-<li>
-<p><strong>Storage Systems</strong>: Storage engineers can embed their systems using <em>model-ADT</em> functors expressed in mm-ADT&#8217;s dependent type system that enable the lossless encoding of key/value store, document store, wide-column store, graph store, relational store, and other novel or hybrid structures such as hypergraph, docu-graph, and quantum data structures.</p>
-</li>
-<li>
-<p><strong>Processing Engines</strong>: Processor developers enable their push- or pull-based execution engines to be programmed by any mm-ADT language for evaluation via mm-ADT&#8217;s abstract execution model of atomic monadic traversers diffusing themselves over storage data structure via single-machine, multi-threaded, agent-based, distributed near-time, and/or cluster-oriented, batch-analytic processors.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The mm-ADT VM enables the intermingling of any language, any storage system, and any processor that can faithfully implement the core language semantics (types and values), storage semantics (streams of atomic and composite data structures), and/or processor semantics (monadic traversers up to the limits of the expressiveness of the components themselves.</p>
-</div>
-<div class="sect2">
-<h3 id="_the_mm_adt_console">The mm-ADT Console</h3>
-<div class="paragraph">
-<p>The mm-ADT VM provides a <a href="https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop:">REPL</a> console for users to evaluate mm-ADT programs written in any mm-ADT language. The reference language distributed with the VM is called <code>mmlang</code>. <code>mmlang</code> is a low-level, functional language that is in near 1-to-1 correspondence with the underlying VM architecture&#8201;&#8212;&#8201;offering it&#8217;s users <a href="https://en.wikipedia.org/wiki/Turing_completeness">Turing-Complete</a> expressively when writing programs and an interactive teaching tool for studying the internal structures and processes of the mm-ADT VM.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="text">~/mm-adt bin/mmadt.sh
-                                _____ _______
-                           /\  |  __ |__   __|
- _ __ ___  _ __ ___ _____ /  \ | |  | | | |
-| '_ ` _ \| '_ ` _ |_____/ /\ \| |  | | | |
-| | | | | | | | | | |   / ____ \ |__| | | |
-|_| |_| |_|_| |_| |_|  /_/    \_\____/  |_|
-                                 mm-adt.org
-mmlang&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>A simple console session is presented below, where the parser expects programs written in the language specified left
-of the <code>&gt;</code> prompt. All the examples contained herein are presented using <code>mmlang</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; <span class="integer">1</span>
-==&gt;<span class="integer">1</span>
-mmlang&gt; +<span class="integer">2</span>
-==&gt;[plus,<span class="integer">2</span>]
-mmlang&gt; <span class="integer">1</span>+<span class="integer">2</span>
-==&gt;<span class="integer">3</span>
-mmlang&gt; <span class="integer">1</span>[plus,<span class="integer">2</span>]
-==&gt;<span class="integer">3</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
 <div class="sect1">
 <h2 id="_language_structures">Language Structures</h2>
 <div class="sectionbody">
@@ -741,22 +511,22 @@ mmlang&gt; <span class="integer">1</span>[plus,<span class="integer">2</span>]
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int
+<pre class="highlight"><code>mmlang&gt; int
 ==&gt;int
-mmlang&gt; int[plus,<span class="integer">4</span>]
-==&gt;int[plus,<span class="integer">4</span>]
-mmlang&gt; int[plus,<span class="integer">4</span>][mult,<span class="integer">42</span>]
-==&gt;int[plus,<span class="integer">4</span>][mult,<span class="integer">42</span>]
-mmlang&gt; int[plus,<span class="integer">4</span>][mult,<span class="integer">42</span>][gt,<span class="integer">42</span>]
-==&gt;bool&lt;=int[plus,<span class="integer">4</span>][mult,<span class="integer">42</span>][gt,<span class="integer">42</span>]</code></pre>
+mmlang&gt; int[plus,4]
+==&gt;int[plus,4]
+mmlang&gt; int[plus,4][mult,42]
+==&gt;int[plus,4][mult,42]
+mmlang&gt; int[plus,4][mult,42][gt,42]
+==&gt;bool&lt;=int[plus,4][mult,42][gt,42]</code></pre>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_type_signatures">Type Signatures</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int[plus,<span class="integer">4</span>][mult,<span class="integer">42</span>][gt,<span class="integer">42</span>]
-==&gt;bool&lt;=int[plus,<span class="integer">4</span>][mult,<span class="integer">42</span>][gt,<span class="integer">42</span>]</code></pre>
+<pre class="highlight"><code>mmlang&gt; int[plus,4][mult,42][gt,42]
+==&gt;bool&lt;=int[plus,4][mult,42][gt,42]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -764,7 +534,7 @@ mmlang&gt; int[plus,<span class="integer">4</span>][mult,<span class="integer">4
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">range<span class="comment">{q}</span>&lt;=domain<span class="comment">{q}</span>([inst]<span class="comment">{q}</span>)*
+<pre class="highlight"><code>range{q}&lt;=domain{q}([inst]{q})*
 |_________________||__________|
      signature      definition</code></pre>
 </div>
@@ -775,7 +545,7 @@ equivalent) type. A <strong>type signature</strong> specifies the source and tar
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">range<span class="comment">{q}</span>&lt;=domain<span class="comment">{q}</span></code></pre>
+<pre class="highlight"><code>range{q}&lt;=domain{q}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -783,47 +553,41 @@ equivalent) type. A <strong>type signature</strong> specifies the source and tar
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int<span class="comment">{1}</span>                      <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlight"><code>mmlang&gt; int{1}                      <b class="conum">(1)</b>
 ==&gt;int
-mmlang&gt; int&lt;=int                    <i class="conum" data-value="2"></i><b>(2)</b>
+mmlang&gt; int&lt;=int                    <b class="conum">(2)</b>
 ==&gt;int
-mmlang&gt; int&lt;=bool                   <i class="conum" data-value="3"></i><b>(3)</b>
-language error: bool <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">of</span> int
-mmlang&gt; int<span class="comment">{5}</span>                      <i class="conum" data-value="4"></i><b>(4)</b>
-==&gt;int<span class="comment">{5}</span>
-mmlang&gt; int<span class="comment">{0,5}</span>                    <i class="conum" data-value="5"></i><b>(5)</b>
-==&gt;int<span class="comment">{0,5}</span>
-mmlang&gt; int<span class="comment">{0,5}</span>&lt;=int<span class="comment">{0,5}</span>          <i class="conum" data-value="6"></i><b>(6)</b>
-==&gt;int<span class="comment">{0,5}</span></code></pre>
+mmlang&gt; int&lt;=bool                   <b class="conum">(3)</b>
+language error: bool is not of int
+mmlang&gt; int{5}                      <b class="conum">(4)</b>
+==&gt;int{5}
+mmlang&gt; int{0,5}                    <b class="conum">(5)</b>
+==&gt;int{0,5}
+mmlang&gt; int{0,5}&lt;=int{0,5}          <b class="conum">(6)</b>
+==&gt;int{0,5}</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>In most programming languages, a value can be typed <code>int</code> as in <code>val x:int = 10</code>. Such <a href="https://en.wikipedia.org/wiki/Declaration_(computer_programming)">declarations</a> state that the value referred to by <code>x</code> is a <em>single</em> element within the set of integers. The concept of a "single element" is captured in mm-ADT via quantification. When the quantifier is the <a href="https://en.wikipedia.org/wiki/Unit_(ring_theory)">unit</a> of the underlying quantifier ring, then the quantifier is not displayed in <code>mmlang</code>.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>From the perspective of a function, An mm-ADT <code>int</code> is a <a href="https://en.wikipedia.org/wiki/NOP_(code)">no-op</a> on the set of integers. Given any integer, <code>int</code> returns that integer. In <code>mmlang</code>, when the domain and range are the same, the <code>&#8656;</code> and repeated type are not displayed.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Without any instructions, there is no way for a type to legally map a <code>bool</code> to an <code>int</code>.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>An mm-ADT type always refers to an unordered <a href="https://en.wikipedia.org/wiki/Multiset">multi-set</a> (or bag) of elements known as a <em>stream</em>. <code>int{5}</code> is a type referring to 5 integers (with repeats possible). As a point of comparison, <code>int</code> denotes a stream containing a single integer. This is why <code>int</code> is syntactic sugar for <code>int{1}</code> in <code>mmlang</code>.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>The quantifier ring can be any ring with unity. In the previous examples, the chosen ring&#8217;s <a href="https://en.wikipedia.org/wiki/Algebraic_structure">carrier set</a> was the set of integers. In this example, the carrier set is two integers and is used to capture uncertainty as to the number of elements being referred to. <code>int{0,5}</code> is a type referring to either 0, 1, 2, 3, 4, or 5 integers.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>This further emphasizes the fact that every mm-ADT type (even canonical types) are functions with a quantified domain and a quantified range.</td>
-</tr>
-</table>
+<ol>
+<li>
+<p>In most programming languages, a value can be typed <code>int</code> as in <code>val x:int = 10</code>. Such <a href="https://en.wikipedia.org/wiki/Declaration_(computer_programming)">declarations</a> state that the value referred to by <code>x</code> is a <em>single</em> element within the set of integers. The concept of a "single element" is captured in mm-ADT via quantification. When the quantifier is the <a href="https://en.wikipedia.org/wiki/Unit_(ring_theory)">unit</a> of the underlying quantifier ring, then the quantifier is not displayed in <code>mmlang</code>.</p>
+</li>
+<li>
+<p>From the perspective of a function, An mm-ADT <code>int</code> is a <a href="https://en.wikipedia.org/wiki/NOP_(code)">no-op</a> on the set of integers. Given any integer, <code>int</code> returns that integer. In <code>mmlang</code>, when the domain and range are the same, the <code>&#8656;</code> and repeated type are not displayed.</p>
+</li>
+<li>
+<p>Without any instructions, there is no way for a type to legally map a <code>bool</code> to an <code>int</code>.</p>
+</li>
+<li>
+<p>An mm-ADT type always refers to an unordered <a href="https://en.wikipedia.org/wiki/Multiset">multi-set</a> (or bag) of elements known as a <em>stream</em>. <code>int{5}</code> is a type referring to 5 integers (with repeats possible). As a point of comparison, <code>int</code> denotes a stream containing a single integer. This is why <code>int</code> is syntactic sugar for <code>int{1}</code> in <code>mmlang</code>.</p>
+</li>
+<li>
+<p>The quantifier ring can be any ring with unity. In the previous examples, the chosen ring&#8217;s <a href="https://en.wikipedia.org/wiki/Algebraic_structure">carrier set</a> was the set of integers. In this example, the carrier set is two integers and is used to capture uncertainty as to the number of elements being referred to. <code>int{0,5}</code> is a type referring to either 0, 1, 2, 3, 4, or 5 integers.</p>
+</li>
+<li>
+<p>This further emphasizes the fact that every mm-ADT type (even canonical types) are functions with a quantified domain and a quantified range.</p>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect3">
@@ -838,11 +602,11 @@ An itemization of the structural components of the written form of this type in 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">int[<span class="keyword">is</span>,[gte,<span class="integer">0</span>]]
+<pre class="highlight"><code>int[is,[gte,0]]
 |_|||_||_____||
 r/d|op | arg ||
    |   |_____||
-   |     <span class="keyword">type</span> |
+   |     type |
    |__________|
        inst</code></pre>
 </div>
@@ -855,47 +619,42 @@ r/d|op | arg ||
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int[<span class="keyword">is</span>,[gte,<span class="integer">0</span>]]                      <i class="conum" data-value="1"></i><b>(1)</b>
-==&gt;int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,bool&lt;=int[gte,<span class="integer">0</span>]]          <i class="conum" data-value="2"></i><b>(2)</b>
-mmlang&gt; int int[<span class="keyword">is</span>,[gte,<span class="integer">0</span>]]                  <i class="conum" data-value="3"></i><b>(3)</b>
-==&gt;int<span class="comment">{?}</span>&lt;=int[<span class="keyword">as</span>,int][<span class="keyword">is</span>,bool&lt;=int[gte,<span class="integer">0</span>]]
-mmlang&gt; <span class="integer">6</span> int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,bool&lt;=int[gte,<span class="integer">0</span>]]
-==&gt;<span class="integer">6</span>                                         <i class="conum" data-value="4"></i><b>(4)</b>
-mmlang&gt; -<span class="integer">6</span> int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,bool&lt;=int[gte,<span class="integer">0</span>]]  <i class="conum" data-value="5"></i><b>(5)</b>
+<pre class="highlight"><code>mmlang&gt; int[is,[gte,0]]                      <b class="conum">(1)</b>
+==&gt;int{?}&lt;=int[is,bool&lt;=int[gte,0]]          <b class="conum">(2)</b>
+mmlang&gt; int int[is,[gte,0]]                  <b class="conum">(3)</b>
+==&gt;int{?}&lt;=int[as,int][is,bool&lt;=int[gte,0]]
+mmlang&gt; 6 int{?}&lt;=int[is,bool&lt;=int[gte,0]]
+==&gt;6                                         <b class="conum">(4)</b>
+mmlang&gt; -6 int{?}&lt;=int[is,bool&lt;=int[gte,0]]  <b class="conum">(5)</b>
 mmlang&gt;</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>A base type composed with an instruction/quantifier pair, where the quantifier is not displayed as it&#8217;s the unit
-of the quantifier ring&#8201;&#8212;&#8201;<code>{1}</code>.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>A compiled type that maps a single integer to zero or one integers. If the internal <code>bool&#8656;int[gte,0]</code> type yields
-<code>true</code>, then an <code>int{1}</code>, else <code>int{0}</code>.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>A type operates on an <code>int</code> thus, if supplied "an <code>int</code> type", the type operates on it to yield a type. The use of types to process types is a form of compilation generally known as <a href="https://en.wikipedia.org/wiki/Abstract_interpretation">abstract interpretation</a>.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The type maps the positive integer <code>6{1}</code> to <code>6{1}</code> (<em>some</em>).</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>The type maps the negative integer <code>-6{1}</code> to <code>-6{0}</code> (<em>none</em>).</td>
-</tr>
-</table>
+<ol>
+<li>
+<p>A base type composed with an instruction/quantifier pair, where the quantifier is not displayed as it&#8217;s the unit
+of the quantifier ring&#8201;&#8212;&#8201;<code>{1}</code>.</p>
+</li>
+<li>
+<p>A compiled type that maps a single integer to zero or one integers. If the internal <code>bool&#8656;int[gte,0]</code> type yields
+<code>true</code>, then an <code>int{1}</code>, else <code>int{0}</code>.</p>
+</li>
+<li>
+<p>A type operates on an <code>int</code> thus, if supplied "an <code>int</code> type", the type operates on it to yield a type. The use of types to process types is a form of compilation generally known as <a href="https://en.wikipedia.org/wiki/Abstract_interpretation">abstract interpretation</a>.</p>
+</li>
+<li>
+<p>The type maps the positive integer <code>6{1}</code> to <code>6{1}</code> (<em>some</em>).</p>
+</li>
+<li>
+<p>The type maps the negative integer <code>-6{1}</code> to <code>-6{0}</code> (<em>none</em>).</p>
+</li>
+</ol>
 </div>
 <div class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title="Note"></i>
+<div class="title">Note</div>
 </td>
 <td class="content">
 Any <code>obj</code> with the the quantifier ring&#8217;s additive identity (<code>zero</code>) is not displayed by <code>mmlang</code> and can be safely garbage collected by the mm-ADT VM processor at anytime throughout a non-reducing computation without altering the semantics of the computation.
@@ -955,12 +714,12 @@ Any <code>obj</code> with the the quantifier ring&#8217;s additive identity (<co
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int<span class="comment">{2}</span>[plus,<span class="integer">4</span>][mult,bool&lt;=int[gt,<span class="integer">10</span>]]
-==&gt;bool<span class="comment">{2}</span>&lt;=int<span class="comment">{2}</span>[plus,<span class="integer">4</span>][gt,<span class="integer">10</span>]
-mmlang&gt; int<span class="comment">{2}</span>[plus,<span class="integer">4</span>] * bool&lt;=int[gt,<span class="integer">10</span>]
-==&gt;bool<span class="comment">{2}</span>&lt;=int<span class="comment">{2}</span>[plus,<span class="integer">4</span>][gt,<span class="integer">10</span>]
-mmlang&gt; int<span class="comment">{2}</span> * int[plus,<span class="integer">4</span>] * bool&lt;=int[gt,<span class="integer">10</span>]
-==&gt;bool<span class="comment">{2}</span>&lt;=int<span class="comment">{2}</span>[plus,<span class="integer">4</span>][gt,<span class="integer">10</span>]</code></pre>
+<pre class="highlight"><code>mmlang&gt; int{2}[plus,4][mult,bool&lt;=int[gt,10]]
+==&gt;bool{2}&lt;=int{2}[plus,4][gt,10]
+mmlang&gt; int{2}[plus,4] * bool&lt;=int[gt,10]
+==&gt;bool{2}&lt;=int{2}[plus,4][gt,10]
+mmlang&gt; int{2} * int[plus,4] * bool&lt;=int[gt,10]
+==&gt;bool{2}&lt;=int{2}[plus,4][gt,10]</code></pre>
 </div>
 </div>
 </div>
@@ -993,7 +752,7 @@ remain as subgraphs of the final expression&#8217;s graph and that <em>this is t
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-important" title="Important"></i>
+<div class="title">Important</div>
 </td>
 <td class="content">
 Every mm-ADT program is a type graph. The set of all possible type graphs and thus, all possible programs, can be generated via the aforementioned <code>[inst]</code> induction rooted at <code>obj{*}</code>. The resultant type graph family is the union of all possible programs and is known as <code>mm</code> (the "mm" in mm-ADT).
@@ -1011,7 +770,7 @@ Every mm-ADT program is a type graph. The set of all possible type graphs and th
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title="Note"></i>
+<div class="title">Note</div>
 </td>
 <td class="content">
 In stream ring theory, instructions are called <em>functions</em> and quantifiers are called <em>coefficients</em>. A function-coefficient pair is called a <em>stream</em>. The equivalence highlights the fact that mm-ADT types refer to streams of objects (i.e. <a href="https://en.wikipedia.org/wiki/Multiset">multi-sets</a> or bags).
@@ -1098,7 +857,7 @@ In stream ring theory, instructions are called <em>functions</em> and quantifier
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title="Note"></i>
+<div class="title">Note</div>
 </td>
 <td class="content">
 Instructions and quantifiers are the carrier sets of two independent <a href="https://en.wikipedia.org/wiki/Ring_(mathematics)">rings</a> with unity whose <a href="https://en.wikipedia.org/wiki/Direct_product">direct product</a> forms the mm-ADT type ring and is the subject of study in <a href="https://zenodo.org/record/2565243">stream ring theory</a> (SRT). The type graph structure presented previously is a subgraph of a (pseudo) <a href="https://en.wikipedia.org/wiki/Cayley_graph">Cayley graph</a> formed from the multiplicative <a href="https://en.wikipedia.org/wiki/Group_(mathematics)">monoid</a> (w/ no multiplicative inverse) component of that ring.
@@ -1184,7 +943,7 @@ Instructions and quantifiers are the carrier sets of two independent <a href="ht
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-important" title="Important"></i>
+<div class="title">Important</div>
 </td>
 <td class="content">
 A known "bug" in stream ring theory is that not all instructions in <code>inst</code> have an additive inverse. Thus, it is not the case that every instruction set can serve as the carrier of a ring. Fortunately, in the larger composite type ring (discussed later), which forms the primary algebraic structure in mm-ADT&#8217;s type system, the quantifier ring&#8217;s multiplicative inverse can be used to remedy the situation&#8212;&#8203;see the 3rd entry in the table above.
@@ -1197,10 +956,10 @@ A known "bug" in stream ring theory is that not all instructions in <code>inst</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; [plus,<span class="integer">10</span>] int[mult,[gt,<span class="integer">5</span>]]
-==&gt;[plus,<span class="integer">10</span>][gt,<span class="integer">5</span>]
-mmlang&gt; [plus,<span class="integer">10</span>] inst[plus,[gt,<span class="integer">5</span>]]
-==&gt;[branch,[plus,<span class="integer">10</span>],[gt,<span class="integer">5</span>]]</code></pre>
+<pre class="highlight"><code>mmlang&gt; [plus,10] int[mult,[gt,5]]
+==&gt;[plus,10][gt,5]
+mmlang&gt; [plus,10] inst[plus,[gt,5]]
+==&gt;[branch,[plus,10],[gt,5]]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1213,7 +972,7 @@ mmlang&gt; [plus,<span class="integer">10</span>] inst[plus,[gt,<span class="int
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">[plus,<span class="integer">10</span>][branch,[gt,<span class="integer">5</span>],[lt,<span class="integer">2</span>]]  ==  [branch,[plus,<span class="integer">10</span>][gt,<span class="integer">5</span>],[plus,<span class="integer">10</span>][lt,<span class="integer">2</span>]]</code></pre>
+<pre class="highlight"><code>[plus,10][branch,[gt,5],[lt,2]]  ==  [branch,[plus,10][gt,5],[plus,10][lt,2]]</code></pre>
 </div>
 </div>
 <div class="imageblock text-center">
@@ -1223,7 +982,7 @@ mmlang&gt; [plus,<span class="integer">10</span>] inst[plus,[gt,<span class="int
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">[branch,[plus,<span class="integer">10</span>],[mult,<span class="integer">5</span>]][gt,<span class="integer">7</span>]  ==  [branch,[plus,<span class="integer">10</span>][gt,<span class="integer">7</span>],[mult,<span class="integer">5</span>][gt,<span class="integer">7</span>]]</code></pre>
+<pre class="highlight"><code>[branch,[plus,10],[mult,5]][gt,7]  ==  [branch,[plus,10][gt,7],[mult,5][gt,7]]</code></pre>
 </div>
 </div>
 <div class="imageblock text-center">
@@ -1302,11 +1061,11 @@ mmlang&gt; [plus,<span class="integer">10</span>] inst[plus,[gt,<span class="int
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">int                                  <span class="comment">// a single int   (some)</span>
-int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,[gt,<span class="integer">0</span>]]               <span class="comment">// 0 or 1 int     (option)</span>
-int<span class="comment">{0}</span>&lt;=int[<span class="keyword">is</span>,false]                <span class="comment">// 0 ints         (none)</span>
-int<span class="comment">{4}</span>&lt;=int<span class="comment">{2}</span>[branch,[id],[id]]     <span class="comment">// 4 ints         (exact)</span>
-int<span class="comment">{*}</span>&lt;=[=db][get,<span class="string"><span class="delimiter">'</span><span class="content">costs</span><span class="delimiter">'</span></span>]           <span class="comment">// 0 or more ints (any)</span></code></pre>
+<pre class="highlight"><code>int                                  // a single int   (some)
+int{?}&lt;=int[is,[gt,0]]               // 0 or 1 int     (option)
+int{0}&lt;=int[is,false]                // 0 ints         (none)
+int{4}&lt;=int{2}[branch,[id],[id]]     // 4 ints         (exact)
+int{*}&lt;=[=db][get,'costs']           // 0 or more ints (any)</code></pre>
 </div>
 </div>
 </div>
@@ -1395,12 +1154,12 @@ int<span class="comment">{*}</span>&lt;=[=db][get,<span class="string"><span cla
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; <span class="integer">1</span><span class="comment">{3}</span> int<span class="comment">{3}</span>
-==&gt;<span class="integer">1</span><span class="comment">{3}</span>
-mmlang&gt; <span class="integer">1</span><span class="comment">{3}</span> int<span class="comment">{2}</span>
-language error: <span class="integer">1</span><span class="comment">{3}</span> <span class="keyword">is</span> <span class="keyword">not</span> a int<span class="comment">{2}</span>
-mmlang&gt; <span class="integer">1</span><span class="comment">{3}</span> int<span class="comment">{2,10}</span>
-==&gt;<span class="integer">1</span><span class="comment">{3}</span></code></pre>
+<pre class="highlight"><code>mmlang&gt; 1{3} int{3}
+==&gt;1{3}
+mmlang&gt; 1{3} int{2}
+language error: 1{3} is not a int{2}
+mmlang&gt; 1{3} int{2,10}
+==&gt;1{3}</code></pre>
 </div>
 </div>
 </div>
@@ -1411,10 +1170,10 @@ mmlang&gt; <span class="integer">1</span><span class="comment">{3}</span> int<sp
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int[<span class="keyword">is</span>,[gt,<span class="integer">0</span>]]
-==&gt;int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,bool&lt;=int[gt,<span class="integer">0</span>]]
-mmlang&gt; int&lt;=int[<span class="keyword">is</span>,[gt,<span class="integer">0</span>]]
-==&gt;int[<span class="keyword">is</span>,bool&lt;=int[gt,<span class="integer">0</span>]]</code></pre>
+<pre class="highlight"><code>mmlang&gt; int[is,[gt,0]]
+==&gt;int{?}&lt;=int[is,bool&lt;=int[gt,0]]
+mmlang&gt; int&lt;=int[is,[gt,0]]
+==&gt;int[is,bool&lt;=int[gt,0]]</code></pre>
 </div>
 </div>
 </div>
@@ -1422,12 +1181,12 @@ mmlang&gt; int&lt;=int[<span class="keyword">is</span>,[gt,<span class="integer"
 <h5 id="_quantified_types">Quantified Types</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int[<span class="keyword">is</span>&gt;<span class="integer">0</span> -&gt; +<span class="integer">1</span> | <span class="keyword">is</span>&gt;<span class="integer">10</span> -&gt; +<span class="integer">2</span>]
-==&gt;int[choose,[int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,bool&lt;=int[gt,<span class="integer">0</span>]]:int[plus,<span class="integer">1</span>]
-              |int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,bool&lt;=int[gt,<span class="integer">10</span>]]:int[plus,<span class="integer">2</span>]]]
-mmlang&gt; int[<span class="keyword">is</span>&gt;<span class="integer">0</span> -&gt; +<span class="integer">1</span> <span class="error">&amp;</span> <span class="keyword">is</span>&gt;<span class="integer">10</span> -&gt; +<span class="integer">2</span>]
-==&gt;int<span class="comment">{0,2}</span>&lt;=int[branch,[int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,bool&lt;=int[gt,<span class="integer">0</span>]]:int[plus,<span class="integer">1</span>]
-                                    <span class="error">&amp;</span>int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,bool&lt;=int[gt,<span class="integer">10</span>]]:int[plus,<span class="integer">2</span>]]]</code></pre>
+<pre class="highlight"><code>mmlang&gt; int[is&gt;0 -&gt; +1 | is&gt;10 -&gt; +2]
+==&gt;int[choose,[int{?}&lt;=int[is,bool&lt;=int[gt,0]]:int[plus,1]
+              |int{?}&lt;=int[is,bool&lt;=int[gt,10]]:int[plus,2]]]
+mmlang&gt; int[is&gt;0 -&gt; +1 &amp; is&gt;10 -&gt; +2]
+==&gt;int{0,2}&lt;=int[branch,[int{?}&lt;=int[is,bool&lt;=int[gt,0]]:int[plus,1]
+                                    &amp;int{?}&lt;=int[is,bool&lt;=int[gt,10]]:int[plus,2]]]</code></pre>
 </div>
 </div>
 </div>
@@ -1442,10 +1201,10 @@ mmlang&gt; int[<span class="keyword">is</span>&gt;<span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; int[<span class="keyword">is</span>,[gt,<span class="integer">10</span>][<span class="keyword">and</span>[lt,<span class="integer">100</span>]]][<span class="keyword">as</span>,str][len]
-==&gt;int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,bool&lt;=int[gt,<span class="integer">10</span>][<span class="keyword">and</span>,bool[lt,<span class="integer">100</span>]]][<span class="keyword">as</span>,str][len]
-mmlang&gt; int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,[gt,<span class="integer">40</span>][<span class="keyword">and</span>[lt,<span class="integer">50</span>]]][<span class="keyword">as</span>,str][len]
-==&gt;int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is</span>,bool&lt;=int[gt,<span class="integer">40</span>][<span class="keyword">and</span>,bool[lt,<span class="integer">50</span>]]][<span class="keyword">as</span>,str][len]</code></pre>
+<pre class="highlight"><code>mmlang&gt; int[is,[gt,10][and[lt,100]]][as,str][len]
+==&gt;int{?}&lt;=int[is,bool&lt;=int[gt,10][and,bool[lt,100]]][as,str][len]
+mmlang&gt; int{?}&lt;=int[is,[gt,40][and[lt,50]]][as,str][len]
+==&gt;int{?}&lt;=int[is,bool&lt;=int[gt,40][and,bool[lt,50]]][as,str][len]</code></pre>
 </div>
 </div>
 </div>
@@ -1453,139 +1212,6 @@ mmlang&gt; int<span class="comment">{?}</span>&lt;=int[<span class="keyword">is<
 <h5 id="_recursive_types">Recursive Types</h5>
 
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_storage_structures">Storage Structures</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_values">Values</h3>
-<div class="paragraph">
-<p>There are only two kinds of structures in mm-ADT: <em>values</em> and <em>types</em>.
-Values are the elements of standard data type sets such as:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">mmlang&gt; <span class="integer">45</span>[plus,<span class="integer">5</span>][plus,[mult,<span class="integer">2</span>]]
-==&gt;<span class="integer">150</span>
-mmlang&gt; <span class="char"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>,<span class="char"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>,<span class="char"><span class="delimiter">'</span><span class="content">c</span><span class="delimiter">'</span></span>[fold,<span class="string"><span class="delimiter">'</span><span class="content">seed</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>,[plus,str&lt;seed&gt;]]
-==&gt;<span class="string"><span class="delimiter">'</span><span class="content">abc</span><span class="delimiter">'</span></span>
-mmlang&gt; <span class="integer">1</span>,<span class="integer">2</span>,<span class="integer">3</span>[plus,<span class="integer">2</span>]&lt;x&gt;[plus,<span class="integer">3</span>]&lt;y&gt;[<span class="keyword">as</span>,rec[<span class="char"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>:int&lt;x&gt;,<span class="char"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>:int&lt;y&gt;]]
-==&gt;[<span class="char"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>:<span class="integer">3</span>,<span class="char"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>:<span class="integer">6</span>]
-==&gt;[<span class="char"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>:<span class="integer">4</span>,<span class="char"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>:<span class="integer">7</span>]
-==&gt;[<span class="char"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>:<span class="integer">5</span>,<span class="char"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>:<span class="integer">8</span>]
-mmlang&gt; [<span class="char"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>:[<span class="char"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>:[<span class="char"><span class="delimiter">'</span><span class="content">c</span><span class="delimiter">'</span></span>:[<span class="char"><span class="delimiter">'</span><span class="content">d</span><span class="delimiter">'</span></span>:<span class="integer">0</span>]]]]
-==&gt;[<span class="char"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>:[<span class="char"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>:[<span class="char"><span class="delimiter">'</span><span class="content">c</span><span class="delimiter">'</span></span>:[<span class="char"><span class="delimiter">'</span><span class="content">d</span><span class="delimiter">'</span></span>:<span class="integer">0</span>]]]]
-mmlang&gt; [<span class="char"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>:[<span class="char"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>:[<span class="char"><span class="delimiter">'</span><span class="content">c</span><span class="delimiter">'</span></span>:[<span class="char"><span class="delimiter">'</span><span class="content">d</span><span class="delimiter">'</span></span>:<span class="integer">0</span>]]]].a.b.c.d
-==&gt;<span class="integer">0</span>
-mmlang&gt; .a
-==&gt;[get,<span class="char"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>]</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_processor_structures">Processor Structures</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The mm-ADT VM is grounded in a base set of types. Along with the base types, mm-ADT provides a set of instructions and a concise algebra for linking types together via instructions. This graph structure is known as a <em>type graph</em> and forms the internal data structure used by the mm-ADT to represent programs.</p>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="images/traverser-fold.png" alt="traverser fold" width="60%">
-</div>
-</div>
-<div class="paragraph">
-<p>It is the role of the processor to evaluate programs composed of types to yield streams composed of values. The primary structure of the processor component of mm-ADT is the <strong>traverser</strong>.</p>
-</div>
-<div class="sect2">
-<h3 id="_traverser">Traverser</h3>
-<div class="imageblock right">
-<div class="content">
-<img src="images/traverser.png" alt="traverser" width="550">
-</div>
-</div>
-<div class="paragraph">
-<p>A traverser is the product of an <code>obj</code> and a random-access finite map called it&#8217;s <code>state</code>. The traverser&#8217;s <code>obj</code> represents the traverser&#8217;s current location in the language (types) or storage (values) structure. Within the mm-ADT VM, every <code>inst</code> has a respective <code>apply()</code>, where \$T\$ is the set of all traversers and \$t,t' \in T\$ are traversers, then the instruction&#8217;s maps \$t\$ to \$t'\$.</p>
-</div>
-<div class="paragraph">
-<p>\[
-\texttt{range&#8656;domain[inst]}: T  \rightarrow (T \times \texttt{range})
-\]</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_instruction_classes">Instruction Classes</h3>
-
-</div>
-<div class="sect2">
-<h3 id="_processor_implementations">Processor Implementations</h3>
-
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_reference_guide">Reference Guide</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_mmlang_syntax_and_semantics">mmlang Syntax and Semantics</h3>
-<div class="paragraph">
-<p>The <a href="https://en.wikipedia.org/wiki/Context-free_grammar">context-free grammar</a> for <code>mmlang</code> is presented below.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">obj   := (<span class="keyword">type</span> | value)<span class="comment">{q}</span>
-<span class="keyword">type</span>  := ctype | dtype
-ctype := bool | int | real | str | rec | inst
-q     := int,int
-dtype := ctype&lt;=ctype([inst]+)
-rec   := [:] | [obj:obj(,obj:obj)*]
-inst  := [op(,obj*)]
-op    := a, <span class="keyword">as</span>, branch, choose, plus, mult, <span class="keyword">is</span>, ...</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The following <a href="https://en.wikipedia.org/wiki/Axiomatic_semantics">language axioms</a> have variables <code>x</code>, <code>y</code>, and <code>z</code> in <code>ctype</code> and <code>[a]</code> and <code>[b]</code> in <code>inst</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">id(x)                      := x&lt;=x[id]
-domain(y&lt;=x[a])            := x
-range(y&lt;=x[a])             := y
-domain(x)                  := x
-range(x)                   := x
-scompose(y&lt;=x[a],z&lt;=y[b])  := z&lt;=x[a][b]
-pcompose(y&lt;=x[a],y&lt;=x[b])  := y&lt;=x[branch,y&lt;=x[a],y&lt;=x[b]]
-pcompose(y&lt;=x[a],z&lt;=x[b])  := obj&lt;=x[branch,y&lt;=x[a],z&lt;=x[b]]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The quantifiers of an <code>mmlang</code> program are elements of a ring with unity (the quantifier ring). In the following equations, <code>*</code> and <code>+</code> refer to the respective monoid and group operations of the program&#8217;s associated quantifier ring.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">scompose(y<span class="comment">{q1}</span>&lt;=x[a],z<span class="comment">{q2}</span>&lt;=y[b]) := z<span class="comment">{q1*q2}</span>&lt;=x[a][b]
-pcompose(y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[a]) := y<span class="comment">{q1+q2}</span>&lt;=x[a]
-pcompose(y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[b]) := y<span class="comment">{q1+q2}</span>&lt;=x[branch,y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[b]]
-pcompose(y<span class="comment">{q1}</span>&lt;=x[a],y<span class="comment">{q2}</span>&lt;=x[b]) := obj<span class="comment">{q1+q2}</span>&lt;=x[branch,y<span class="comment">{q1}</span>&lt;=x[a],z<span class="comment">{q2}</span>&lt;=x[b]]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The following inference rules reuse the same variables as the equations above.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="Delphi">xxx   yyy      xxx   yyy
-_________      _________
-    zz            zz</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>include::instructions.adoc
-:leveloffset: -1</p>
 </div>
 </div>
 </div>
@@ -1599,24 +1225,8 @@ _________      _________
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-05 03:38:46 -0600
+Last updated 2020-04-05 03:39:12 -0600
 </div>
 </div>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  messageStyle: "none",
-  tex2jax: {
-    inlineMath: [["\\(", "\\)"]],
-    displayMath: [["\\[", "\\]"]],
-    ignoreClass: "nostem|nolatexmath"
-  },
-  asciimath2jax: {
-    delimiters: [["\\$", "\\$"]],
-    ignoreClass: "nostem|noasciimath"
-  },
-  TeX: { equationNumbers: { autoNumber: "none" } }
-});
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 </body>
 </html>
