@@ -437,16 +437,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_processor_structures">Processor Structures</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>The mm-ADT VM is grounded in a base set of types. Along with the base types, mm-ADT provides a set of instructions and a concise algebra for linking types together via instructions. This graph structure is known as a <em>type graph</em> and forms the internal data structure used by the mm-ADT to represent programs.</p>
-</div>
-<div class="imageblock text-center">
+<div class="imageblock left">
 <div class="content">
-<img src="images/traverser-fold.png" alt="traverser fold" width="65%">
+<img src="images/processor-stack.png" alt="processor stack" width="150">
 </div>
 </div>
 <div class="paragraph">
-<p>It is the role of the processor to evaluate programs composed of types to yield streams composed of values. The primary structure of the processor component of mm-ADT is the <strong>traverser</strong>.</p>
+<p>The mm-ADT VM provides a set of canonical types (<em>ctypes</em>) along with a ring theoretic algebra for deriving new types (<em>dtypes</em>) via instructions from the virtual machine&#8217;s instruction set architecture. Type construction yields a graph composed of type vertices and instruction edges called a <em>type graph</em> and it is this graph structure that forms the internal data structure used by the mm-ADT VM to encode, compile, and execute programs.</p>
+</div>
+<div class="paragraph">
+<p>Type compilation and evaluation is enabled by mm-ADT compliant processors that ground the abstract mm-ADT virtual machine to the underlying physical machine (over a single machine, multiple threads, or cross a compute cluster). At the bottom of this "process stack", the natural world&#8217;s physics provides the baseline dynamics (a "ptype" so to speak). Finally, atop this stack is the mm-ADT VM&#8217;s abstract, general-purpose, register-based machines known as the <strong>traversers</strong>.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+Distributed mm-ADT processors can yield on the order of millions of traversers during a single program evaluation. Conceptually, a processor is responsible for coordinating a <a href="https://en.wikipedia.org/wiki/Swarm_intelligence"><em>traverser swarm</em></a>, where the result of an mm-ADT program is the aggregate data locations of all the halted traversers.
+</td>
+</tr>
+</table>
 </div>
 <div class="sidebarblock">
 <div class="content">
@@ -477,26 +489,37 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="sect2">
 <h3 id="_traverser">Traverser</h3>
+<div class="paragraph">
+<p>A traverser (abbreviated <code>trav</code>) is a product with three projections:</p>
+</div>
 <div class="imageblock right">
 <div class="content">
 <img src="images/traverser-product.png" alt="traverser product" width="350">
 </div>
 </div>
-<div class="paragraph">
-<p>A traverser is the product of an <code>obj</code> and a random-access finite map called it&#8217;s <code>state</code>. The traverser&#8217;s <code>obj</code> represents the traverser&#8217;s current location in the language (types) or storage (values) structure. Within the mm-ADT VM, every <code>inst</code> has a respective <code>apply()</code>, where \$T\$ is the set of all traversers and \$t,t' \in T\$ are traversers, then the instruction&#8217;s maps \$t\$ to \$t'\$.</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>[dc]</code>: the <a href="https://en.wikipedia.org/wiki/Pointer_(computer_programming)"><strong>data counter</strong></a> denotes the traverser&#8217;s current location in the data.</p>
+</li>
+<li>
+<p><code>[pc]</code>: the <a href="https://en.wikipedia.org/wiki/Program_counter"><strong>program counter</strong></a> denotes the traverser&#8217;s current location in the program.</p>
+</li>
+<li>
+<p><code>[state]</code>: the local read/write <a href="https://en.wikipedia.org/wiki/Processor_register"><strong>registers</strong></a> of the traverser provide a memory stucture that increases general expressivity.</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
-<p>\[
-\texttt{range&#8656;domain[inst]}: T  \rightarrow (T \times \texttt{range})
-\]</p>
-</div>
-<div class="paragraph">
-<p>&nbsp;</p>
+<p>The traverser is <em>halted</em> when the type has no more instructions. A traverser can be understood as implementing the following "fold."</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="images/traverser.png" alt="traverser" width="550">
+<img src="images/traverser-fold.png" alt="traverser fold" width="80%">
 </div>
+</div>
+<div class="paragraph">
+<p>&nbsp;</p>
 </div>
 <div class="sect3">
 <h4 id="_instruction_evaluation">Instruction Evaluation</h4>
@@ -605,7 +628,7 @@ mmlang&gt; 10[plus,[mult,2]]
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-05 15:47:34 -0600
+Last updated 2020-04-06 02:13:05 -0600
 </div>
 </div>
 </body>
